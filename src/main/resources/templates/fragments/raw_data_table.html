@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="raw_data_table_obj">
+		<div class="container">
+			<div class="justify-content-center align-items-center"
+				style="margin-top: 5px">
+				<div class="col-ms-12">
+					<div class="form-row mt-2 ml-1 mr-1">
+						<div class="form-group col-md-7">
+							<h5 style="text-align: right;">Мониторинг данных УСПД</h5>
+						</div>
+						<div class="form-group col-md-auto">
+							<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+						</div>
+					</div>
+					<!-- Фильтр для таблиц объектов -->
+					<div th:insert="~{fragments/filtr_uspd :: filtr_uspd_obj}"></div>
+					<table class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary" id="rawtable">
+					   <thead style="text-align: center;">
+						   <tr>
+						       <th>№</th>
+							   <th style="display: none;">id_rawdata</th>
+							   <th>Время приема</th>
+							   <th>ip Сервера</th>
+							   <th>port Сервера</th>
+							   <th>Номер УСПД</th>
+							   <th>Первичные данные </th>
+						   </tr>
+						</thead>
+							<tbody style="text-align: center;">
+							   <tr th:each="rd,idxStat : *{listRawData}">
+							      <td th:text="${idxStat.index+1}"></td>
+							      <td style="display: none;" th:text="${rd.idRawData}"></td>
+							      <td th:text="${#temporals.format(rd.eventTime, 'dd.MM.yyyy HH:mm:ss')}"></td>
+							      <td th:text="${rd.ipServer}"></td>
+							      <td th:text="${rd.port}"></td>
+							      <td th:text="${rd.numUspd}"></td>
+							      <td th:text="${rd.rawData}"></td>
+							   <tr>
+							</tbody> 
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

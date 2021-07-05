@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="obj_count_heater_table">
+		<div class="container">
+		   <div class="justify-content-center align-items-center" style="margin-top: 5px">
+		      <div class="col-md-12">
+				<div class="form-row mt-2 ml-1 mr-1">
+					<div class="form-group col-md-7">
+						<h4 style="text-align: right;">Счетчики тепла</h4>
+					</div>
+				   <div class="form-group col-md-1">
+						<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+				   </div>
+				</div>
+			  </div>
+			  <!-- Фильтр для таблиц объектов -->			
+				<div th:insert="~{fragments/filtr_uspd :: filtr_uspd_obj}"></div>
+		   </div>
+		   <div>
+					<table
+						class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary" id="counthetable">
+						<thead style="text-align: center;">
+							<tr>
+								<th>№</th>
+								<th style="display: none;">idCountHeat</th>
+								<th>Номера<br>счетчиков</th>
+								<th>Показания <br> счетчиков</th>
+								<th style="display: none;">id_Measuring</th>
+								<th>Время</th>
+								<th>Дата</th>
+								<th>Номер<br>УСПД</th>
+								<th>Время<br>получения</th>
+								
+							</tr>
+						</thead>
+						<tbody style="text-align: center;">
+							<tr th:each="cnt,idxStat : *{listCountHe}">
+								<td th:text="${idxStat.index + 1}"></td>
+								<td style="display: none;" th:text="${cnt.idCountHeat}"></td>
+								<td th:text="${cnt.heatMeterNum}"></td>
+								<td th:text="${cnt.gKalor}"></td>
+								<td style="display: none;" th:text="${cnt.idMeasuring}"></td>
+								<td th:text="${cnt.heatTime}"></td>
+								<td th:text="${cnt.heatDate}"></td>
+								<td th:text="${cnt.factoryNumberUspd}"></td>
+								<td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy HH:mm')}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+		</div>
+	</div>
+</body>
+</html>

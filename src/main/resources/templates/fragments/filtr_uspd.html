@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+	<div th:fragment="filtr_uspd_obj">
+		<div class="form-row mt-2 ml-1 mr-1">
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
+			</div>
+
+			<div class="form-group col-sm-2">
+				<input type="text" class="form-control pull-right" id="searchuspd" placeholder="Номер УСПД">
+			</div>
+
+			<div class="mb-3 row">
+				<label for="datefrom" style="text-align: right;" class="col-sm-auto col-form-label">За период с:</label>
+				<div class="form-group col-sm-7">
+					<input value="" type="date" class="form-control pull-right" id="datefrom" name="datebeg" />
+				</div>
+			</div>
+
+			<div class="mb-3 row">
+				<label for="dateto" style="text-align: right;" class="col-sm-auto col-form-label">по:</label>
+				<div class="form-group col-sm-9">
+					<input value="" type="date" class="form-control pull-right" id="dateto" name="dateend" />
+				</div>
+			</div>
+			<div class="form-group col-sm-auto">
+				 <button type="button" class="btn btn-info btn-sm" id="btn-filtr"><i class="bi-funnel"></i>Фильтр</button>
+			</div>
+			<div class="form-group col-sm-auto">
+				 <button type="button" class="btn btn-info btn-sm" id="btn-del-filtr"><i class="bi-file-x"></i>Сброс</button>
+			</div>
+		</div>
+	</div>
+</body>
