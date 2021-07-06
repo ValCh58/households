@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.AlarmDTO;
 import eis.company.households.dto.CountWaterDTO;
 import eis.company.households.modeleis.CountElEn;
@@ -31,7 +32,7 @@ public class ObjectAdminRest {
 	@GetMapping(value = "/admin/object_uspd/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
 	public List<Measuring> updateViewUspdPar(@PathVariable("numUspd") String numUspd,
 			                                 @PathVariable("dateFrom")  LocalDate dateFrom, 
-			                                 @PathVariable("dateTo")  LocalDate dateTo) {
+			                                 @PathVariable("dateTo")  LocalDate dateTo){
 		
 		List<Measuring> list = objAdmSrv.retUpdateUspdObj(numUspd, dateFrom, dateTo); 
 		return list;
