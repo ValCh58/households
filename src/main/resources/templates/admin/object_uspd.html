@@ -101,7 +101,9 @@
 		        	});
 		        },
 		        error: function (x, e) {
-	                alert(x+'     '+e);
+		        	var tableBody = $("#uspdtable tbody");
+		        	tableBody.empty();
+                    alert('Данные не найдены. Измените параметры запроса');
 	            }
 		    });
 		  

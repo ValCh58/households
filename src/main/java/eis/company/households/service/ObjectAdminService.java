@@ -151,6 +151,7 @@ public class ObjectAdminService {
 		} else {
 			list = countElEnRepo.findByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
 		}
+		
 		return list;
 	}
 	

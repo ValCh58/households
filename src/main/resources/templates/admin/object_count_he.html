@@ -85,7 +85,9 @@
     		        	
     		        },
     		        error: function (x, e) {
-    	                alert(x+'     '+e);
+    		        	var tableBody = $("#counthetable tbody");
+    		        	tableBody.empty();
+                        alert('Данные не найдены. Измените параметры запроса');
     	            }
     		    });
     		  

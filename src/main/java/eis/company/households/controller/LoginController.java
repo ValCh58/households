@@ -27,14 +27,10 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private RoleRepository roleRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private QueryUsersRepositoryImpl usersRepositoryImpl;
+    @Autowired private UserService userService;
+    @Autowired private RoleRepository roleRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private QueryUsersRepositoryImpl usersRepositoryImpl;
 
     @GetMapping(value={"/", "/login"})
     public ModelAndView login(){

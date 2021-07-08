@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.AlarmDTO;
 import eis.company.households.dto.CountWaterDTO;
 import eis.company.households.modeleis.CountElEn;
@@ -32,9 +31,18 @@ public class ObjectAdminRest {
 	@GetMapping(value = "/admin/object_uspd/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
 	public List<Measuring> updateViewUspdPar(@PathVariable("numUspd") String numUspd,
 			                                 @PathVariable("dateFrom")  LocalDate dateFrom, 
-			                                 @PathVariable("dateTo")  LocalDate dateTo){
+			                                 @PathVariable("dateTo")  LocalDate dateTo)
+			                                		 //throws ResourceNotFoundException{
+	                                            {
 		
 		List<Measuring> list = objAdmSrv.retUpdateUspdObj(numUspd, dateFrom, dateTo); 
+		/*
+		 * //обработка исключений -> class GlobalExceptionHandler if(list.isEmpty()) {
+		 * throw new Exception("USPD not found for this parameters.");
+		 * //ResourceNotFoundException("USPD not found for this parameters."); }
+		 */
+		if(list.isEmpty()) {list = null;}
+		 
 		return list;
 	}
 	
@@ -52,7 +60,8 @@ public class ObjectAdminRest {
 		
 		//List<CountWater> list = objAdmSrv.retUpdateCountWaterObj(numUspd, dateFrom, dateTo);
 		List<CountWaterDTO> list = objAdmSrv.retUpdateCountWaterObj(numUspd, dateFrom, dateTo);
-		return list;
+		
+		return list;//При отсутствии данных list = null//
 	}
 	
 	/**
@@ -68,11 +77,13 @@ public class ObjectAdminRest {
 		                                            @PathVariable("dateTo")  LocalDate dateTo) {
 		
 		List<CountElEn> list = objAdmSrv.retUpdateCountElEnObj(numUspd, dateFrom, dateTo); 
+		
+		if(list.isEmpty()) {list = null;}
 		return list;
 	}
 	
 	/**
-	 * REST Row данные от УСПД фильтрация
+	 * REST Row данные от серверов, фильтрация
 	 * @param numUspd
 	 * @param dateFrom
 	 * @param dateTo
@@ -84,6 +95,7 @@ public class ObjectAdminRest {
 		                                            @PathVariable("dateTo")  LocalDate dateTo) {
 		
 		List<RawData> list = objAdmSrv.retUpdateRawData(numUspd, dateFrom, dateTo); 
+		if(list.isEmpty()) {list = null;}
 		return list;
 	}
 	
@@ -111,7 +123,7 @@ public class ObjectAdminRest {
                                                @PathVariable("dateFrom")  LocalDate dateFrom, 
                                                @PathVariable("dateTo")  LocalDate dateTo){
 		List<CountHeat> list = objAdmSrv.retUpdCountHeater(numUspd, dateFrom, dateTo);
-		
+		if(list.isEmpty()) {list = null;}
 		return list;
 	}
 

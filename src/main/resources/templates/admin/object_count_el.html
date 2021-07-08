@@ -87,7 +87,9 @@
 		        	});
 		        },
 		        error: function (x, e) {
-	                alert(x+'     '+e);
+		        	var tableBody = $("#counteltable tbody");
+		        	tableBody.empty();
+                    alert('Данные не найдены. Измените параметры запроса');
 	            }
 		    });
 		  

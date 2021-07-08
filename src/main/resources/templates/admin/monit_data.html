@@ -81,7 +81,9 @@ $(document).ready(function(){
 		        	});
 		        },
 		        error: function (x, e) {
-	                alert(x+'     '+e);
+		        	var tableBody = $("#rawtable tbody");
+		        	tableBody.empty();
+                    alert('Данные не найдены. Измените параметры запроса');
 	            }
 		    });
 		  
