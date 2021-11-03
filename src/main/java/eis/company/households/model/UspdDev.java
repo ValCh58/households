@@ -58,14 +58,19 @@ public class UspdDev implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_uspd_dev", unique=true, nullable=false, precision=11)
     private int idUspdDev;
+    
     @Column(name="name_uspd_dev", nullable=false, length=128)
     private String nameUspdDev;
+    
     @Column(name="num_uspd_dev", length=28)
     private String numUspdDev;
+    
     @Column(name="address_loc", length=255)
     private String addressLoc;
+    
     @Column(name="id_counts", precision=11)
     private int idCounts;
+    
     @Column(name="id_config_uspd", precision=11)
     private int idConfigUspd;
     
@@ -80,12 +85,16 @@ public class UspdDev implements Serializable {
         count.setUspdDev(null);
         this.counts.remove(count);
     }
-    /*******************************************/
-    
+        
     /********* USPD_DEV --------< COUNTS *****************/
     @OneToMany(mappedBy="uspdDev", orphanRemoval = true)
     //@JsonIgnore //Удаление рекурсии!!!
     private List<Counts> counts = new ArrayList<>();
+    
+    /********* USPD_DEV --------< Room *****************/
+    @OneToMany(mappedBy="uspdDev", orphanRemoval = true)
+    //@JsonIgnore //Удаление рекурсии!!!
+    private List<Room> room = new ArrayList<>();
     
     /********** USPD_DEV >------ COM_SERVER **************/
     @ManyToOne(fetch = FetchType.LAZY)
@@ -117,14 +126,26 @@ public class UspdDev implements Serializable {
 		this.idCounts = idCounts;
 		this.idConfigUspd = idConfigUspd;
 	}
+	
+	/******Helper functions****************/
+	public void removeRoom(Room room) { 
+	     room.setUspdDev(null);
+	     this.room.remove(room); 
+	}
+	/**************************************/
     
-    
+    public List<Room> getRoom() {
+		return room;
+	}
 
-    public String getNumUspdDev() {
+	public void setRoom(List<Room> room) {
+		this.room = room;
+	}
+
+	public String getNumUspdDev() {
 		return numUspdDev;
 	}
     
-
 	public void setNumUspdDev(String numUspdDev) {
 		this.numUspdDev = numUspdDev;
 	}

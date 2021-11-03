@@ -17,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="type_object")
 public class TypeObject implements Serializable {
 
@@ -57,25 +59,22 @@ public class TypeObject implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_type_object", unique=true, nullable=false, precision=11)
     private int idTypeObject;
+    
     @Column(name="name_type", nullable=false, length=255)
     private String nameType;
+    
     
     @OneToMany(mappedBy="typeObject")
     private List<ComServer> comServer = new ArrayList<ComServer>();
     
     @OneToMany(mappedBy="typeObject")
     private List<Counts> counts = new ArrayList<Counts>();
-    /*** Helper methods ***/
-    public void addCounts(Counts count) {
-        this.counts.add(count);
-        count.setTypeObject(this);
-    }
-    
-    /*****************************/
-    
     
     @OneToMany(mappedBy="typeObject")
     private List<LinkObject> linkObject = new ArrayList<LinkObject>();
+    
+    @OneToMany(mappedBy="typeObject")
+    private List<LinkObjectUk> linkObjectUk = new ArrayList<LinkObjectUk>();
     
     @OneToMany(mappedBy="typeObject")
     private List<ManagCompany> managCompany = new ArrayList<ManagCompany>();
@@ -83,13 +82,104 @@ public class TypeObject implements Serializable {
     @OneToMany(mappedBy="typeObject")
     private List<UspdDev> uspdDev = new ArrayList<UspdDev>();
     
+    //@OneToMany(mappedBy="typeObject")//////////Создать класс!!!!!!!
+    //private List<UspdDevPrev> uspdDevPrev = new ArrayList<UspdDev>();
+    
+    @OneToMany(mappedBy="typeObject", orphanRemoval = true)
+    @JsonIgnore
+    private List<Street> street = new ArrayList<Street>();
+    
+    @OneToMany(mappedBy="typeObject")
+    @JsonIgnore
+    private List<House> house = new ArrayList<House>();
+    
+    @OneToMany(mappedBy="typeObject")
+    @JsonIgnore
+    private List<Room> room = new ArrayList<Room>();
+    
+    @OneToMany(mappedBy="typeObject")
+    @JsonIgnore
+    private List<PersonAcnt> personAcnt = new ArrayList<PersonAcnt>();
+    
+    /*** Helper methods ***/
+    public void addCounts(Counts count) {
+        this.counts.add(count);
+        count.setTypeObject(this);
+    }
+    
+    public void addStreet(Street street) { 
+	    this.street.add(street);
+	    street.setTypeObject(this); 
+	  }
+
+    
+    public void addHouse(House house) {
+        this.house.add(house);
+        house.setTypeObject(this);
+    }
+    /********Del**************************/
+    public void removeStreet(Street street) { 
+	     street.setTypeObject(null);
+	     this.street.remove(street); 
+	}
+    
+    public void removeHouse(House house) { 
+	     house.setTypeObject(null);
+	     this.house.remove(house); 
+	}
+    
+    public void removeRoom(Room room) { 
+	     room.setTypeObject(null);
+	     this.room.remove(room); 
+	}
+    
+    public void removePersonAcnt(PersonAcnt personAcnt) { 
+    	 personAcnt.setTypeObject(null);
+	     this.personAcnt.remove(personAcnt); 
+	}
+    /*************************************/
+    
     
     /** Default constructor. */
     public TypeObject() {
         super();
     }
+    
+    
 
-    /**
+    public List<PersonAcnt> getPersonAcnt() {
+		return personAcnt;
+	}
+
+	public void setPersonAcnt(List<PersonAcnt> personAcnt) {
+		this.personAcnt = personAcnt;
+	}
+
+	public List<Room> getRoom() {
+		return room;
+	}
+
+	public void setRoom(List<Room> room) {
+		this.room = room;
+	}
+
+	public List<Street> getStreet() {
+		return street;
+	}
+
+	public void setStreet(List<Street> street) {
+		this.street = street;
+	}
+
+	public List<House> getHouse() {
+		return house;
+	}
+
+	public void setHouse(List<House> house) {
+		this.house = house;
+	}
+
+	/**
      * Access method for idTypeObject.
      *
      * @return the current value of idTypeObject

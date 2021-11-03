@@ -16,11 +16,10 @@ import eis.company.households.repository.QueryLinkObjectRepository;
 public class QueryLinkObjectRepoImpl implements QueryLinkObjectRepository{
 	
 	List<LinkObjectDTO> list = new ArrayList<>();
-	public QueryLinkObjectRepoImpl(){};
 	@PersistenceContext(unitName = "housingEntityManager")
 	private EntityManager em;
 	
-	String sqlStr = "select f.id_link_object, f.id_parent, f.name_object, f.prop_object, f.id_object, f.id_type_object from(\r\n"
+	private String sqlStr = "select f.id_link_object, f.id_parent, f.name_object, f.prop_object, f.id_object, f.id_type_object from(\r\n"
 				+"select r.id_link_object, r.id_parent, r.name_object, r.prop_object, r.id_object, r.id_type_object from\r\n"
 				+ " (select l.id_link_object, l.id_parent,\r\n"
 				+ " (select name_company from manag_company where id_manag_company = l.id_object)  as name_object,\r\n"
@@ -50,6 +49,8 @@ public class QueryLinkObjectRepoImpl implements QueryLinkObjectRepository{
 				+ " c.id_counts as id_object, c.id_type_object as id_type_object\r\n"
 				+ " from counts c where c.id_type_object = 4) f order by f.id_parent, id_link_object";
 		
+	
+
 		@Override
 		public List<LinkObjectDTO> queryLinkObjectReository() {	
 			
@@ -62,12 +63,12 @@ public class QueryLinkObjectRepoImpl implements QueryLinkObjectRepository{
 			
 			for (Tuple t : listTp) {
 				LinkObjectDTO ad = new LinkObjectDTO(
-						                             ((Integer)t.get("id_link_object")).intValue(),
-						                             ((Integer)t.get("id_parent")).intValue(),
+						                             ((Number)t.get("id_link_object")).intValue(),
+						                             ((Number)t.get("id_parent")).intValue(),
 						                             (String)t.get("name_object"),
 						                             (String)t.get("prop_object"),
-						                             ((Integer)t.get("id_object")).intValue(),
-						                             ((Integer)t.get("id_type_object")).intValue()
+						                             ((Number)t.get("id_object")).intValue(),
+						                             ((Number)t.get("id_type_object")).intValue()
 						                             );
 				list.add(ad);
 			}

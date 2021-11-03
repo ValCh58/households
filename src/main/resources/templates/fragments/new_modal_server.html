@@ -12,8 +12,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Создание сервера связи </h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -35,7 +34,7 @@
                             pattern="\d{1,10}" name="port_server" required/>
                         </div>
                     <div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>
 						<input type="submit" class="btn btn-primary" value="Сохранить" />
 					</div>
 				</div>

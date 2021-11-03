@@ -26,15 +26,16 @@ public class QueryCountWaterDto {
 	countList.clear();	
 		
 	Query q = em.createNativeQuery("select b.id_count_water as idCountWater, b.factory_number_uspd as factoryNumberUspd, b.id_measuring as id_Measuring, \r\n"
-			+ "b.count_w as countW, b.time_stamp as timeStamp, b.type_count as typeCount, b.num_ch as numCh  from(\r\n"
-			+ "SELECT cw.id_count_water, cw.id_measuring, cw.factory_number_uspd, cw.count_w, cw.time_stamp, cw.num_ch,\r\n"
-			+ "a.id_uspd_dev, a.num_uspd_dev, a.type_count, a.num_ch as numCh \r\n"
+			+ " b.count_w as countW, b.time_stamp as timeStamp, b.type_count as typeCount, b.num_ch as numCh  from(\r\n"
+			+ " SELECT cw.id_count_water, cw.id_measuring, cw.factory_number_uspd, cw.count_w, cw.time_stamp, cw.num_ch,\r\n"
+			+ " a.id_uspd_dev, a.num_uspd_dev, a.type_count, a.num_ch as numCh \r\n"
 			+ " FROM eisystems.count_water cw \r\n"
 			+ " left join \r\n"
 			+ " (SELECT ud.id_uspd_dev, ud.num_uspd_dev, cnt.type_count, cnt.num_ch \r\n"
-			+ "FROM housing.uspd_dev ud, housing.counts cnt\r\n"
-			+ "where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
-			+ "on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b order by b.time_stamp desc limit 1000;", Tuple.class);
+			+ " FROM housing.uspd_dev ud, housing.counts cnt\r\n"
+			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
+			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
+			+ " order by b.time_stamp desc limit 1000;", Tuple.class);
 	
 	@SuppressWarnings("unchecked")
 	List<Tuple> list = q.getResultList();

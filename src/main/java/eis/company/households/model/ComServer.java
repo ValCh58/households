@@ -58,10 +58,13 @@ public class ComServer implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_com_server", unique=true, nullable=false, precision=11)
     private int idComServer;
+    
     @Column(name="name_server", nullable=false, length=128)
     private String nameServer;
+    
     @Column(name="ip_server", nullable=false, length=25)
     private String ipServer;
+    
     @Column(name="port_server", nullable=false, length=10)
     private String portServer;
     

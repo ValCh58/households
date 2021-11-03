@@ -1,4 +1,4 @@
-package eis.company.households.controller;
+package eis.company.households.restcontroller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,25 +30,14 @@ public class NodesController {
 	List<LinkObjectDTO> queryList;
 	List<LinkObjectDTO> retList = new ArrayList<LinkObjectDTO>();
 
-	@Autowired
-	QueryCountsDto queryCountsDto;
+	@Autowired private QueryCountsDto queryCountsDto;
+	@Autowired private UspdDevRepository uspdDevRep;
+	@Autowired private TypeUspdRepository typeUspdRepository;
+	@Autowired private QueryLinkObjectRepoImpl queryLinkObj;
+	@Autowired private QueryEditSrvRepositoryImpl queryEditSrv;
+	@Autowired private UpdateEditSrv updEditSrv;
 
-	@Autowired
-	UspdDevRepository uspdDevRep;
-
-	@Autowired
-	TypeUspdRepository typeUspdRepository;
-
-	@Autowired
-	QueryLinkObjectRepoImpl queryLinkObj;
-	@Autowired
-	QueryEditSrvRepositoryImpl queryEditSrv;
-
-	@Autowired
-	UpdateEditSrv updEditSrv;
-
-	public NodesController() {
-	}
+	public NodesController() {}
 
 	/**
 	 * Получение списка данных для построения tree table
@@ -57,7 +46,6 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodes")
 	public List<LinkObjectDTO> nodes() {
-
 		return makeTree();
 	}
 

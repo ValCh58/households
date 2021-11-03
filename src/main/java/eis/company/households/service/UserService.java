@@ -41,7 +41,6 @@ public class UserService {
     @Transactional
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        //user.setActive(true);
         Role userRole = roleRepository.findByRole(user.getNameRole());
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         return userRepository.save(user);

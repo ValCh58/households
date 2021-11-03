@@ -4,16 +4,13 @@
 <body>
 <div th:fragment="modal_edit_server">
 
-<div class="modal modal-warning fade in" id="modalEditServer"
-		data-backdrop="static" data-keyboard="false" tabindex="-1">
-		<!-- form th:action="@{/update}" th:method="post" -->
+<div class="modal modal-warning fade in" id="modalEditServer" data-backdrop="static" data-keyboard="false" tabindex="-1">
 		<form  id="modalFormEditSrv">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Редактирование сервера связи </h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -50,7 +47,7 @@
                         </div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>
 						<input type="submit" class="btn btn-primary" value="Сохранить" />
 					</div>
 				</div>

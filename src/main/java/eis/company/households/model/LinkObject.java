@@ -15,13 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="link_object")
 public class LinkObject implements Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 	/** Primary key. */
     protected static final String PK = "idLinkObject";
@@ -55,12 +54,16 @@ public class LinkObject implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_link_object", unique=true, nullable=false, precision=11)
     private int idLinkObject;
+    
     @Column(name="id_parent", nullable=false, precision=11)
     private int idParent;
+    
     @Column(name="id_object", precision=11)
     private int idObject;
+    
     @ManyToOne(optional=false)
     @JoinColumn(name="id_type_object", nullable=false)
+    @JsonIgnore //Удаление рекурсии!!!
     private TypeObject typeObject;
 
     /** Default constructor. */

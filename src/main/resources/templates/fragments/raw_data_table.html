@@ -19,14 +19,15 @@
 					</div>
 					<!-- Фильтр для таблиц объектов -->
 					<div th:insert="~{fragments/filtr_uspd :: filtr_uspd_obj}"></div>
-					<table class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary" id="rawtable">
+					<table class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary" 
+					       id="rawtable" style="font-size: 0.8em; line-height: 1em;">
 					   <thead style="text-align: center;">
 						   <tr>
 						       <th>№</th>
 							   <th style="display: none;">id_rawdata</th>
 							   <th>Время приема</th>
-							   <th>ip Сервера</th>
-							   <th>port Сервера</th>
+							   <th>IP</th>
+							   <th>Port</th>
 							   <th>Номер УСПД</th>
 							   <th>Первичные данные </th>
 						   </tr>

@@ -13,8 +13,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title">Удаление объекта!</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 
@@ -31,7 +30,7 @@
                         
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Нет</button>
+						<button type="button" class="btn btn-primary pull-left" onclick="setScrollToPos();" data-dismiss="modal">Нет</button>
 						<input type="submit" class="btn btn-secondary" id="btn_delete_object" value="Удалить" />
 					</div>
 				</div>

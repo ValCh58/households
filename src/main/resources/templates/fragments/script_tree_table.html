@@ -25,19 +25,19 @@
                 $("#treeTable").append(
                 "<tr data-tt-id=\"" + obj.id_link_object + "\" data-tt-parent-id=\"" + obj.id_parent + "\"><td>" + obj.name_object + "</td><td>" + obj.prop_object + "</td>"
                 + "<td style=\"display: none;\">" + obj.id_object + "</td><td style=\"display: none;\">" + obj.id_type_object + "</td>"
-                + '<TD ALIGN="center">'
+                + '<TD style="width:8%;" align=center>'
                 + '<div class="dropdown no-arrow" id="dropdown' + obj.id_link_object + '">'
                 + '<a  href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
-                +    '<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>'
+                +    '<i class="fa fa-cog fa-sm fa-fw text-gray-400"></i>'
                 + '</a>'
                 + '<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">'
                 + '<div class="dropdown-header">Действия:</div>'
                 + '<div class="dropdown-divider"></div>'
-                + '<a class="dropdown-item newBtn" href="#" onclick="openModalNewSrv(' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить Сервер</a>'
-                + '<a class="dropdown-item newBtn" href="#" onclick="openModalNewUspd(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить УСПД</a>'
-                + '<a class="dropdown-item newBtn" href="#" onclick="openModalNewCnt(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить Счетчик</a>'
-                + '<a class="dropdown-item delBtn" href="#" onclick="openModalWarningDel(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-trash-alt"></i>&nbsp;Удалить</a>'
-                + '<a class="dropdown-item editBtn" href="#" onclick="openModalEdit(' + obj.id_object + ',' + obj.id_type_object + ')"><i class="fas fa-pencil-alt"></i>&nbsp;Изменить</a>' 
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewSrv(' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить Сервер</a>'
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewUspd(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить УСПД</a>'
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewCnt(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-file-alt"></i>&nbsp;Добавить Счетчик</a>'
+                + '<a class="dropdown-item delBtn" href="#" onclick="getPosScroll(); openModalWarningDel(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-trash-alt"></i>&nbsp;Удалить</a>'
+                + '<a class="dropdown-item editBtn" href="#" onclick="getPosScroll(); openModalEdit(' + obj.id_object + ',' + obj.id_type_object + ')"><i class="fas fa-pencil-alt"></i>&nbsp;Изменить</a>' 
                 + '</div></div>'
                 + '</TD>'
                 + "</tr>");
@@ -49,10 +49,28 @@
                   clickableNodeNames: true,
                   indent: 30
               });
-                       
+
+              setScrollToPos();         
           }
         });
     });
+
+    /**
+     *  Получим и запишем позицию скроллинга
+     */
+      function getPosScroll(){
+      	sessionStorage.scrollTop = $(window).scrollTop();
+      }
+      
+      /**
+       *  Прочитаем и установим позицию скроллинга
+       */ 
+      function setScrollToPos(){
+      	if (sessionStorage.scrollTop != "undefined") {
+  			  $(window).scrollTop(sessionStorage.scrollTop);
+  		   }
+          }
+      
    
 </script>
 
@@ -62,9 +80,7 @@
 function openModalWarningDel(idLinkObject, idTypeObject){
 	
 	var myModalEl = document.getElementById('modal-warning-obj');
-	myModalEl.addEventListener('hidden.bs.modal', function (e) { 
-	reloadMyPage();
-})
+	myModalEl.addEventListener('hidden.bs.modal', function (e) {reloadMyPage();})
 	
 	$('#modal-warning-obj #id_link_object').val(idLinkObject);
 	$('#modal-warning-obj #id_type_object').val(idTypeObject);
@@ -153,6 +169,9 @@ function reloadMyPage(){
 	
 	 $("#modalEditCount").modal();
 }
+ $('#modalEditCount').on('shown.bs.modal', function() {
+	   $('#nameCount').focus();
+	 })
 
 /******* Запись состояния радиокнопки *********************/
  $("#counts-group input[type='radio']").change(function() {
@@ -206,11 +225,15 @@ function editUspd(idObj){
         			 $('<option/>', {value: obj.idTypeUspd, html: obj.nameType, selected: false}).appendTo('#typeuspdselect');
         		 }
         		});
+
+        	 $("#modalEditUspd").modal();
        }
     });
-	
-	$("#modalEditUspd").modal();
 }
+
+$('#modalEditUspd').on('shown.bs.modal', function() {
+	   $('#nameUspdDev').focus();
+	 })
 
 /****редактирование сервера связи************************************************/
 function editSrv(idObj){
@@ -229,12 +252,15 @@ function editSrv(idObj){
         	 $('#modalEditServer #id_manag_company').val(data.id_manag_company);
         	 $('#modalEditServer #id_type_object').val(data.id_type_object);
         	 $('#modalEditServer #id_com_server').val(data.id_com_server);
-        	 //console.log("var href=", href);
+        	 
+        	 $("#modalEditServer").modal();    	 
        }
     });
-	$("#modalEditServer").modal();
+	
 }
-
+$('#modalEditServer').on('shown.bs.modal', function() {
+	   $('#name_server').focus();
+	 })
 
 /* Запись параметров сервера связи в режиме редактирования***********/
  $("#modalFormEditSrv").on("submit", function(){
@@ -247,9 +273,7 @@ function editSrv(idObj){
 		success: function(data){
 		}
 	});
-	//e.preventDefault();
 	$("#modalEditServer").modal('hide');
-	//return false;
 });
 
  
@@ -353,6 +377,9 @@ $("#modalFormNewSrv").on("submit", function(){
 		alert("УСПД можно привязать только к Серверу связи!");
 	}
 } 
+ $('#modalEditUspd').on('shown.bs.modal', function() {
+	   $('#nameUspdDev').focus();
+	 })
 
 /****************************Создать новый счетчик************************************/
  
@@ -393,6 +420,9 @@ $("#modalFormNewSrv").on("submit", function(){
 		alert("Счетчик можно привязать только к УСПД!");
 	}
 }
+ $('#modalEditCount').on('shown.bs.modal', function() {
+	   $('#typeCount').focus();
+	 })
  
 </script>
 

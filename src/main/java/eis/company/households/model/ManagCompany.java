@@ -17,13 +17,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="manag_company")
 public class ManagCompany implements Serializable {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 	/** Primary key. */
     protected static final String PK = "idManagCompany";
@@ -57,18 +56,30 @@ public class ManagCompany implements Serializable {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id_manag_company", unique=true, nullable=false, precision=11)
     private int idManagCompany;
+    
     @Column(name="name_company", nullable=false, length=255)
     private String nameCompany;
+    
     @Column(length=45)
     private String phone;
+    
     @Column(name="address_1", length=255)
     private String address1;
+    
     @Column(name="address_2", length=255)
     private String address2;
+    
     @OneToMany(mappedBy="managCompany")
+    @JsonIgnore //Удаление рекурсии!!!
     private Set<ComServer> comServer;
+    
+    @OneToMany(mappedBy="managCompany", orphanRemoval = true)
+    @JsonIgnore
+    private Set<Street> street;
+    
     @ManyToOne(optional=false)
     @JoinColumn(name="id_type_object", nullable=false)
+    @JsonIgnore
     private TypeObject typeObject;
 
     /** Default constructor. */
@@ -76,7 +87,32 @@ public class ManagCompany implements Serializable {
         super();
     }
 
-    /**
+    /*** Helper methods **************************/
+	/*
+	 * public void addStreet(Street street) { 
+	 *    this.street.add(street);
+	 *    street.setManagCompany(this); 
+	 * }
+	 */
+
+	
+	  public void removeStreet(Street street) { 
+	     street.setManagCompany(null);
+	     this.street.remove(street); 
+	  }
+	 
+    /*******************************************/
+    
+    
+    public Set<Street> getStreet() {
+		return street;
+	}
+
+	public void setStreet(Set<Street> street) {
+		this.street = street;
+	}
+
+	/**
      * Access method for idManagCompany.
      *
      * @return the current value of idManagCompany

@@ -28,20 +28,13 @@ import eis.company.households.repository.UspdDevRepository;
 @Service
 public class UpdateEditSrv {
 
-	@Autowired
-	private CountsRepository countsRep;
-	@Autowired
-	private ComServerRepository comServerRepository;
-	@Autowired
-	private LinkObjectRepository linkObjRep;
-	@Autowired
-	private ManagCompanyRepository managCompanyRepository;
-	@Autowired
-	private TypeObjectRepository typeObjectRepository;
-	@Autowired
-	private UspdDevRepository uspdDevRep;
-	@Autowired
-	private TypeUspdRepository typeUspdRepo;
+	@Autowired private CountsRepository countsRep;
+	@Autowired private ComServerRepository comServerRepository;
+	@Autowired private LinkObjectRepository linkObjRep;
+	@Autowired private ManagCompanyRepository managCompanyRepository;
+	@Autowired private TypeObjectRepository typeObjectRepository;
+	@Autowired private UspdDevRepository uspdDevRep;
+	@Autowired private TypeUspdRepository typeUspdRepo;
 
 	public UpdateEditSrv() {
 	}
@@ -151,7 +144,6 @@ public class UpdateEditSrv {
 	 * @param editUspdDto объект полученый из формы "Редактирование УСПД"
 	 * @return
 	 */
-	@Transactional
 	public UspdDev saveUspdDev(EditUspdDTO editUspdDto) {
 
 		if (editUspdDto.getIdTypeUspdDev() > 0) {
@@ -168,7 +160,6 @@ public class UpdateEditSrv {
 	 * 
 	 * @param countsDto
 	 */
-	@Transactional
 	public void updateCounts(CountsDTO countsDto) {
 		if (countsDto.getIdCounts() > 0) {
 			saveCounts(countsDto);
@@ -219,10 +210,7 @@ public class UpdateEditSrv {
 	private UspdDev saveNewUspd(EditUspdDTO editUspdDto) {
 
 		Optional<LinkObject> opLinkObject = linkObjRep.findById(editUspdDto.getIdLinkObject());
-		if (!opLinkObject.isPresent()
-				&& opLinkObject.get().getTypeObject().getIdTypeObject() != MyConst.TYPE_OBJECT_SERVER) {
-			return null;
-		} // ERROR!!! USPD можно привязать только к серверу//
+		if (!opLinkObject.isPresent()) {return null;}
 
 		Optional<ComServer> opComServer = comServerRepository.findById(opLinkObject.get().getIdObject());
 		TypeObject typeObject = typeObjectRepository.getOne(MyConst.TYPE_OBJECT_USPD);
@@ -261,7 +249,7 @@ public class UpdateEditSrv {
 	@Transactional
 	public ComServer saveNewComServer(EditServerDTO esd) {
 		
-		// Найдем корневой элемент дерева//Нельзя удалять кореневой сервер/////////
+		// Найдем корневой элемент дерева//
 		Optional<LinkObject> oplink = linkObjRep.findByIdParent(MyConst.TREE_ROOT);
 		LinkObject linkobject = oplink.isPresent() ? oplink.get() : null;
 		if (linkobject == null) {return null;}
@@ -271,8 +259,7 @@ public class UpdateEditSrv {
 		comserver.setNameServer(esd.getName_server());
 		comserver.setPortServer(esd.getPort_server());
 
-		Optional<ManagCompany> opmcomp = managCompanyRepository.findById(1);// Сделать выбор из списка
-																			// УК!!!!!!!!!!!!!!!!
+		Optional<ManagCompany> opmcomp = managCompanyRepository.findById(1);// Сделать выбор из списка УК
 		ManagCompany manageCompany = opmcomp.isPresent() ? opmcomp.get() : null;
 		if (manageCompany == null) {return null;}
 		comserver.setManagCompany(manageCompany);
@@ -324,7 +311,7 @@ public class UpdateEditSrv {
 	}
 
 	/**
-	 * Удаление строки из дерева
+	 * Удаление Comm Server
 	 * 
 	 * @param idLinkObj ID дерева объектов
 	 * @return

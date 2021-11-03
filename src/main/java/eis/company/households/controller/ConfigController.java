@@ -6,7 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Вызов страницы /admin/spr_object
- * @author Admin
+ * @author chvaleriy
  *
  */
 @Controller
@@ -17,6 +17,14 @@ public class ConfigController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/spr_object");
+		return modelAndView;
+	}
+	
+	@GetMapping(value = "/user/nodes_uk")
+	public ModelAndView sprObjectUk() {
+
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("user/nodes_uk");
 		return modelAndView;
 	}
 }

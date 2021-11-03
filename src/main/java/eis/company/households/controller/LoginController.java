@@ -130,6 +130,18 @@ public class LoginController {
         modelAndView.setViewName("admin/home");
         return modelAndView;
     }
+    
+       
+    @GetMapping(value="/user/home_user")
+    public ModelAndView home_user(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByUserName(auth.getName());
+        modelAndView.addObject("userName", "Пользователь " + user.getUserName() + "/" + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+        modelAndView.addObject("userMessage","Контент пользователя УК");
+        modelAndView.setViewName("user/home_user");
+        return modelAndView;
+    }
 
 
 }
