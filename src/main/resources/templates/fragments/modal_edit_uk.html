@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body>
+   <div th:fragment="modal_edit_uk">
+      <div class="modal modal-warning fade in" id="modalEditUk" data-backdrop="static" data-keyboard="false" tabindex="-1">
+         <form id="modalFormEditUk">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                 <div class="modal-header">
+						<h5 class="modal-title">Редактирование параметров УК</h5>
+						<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+				 </div>
+					<div class="modal-body">
+					   <div class="form-group">
+						    <input  value="" type="hidden" class="form-control" id="id_uk" name="idManagCompany"/>
+                       </div>
+					   <div class="form-group">
+						    <label for="title">Название управляющей компании:</label>
+                            <input  value="" type="text" class="form-control" id="name_uk" name="nameCompany" required/>
+                       </div>
+                       <div class="form-group">
+						    <label for="title">Номера телефонов:</label>
+                            <input  value="" type="text" class="form-control" id="phone_uk" name="phone" required/>
+                       </div>
+                       <div class="form-group">
+						    <label for="title">Адрес 1:</label>
+                            <input  value="" type="text" class="form-control" id="adress_1_uk" name="address1" required/>
+                       </div>
+                       <div class="form-group">
+						    <label for="title">Адрес 2:</label>
+                            <input  value="" type="text" class="form-control" id="adress_2_uk" name="address2"/>
+                       </div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>
+						<input type="submit" class="btn btn-primary" value="Сохранить"/>
+					</div>
+               </div>
+            </div>
+         </form>
+      </div>
+   </div>
+</body>
+</html>
