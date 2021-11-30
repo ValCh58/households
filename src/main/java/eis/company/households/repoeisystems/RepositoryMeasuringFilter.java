@@ -12,6 +12,6 @@ import eis.company.households.modeleis.Measuring;
 @Repository
 public interface RepositoryMeasuringFilter extends JpaRepository<Measuring, Integer> {
 	
-    List<Measuring> findByTimeStampBetween(LocalDateTime dateFrom, LocalDateTime dateTo, Sort sort);
-    List<Measuring> findByTimeStampBetweenAndFactoryNumberUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
+    List<Measuring> findFirst1000ByTimeStampBetween(LocalDateTime dateFrom, LocalDateTime dateTo, Sort sort);
+    List<Measuring> findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
 }

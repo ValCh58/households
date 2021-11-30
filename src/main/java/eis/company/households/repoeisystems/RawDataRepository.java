@@ -13,6 +13,6 @@ import eis.company.households.modeleis.RawData;
 public interface RawDataRepository extends JpaRepository<RawData, Integer> {
 	
 	List<RawData> findFirst1000ByOrderByEventTimeDesc();
-	List<RawData> findByEventTimeBetween(LocalDateTime from, LocalDateTime to, Sort sort);
-	List<RawData> findByEventTimeBetweenAndNumUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
+	List<RawData> findFirst1000ByEventTimeBetween(LocalDateTime from, LocalDateTime to, Sort sort);
+	List<RawData> findFirst1000ByEventTimeBetweenAndNumUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
 }

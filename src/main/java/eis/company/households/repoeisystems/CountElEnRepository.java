@@ -14,6 +14,6 @@ public interface CountElEnRepository extends JpaRepository<CountElEn, Integer> {
 
 	//Optional<CountElEn> findById(Integer id);
 	List<CountElEn> findFirst1000ByOrderByTimeStampDesc();
-	List<CountElEn> findByTimeStampBetween(LocalDateTime dateFrom, LocalDateTime dateTo, Sort sort);
-	List<CountElEn> findByTimeStampBetweenAndFactoryNumberUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
+	List<CountElEn> findFirst1000ByTimeStampBetween(LocalDateTime dateFrom, LocalDateTime dateTo, Sort sort);
+	List<CountElEn> findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(LocalDateTime dateFrom, LocalDateTime dateTo, String numUspd, Sort sort);
 }

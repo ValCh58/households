@@ -42,8 +42,8 @@ public class ObjectAdminService {
 	@Autowired private CountHeaterRepository countHeaterRepo;
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository УСПД 
+	 * @return List<Measuring>
 	 */
 
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
@@ -59,8 +59,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository УСПД фильтрация
+	 * @return List<Measuring>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<Measuring> retUpdateUspdObj(String numUspd, LocalDate dateFrom, LocalDate dateTo) {
@@ -70,32 +70,30 @@ public class ObjectAdminService {
 		List<Measuring> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = repoMeasuringFiltr.findByTimeStampBetween(from, to, sort);
+			list = repoMeasuringFiltr.findFirst1000ByTimeStampBetween(from, to, sort);
 		} else {
-			list = repoMeasuringFiltr.findByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = repoMeasuringFiltr.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
 		}
 		return list;
 	}
 	
 	/**
 	 * Service repository фильтрация счетчиков воды
-	 * @return
+	 * @return List<CountWaterDTO>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountWaterDTO> retUpdateCountWaterObj(String numUspd, LocalDate dateFrom, LocalDate dateTo) {
 		LocalDateTime from = dateFrom.atStartOfDay();
 		LocalDate dayTo = dateTo.plusDays(1);
 		LocalDateTime to = dayTo.atStartOfDay();
-		List<CountWaterDTO> list = null;
-				
-		list = countWaterPar2.retCountWaterDTOPar2(numUspd, from, to);
+		List<CountWaterDTO> list = countWaterPar2.retCountWaterDTOPar2(numUspd, from, to);
 			
 		return list;
 	}
 	
 	/**
-	 * Service DTO чтение показаний счетчиков не фильтрация.
-	 * @return
+	 * Service DTO чтение показаний счетчиков воды
+	 * @return List<CountWaterDTO>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountWaterDTO> retCountWater() {
@@ -105,8 +103,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository  счетчики эл энергии
+	 * @return List<CountElEn
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountElEn> retCountElEn() {
@@ -116,8 +114,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository raw data
+	 * @return List<RawData>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<RawData> retRawData(){
@@ -126,8 +124,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service DTO 
-	 * @return
+	 * Service DTO аварийные сообщения
+	 * @return List<AlarmDTO>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly=true)
 	public List<AlarmDTO> retAlarmMsg(){
@@ -136,8 +134,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository счетчики эл энергии фильтрация
+	 * @return List<CountElEn>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountElEn> retUpdateCountElEnObj(String numUspd, LocalDate dateFrom, LocalDate dateTo) {
@@ -147,17 +145,17 @@ public class ObjectAdminService {
 		List<CountElEn> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = countElEnRepo.findByTimeStampBetween(from, to, sort);
+			list = countElEnRepo.findFirst1000ByTimeStampBetween(from, to, sort);
 		} else {
-			list = countElEnRepo.findByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = countElEnRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
 		}
 		
 		return list;
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository счетчики тепла фильтрация
+	 * @return List<CountHeat>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly=true)
 	public List<CountHeat> retUpdCountHeater(String numUspd, LocalDate dateFrom, LocalDate dateTo){
@@ -167,16 +165,16 @@ public class ObjectAdminService {
 		List<CountHeat> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = countHeaterRepo.findByTimeStampBetween(from, to, sort);
+			list = countHeaterRepo.findFirst1000ByTimeStampBetween(from, to, sort);
 		} else {
-			list = countHeaterRepo.findByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = countHeaterRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
 		}
 		return list;
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository счетчики тепла
+	 * @return List<CountHeat>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountHeat> retCountHeater(){
@@ -185,8 +183,8 @@ public class ObjectAdminService {
 	}
 	
 	/**
-	 * Service repository 
-	 * @return
+	 * Service repository raw data
+	 * @return List<RawData>
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<RawData> retUpdateRawData(String numUspd, LocalDate dateFrom, LocalDate dateTo) {
@@ -196,16 +194,16 @@ public class ObjectAdminService {
 		List<RawData> list;
 		Sort sort = Sort.by("eventTime").descending();
 		if (numUspd.equals("0")) {
-			list = repoRawData.findByEventTimeBetween(from, to, sort);
+			list = repoRawData.findFirst1000ByEventTimeBetween(from, to, sort);
 		} else {
-			list = repoRawData.findByEventTimeBetweenAndNumUspd(from, to, numUspd, sort);
+			list = repoRawData.findFirst1000ByEventTimeBetweenAndNumUspd(from, to, numUspd, sort);
 		}
 		return list;
 	}
 	
 	/**
-	 * Service DTO 
-	 * @return
+	 * Service DTO сообщения об авариях
+	 * @return AlarmDTO
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager")
 	public AlarmDTO retUpdAlarmDTO(Integer idalarm) {

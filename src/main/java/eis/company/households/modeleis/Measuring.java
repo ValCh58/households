@@ -17,6 +17,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -99,6 +101,7 @@ public class Measuring implements Serializable {
     private String thresholdCounterUspd;
     
     @Column(name="TIME_STAMP")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime timeStamp;
     
     @Column(name="ERROR_EN", length=45)

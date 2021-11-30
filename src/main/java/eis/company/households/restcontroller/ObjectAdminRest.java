@@ -41,9 +41,8 @@ public class ObjectAdminRest {
 		 * throw new Exception("USPD not found for this parameters.");
 		 * //ResourceNotFoundException("USPD not found for this parameters."); }
 		 */
-		if(list.isEmpty()) {list = null;}
-		 
-		return list;
+				 
+		return list.isEmpty() ? null : list;
 	}
 	
 	/**

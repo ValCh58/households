@@ -40,8 +40,9 @@ public class RetCountWaterDTOPar2 {
 			+ " FROM housing.uspd_dev ud, housing.counts cnt\r\n"
 			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
-			+ " where b.time_stamp >= ?1 and b.time_stamp <= ?2"
-			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 1000;", Tuple.class);
+			+ " where b.time_stamp >= ?1 and b.time_stamp <= ?2 "
+			+ " and b.type_count <> 0 and b.count_w <> 0 "
+			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 5000;", Tuple.class);
 	q.setParameter(1, dateFrom);
 	q.setParameter(2, dateTo);
 	}
@@ -57,7 +58,8 @@ public class RetCountWaterDTOPar2 {
 			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
 			+ " where b.time_stamp >= ?1 and b.time_stamp <= ?2 and b.factory_number_uspd=?3 "
-			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 1000;", Tuple.class);
+			+ " and b.type_count <> 0 and b.count_w <> 0 "
+			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 5000;", Tuple.class);
 	q.setParameter(1, dateFrom);
 	q.setParameter(2, dateTo);
 	q.setParameter(3, numUspd);

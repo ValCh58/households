@@ -35,7 +35,7 @@ public class QueryCountWaterDto {
 			+ " FROM housing.uspd_dev ud, housing.counts cnt\r\n"
 			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
-			+ " order by b.time_stamp desc limit 1000;", Tuple.class);
+			+ " where b.type_count <> 0 and b.count_w <> 0 order by b.time_stamp desc limit 5000;", Tuple.class);
 	
 	@SuppressWarnings("unchecked")
 	List<Tuple> list = q.getResultList();
