@@ -18,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity(name="counts")
 public class Counts implements Serializable {
 
@@ -63,32 +65,46 @@ public class Counts implements Serializable {
     @Column(name="type_count", precision=2)
     private int typeCount;
     //////////////////////////////////////
+    
     @Column(name="serial_num", nullable=false, length=128)
     private String serialNum;
+    
     @Column(name="date_plug")
     private LocalDate datePlug;
+    
     @Column(name="date_expire")
     private LocalDate dateExpire;
+    
     @Column(name="name_count", nullable=false, length=128)
     private String nameCount;
+    
     @Column(nullable=false, length=255)
     private String address;
+    
     @Column(name="num_ch")
     private int numCh;
+    
+    /*** Counts >-------> Person_acnt ***/
+    @ManyToOne
+    @JoinColumn(name="id_person_acnt")
+    @JsonIgnore
+    private PersonAcnt personAcnt;
    
     /*** Counts >--------- TypeObject ***/
     @ManyToOne
     @JoinColumn(name="id_type_object")
+    @JsonIgnore
     private TypeObject typeObject;
     
     /*** Counts >--------- UspdDev ***/
     @ManyToOne(optional=false)
     @JoinColumn(name="id_uspd_dev", nullable=false)
+    @JsonIgnore
     private UspdDev uspdDev;
     
     /*** Counts ---------< FotoCount ***/
     @OneToMany(mappedBy="counts")
-    private List<FotoCounts> fotoCounts = new ArrayList<FotoCounts>();
+    private List<FotoCounts> fotoCounts = new ArrayList<>();
 
     /** Default constructor. */
     public Counts() {
@@ -234,8 +250,18 @@ public class Counts implements Serializable {
     public void setAddress(String aAddress) {
     	this.address = aAddress;
     }
+    
+    
 
-    /**
+    public PersonAcnt getPersonAcnt() {
+		return personAcnt;
+	}
+
+	public void setPersonAcnt(PersonAcnt personAcnt) {
+		this.personAcnt = personAcnt;
+	}
+
+	/**
      * Access method for typeObject.
      *
      * @return the current value of typeObject
