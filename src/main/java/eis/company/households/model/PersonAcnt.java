@@ -3,7 +3,9 @@
 package eis.company.households.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,6 +39,9 @@ public class PersonAcnt implements Serializable {
     
     @Column(name="id_link_object")
     private int idLinkObject;
+    
+    @OneToMany(mappedBy="personAcnt")
+    private List<Counts> counts = new ArrayList<>();
     
     @ManyToOne(optional=false)
     @JoinColumn(name="id_room", nullable=false)
@@ -103,8 +109,18 @@ public class PersonAcnt implements Serializable {
     public void setNumAcnt(String aNumAcnt) {
         numAcnt = aNumAcnt;
     }
+    
+    
 
-    /**
+    public List<Counts> getCounts() {
+		return counts;
+	}
+
+	public void setCounts(List<Counts> counts) {
+		this.counts = counts;
+	}
+
+	/**
      * Access method for room.
      *
      * @return the current value of room
