@@ -306,7 +306,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 		   editFlat(IdObject, idTree); //Квартира 
 	   }
 	   else if(IdTypeObject == 11){
-		   editAcc(IdObject, idTree); //Лицевой счет
+		   editAcc(IdObject); //Лицевой счет
 	   }
 
 	    
@@ -494,8 +494,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    */
    function editAcc(idObj){
 	   var id = idObj;
-	   var idLink;
-
+	 
 	   $.ajax({
 		   "type"     : 'get',
            "url"      : '/nodeEditAcc/'+id,
@@ -505,6 +504,8 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
         	   $('#modalEditAct #num_acnt').val(data.numAcnt);
         	   $('#modalEditAct #id_link_object').val(data.idLinkObject);
         	   $("#modalEditAct").modal();
+
+        	   //openPersonAcnt();
            },
            "error"  : function(){
                alert("Ошибка чтения данных!"); 
@@ -531,7 +532,34 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    	$("#modalEditAct").modal('hide');
   });
   /***************************************************************************/
-   
+  
+  /**
+  * Загрузка данных в таблицу по событию show модального окна*
+  */
+  $('#modalEditAct').on('show.bs.modal', function(e) {
+	  
+	openPersonAcnt();
+	   
+	});
+
+	function openPersonAcnt(){
+		
+		var idLink = $('#modalEditAct #id_link_object').val();
+		console.log(idLink);
+		$.ajax({
+			   "type"     : 'get',
+	           "url"      : '/user/cool_water/'+idLink,
+	           "dataType" : 'json',
+	           "success"  : function(data){
+	        	  console.log(data);
+	        	  console.log(idLink);
+	           },
+	           "error"  : function(){
+	               alert("Ошибка чтения данных!"); 
+	           }
+			   });
+	}
+  /***************************************************************************/ 
    
 </script>
  
