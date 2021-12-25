@@ -1,6 +1,6 @@
 package eis.company.households.queres;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class QueryAcntCountsDto {
 	@PersistenceContext(name="housingEntityManager")
 	private EntityManager me;
 	
-	@SuppressWarnings("unused")
 	public List<AcntCountsDTO> getAcntCountsDTO(Integer id){
+		acntCntList.clear();
 		@SuppressWarnings("unchecked")
 		List<Tuple> list = me.createNativeQuery("SELECT co.id_counts as idCounts, co.id_person_acnt as idPersonAcnt,"
 				                              + " co.name_count as nameCount, co.serial_num as serialNum,"
@@ -29,7 +29,9 @@ public class QueryAcntCountsDto {
 				                              + "FROM housing.room ro \r\n"
 				                              + "left join housing.uspd_dev ud on ro.id_uspd_dev = ud.id_uspd_dev\r\n"
 				                              + "left join housing.counts co on ud.id_uspd_dev = co.id_uspd_dev\r\n"
-				                              + "where ro.id_room =:id", Tuple.class).setParameter("id", id).getResultList();
+				                              + "where ro.id_room ="
+				                              + "(select hll.id_object from housing.link_object_uk hll where hll.id_link_object = :id)"
+				                              , Tuple.class).setParameter("id", id).getResultList();
 		if(list.isEmpty())
 			return null;
 		
@@ -40,7 +42,7 @@ public class QueryAcntCountsDto {
 					           (int)t.get("idPersonAcnt"),
 					           (String)t.get("nameCount"),
 					           (String)t.get("serialNum"),
-					           ((Timestamp) t.get("dateExpire")).toLocalDateTime(),
+					           ((java.sql.Date) t.get("dateExpire")).toLocalDate(),
 					           (String)t.get("address"));
 			
 			acntCntList.add(ac);

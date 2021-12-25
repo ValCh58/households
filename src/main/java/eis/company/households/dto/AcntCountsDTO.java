@@ -1,7 +1,6 @@
 package eis.company.households.dto;
 
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,7 @@ public class AcntCountsDTO {
 	private Integer idPersonAcnt;
 	private String nameCount;
 	private String serialNum;
-	private LocalDateTime dateExpire;
+	private LocalDate dateExpire;
 	private String address;
 
 }

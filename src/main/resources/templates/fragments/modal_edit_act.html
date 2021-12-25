@@ -24,6 +24,28 @@
                        <div class="form-group">
 						    <input value="" type="hidden" class="form-control" id="id_link_object" name="idLinkObject"/>
                        </div>
+                       
+                       <div class="overflow: auto;" id="scrolluspdflat">
+						  <table
+							class="table table-success table-condensed table-hover table-sm table-bordered border-primary 
+                                   table-responsive-sm table-fixed" id="acntcounts" style="font-size: 0.8em; line-height: 1em;">
+							 <thead style="text-align: center;">
+								 <tr>
+									<th>№</th>
+								    <th style="display: none;">idCounts</th>
+								    <th style="display: none;">idPerson_acnt</th>
+									<th>Тип счетчика</th>
+									<th>Номер</th>
+									<th>Дата поверки</th>
+									<th>Адрес установки</th>
+									<th>Запись</th>
+								</tr>
+							 </thead>
+							 <tbody style="text-align: center;">
+							 </tbody>
+						  </table>
+					   </div>
+                       
                        <div class="modal-footer">
 						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>
 						<input type="submit" class="btn btn-primary" value="Сохранить" />
