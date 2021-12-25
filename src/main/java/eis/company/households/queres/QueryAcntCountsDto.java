@@ -20,8 +20,8 @@ public class QueryAcntCountsDto {
 	@PersistenceContext(name="housingEntityManager")
 	private EntityManager me;
 	
-	@SuppressWarnings("unused")
 	public List<AcntCountsDTO> getAcntCountsDTO(Integer id){
+		acntCntList.clear();
 		@SuppressWarnings("unchecked")
 		List<Tuple> list = me.createNativeQuery("SELECT co.id_counts as idCounts, co.id_person_acnt as idPersonAcnt,"
 				                              + " co.name_count as nameCount, co.serial_num as serialNum,"

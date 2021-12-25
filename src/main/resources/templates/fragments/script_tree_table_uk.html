@@ -490,7 +490,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   });
    
    /**
-   * *******Edit Acc****************************************************** *
+   * *******Edit Acc - открытие окна редактирования modalEditAct***************************** *
    */
    function editAcc(idObj){
 	   var id = idObj;
@@ -504,8 +504,6 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
         	   $('#modalEditAct #num_acnt').val(data.numAcnt);
         	   $('#modalEditAct #id_link_object').val(data.idLinkObject);
         	   $("#modalEditAct").modal();
-
-        	   //openPersonAcnt();
            },
            "error"  : function(){
                alert("Ошибка чтения данных!"); 
@@ -520,7 +518,9 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    * **********Update Account********************* *
    */
    $("#modalFormEditAct").on("submit", function(){
-	   
+
+	   isCheckedAcntCounts();
+		   
   	$.ajax({
   		url: "/updateEditAcc",
   		method: "POST",
@@ -534,32 +534,60 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   /***************************************************************************/
   
   /**
-  * Загрузка данных в таблицу по событию show модального окна*
+  * Загрузка данных в таблицу по событию show модального окна modalEditAct*
   */
   $('#modalEditAct').on('show.bs.modal', function(e) {
-	  
-	openPersonAcnt();
+	  var idLink = $('#modalEditAct #id_link_object').val();  
+	  openPersonAcnt(idLink);
 	   
 	});
 
-	function openPersonAcnt(){
-		
-		var idLink = $('#modalEditAct #id_link_object').val();
-		console.log(idLink);
+	function openPersonAcnt(idLink){
+		//#modalEditAct #id_link_object -> зачение id_link_object родителя!
 		$.ajax({
 			   "type"     : 'get',
 	           "url"      : '/user/cool_water/'+idLink,
 	           "dataType" : 'json',
 	           "success"  : function(data){
-	        	  console.log(data);
-	        	  console.log(idLink);
+
+	        	 //Удалим тело таблицы/////////////////
+	           	var tableBody = $("#acntcounts tbody");
+	           	tableBody.empty();
+	           	//Вставим новые записи////////////////
+	           	$.each(data, function (idx, obj){
+		           	$('#acntcounts').append(
+	               		 '<tr>' +
+	   				       '<td>' + (idx+1) + '</td>' +
+	   				       '<td style="display: none;">' + obj.idCounts + '</td>' +
+	   				       '<td style="display: none;">' + obj.idPersonAcnt + '</td>' +
+	   				       '<td>' + obj.nameCount + '</td>' +
+	   				       '<td>' + obj.serialNum + '</td>' +
+	   				       '<td>' + obj.dateExpire + '</td>' + 
+	   				       '<td>' + obj.address + '</td>' +
+	   				       '<td align="center"><input type="checkbox" onchange="#" name="my_check'+(idx)+'">' +
+	   				    '</tr>'
+	   				 );
+	                 $('input[name="my_check'+(idx)+'"]').prop('checked', (obj.idPersonAcnt == $("#modalEditAct #id_person_acnt").val()));
+	           	});
 	           },
 	           "error"  : function(){
 	               alert("Ошибка чтения данных!"); 
 	           }
 			   });
 	}
-  /***************************************************************************/ 
+
+	/**
+	* Проверка выбранных счетчиков в таблице acntcounts
+	*/
+	function isCheckedAcntCounts(){
+		$('#acntcounts td').each(function(key){
+
+			console.log(key);
+
+		});
+	}
+
+/*********************************************************************/ 
    
 </script>
  
