@@ -274,7 +274,8 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
            $('#modalFormEditAct')[0].reset();
            $('#modalFormEditAct #id_person_acnt').val(0);
            $('#modalFormEditAct #id_link_object').val(id_link);
-           
+           openPersonAcnt(id_link);
+           console.log(id_link);
        }
        else{
     	   alert("Объект л/сч можно привязать только к объекту помещение!");
@@ -519,7 +520,8 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    */
    $("#modalFormEditAct").on("submit", function(){
 
-	   isCheckedAcntCounts();
+	if(!isCheckedAcntCounts())
+	   return;
 		   
   	$.ajax({
   		url: "/updateEditAcc",
@@ -527,7 +529,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   		dataType: "json",
   		cache: false,
   		data: $(this).serialize(),
-  		success: function(data){}
+  		success: function(data){},
   	});
    	$("#modalEditAct").modal('hide');
   });
@@ -537,6 +539,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   * Загрузка данных в таблицу по событию show модального окна modalEditAct*
   */
   $('#modalEditAct').on('show.bs.modal', function(e) {
+	  //var idLink = $('#modalFormEditAct #id_link_object').val();
 	  var idLink = $('#modalEditAct #id_link_object').val();  
 	  openPersonAcnt(idLink);
 	   
@@ -544,6 +547,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 
 	function openPersonAcnt(idLink){
 		//#modalEditAct #id_link_object -> зачение id_link_object родителя!
+		console.log(idLink);
 		$.ajax({
 			   "type"     : 'get',
 	           "url"      : '/user/cool_water/'+idLink,
@@ -564,14 +568,14 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 	   				       '<td>' + obj.serialNum + '</td>' +
 	   				       '<td>' + obj.dateExpire + '</td>' + 
 	   				       '<td>' + obj.address + '</td>' +
-	   				       '<td align="center"><input type="checkbox" onchange="#" name="my_check'+(idx)+'">' +
+	   				       '<td align="center"><input type="checkbox" name="my_check'+(idx)+'">' +
 	   				    '</tr>'
 	   				 );
 	                 $('input[name="my_check'+(idx)+'"]').prop('checked', (obj.idPersonAcnt == $("#modalEditAct #id_person_acnt").val()));
 	           	});
 	           },
 	           "error"  : function(){
-	               alert("Ошибка чтения данных!"); 
+	               alert("Ошибка чтения данных!\nВозможно не привязаны счетчики к УСПД.\nОбратитесь к администратору."); 
 	           }
 			   });
 	}
@@ -580,11 +584,40 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 	* Проверка выбранных счетчиков в таблице acntcounts
 	*/
 	function isCheckedAcntCounts(){
-		$('#acntcounts td').each(function(key){
 
-			console.log(key);
-
+		var acntPerson = $("#modalEditAct #id_person_acnt").val(); //Номер л/сч в форме modalEditAct
+		var statusMsgErr = ''; //Запись ошибочных сообщений при -> acntPerson == id_person_acnt && checked != true
+	  //var array = [];
+		 
+		$('#acntcounts tr').each(function(){
+			var array_row = [];
+			$(this).find('td').each(function(){
+				array_row.push($(this).text());
+			});
+			var i = (array_row[0])-1;
+			if(acntPerson == array_row[2] && !($('input[name="my_check'+(i)+'"]').prop('checked'))){
+                 statusMsgErr = statusMsgErr + ' ' + array_row[3] + ' №' + array_row[4];
+			}
+			//console.log(statusMsgErr);
+			//array.push(array_row);
 		});
+
+		if(statusMsgErr != ''){
+           alert('Не связаны л.сч. и счетчик(и) ' + statusMsgErr);
+           return false;;
+		}
+
+		return true;
+		//console.table(array);
+
+		/*var acnt = array[1][2];
+		var cnt = array[1][1];
+		console.log('acnt = array[1][2] '+array[1][2]);
+		console.log('cnt = array[1][1] ' +array[1][1]);
+		
+		var i = (array[1][0])-1;
+		var prop = $('input[name="my_check'+(i)+'"]').prop('checked');
+		console.log('prop =  ' + "my_check"+i + " " + prop);*/
 	}
 
 /*********************************************************************/ 

@@ -1,5 +1,6 @@
 package eis.company.households.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -399,7 +400,7 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt updateAccount(PersonAcnt pa) {
+	public PersonAcnt updateAccount(PersonAcnt pa) throws SQLIntegrityConstraintViolationException{
 		Optional<PersonAcnt> opt = personAcntRepository.findById(pa.getIdPersonAcnt());
 		PersonAcnt personAcc = opt.isPresent() ? opt.get() : null;
 		if (personAcc == null) {
@@ -416,7 +417,7 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt insertPersonAcnt(PersonAcnt pacnt) {
+	public PersonAcnt insertPersonAcnt(PersonAcnt pacnt) throws SQLIntegrityConstraintViolationException {
 		LinkObjectUk linkObjUk = null;
 		Room room = null;
 		TypeObject typeObj = null;
