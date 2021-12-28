@@ -264,26 +264,6 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
     	$('#name_flat').focus();
  	 })
     
-    /**
-    * Добавление объекта л,сч ******************************************************
-    */
-    function openModalNewAccount(id_link, id_type){
-    	
-       if(id_type == 10){
-           $("#modalEditAct").modal();
-           $('#modalFormEditAct')[0].reset();
-           $('#modalFormEditAct #id_person_acnt').val(0);
-           $('#modalFormEditAct #id_link_object').val(id_link);
-           openPersonAcnt(id_link);
-           console.log(id_link);
-       }
-       else{
-    	   alert("Объект л/сч можно привязать только к объекту помещение!");
-       }
-    }
-    $('#modalFormEditAct').on('shown.bs.modal', function() {
-    	$('#num_acnt').focus();
- 	 })
     /**********************************************************************************/
     
     /**********************************************************************************/
@@ -490,8 +470,9 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    	//return false;
   });
    
-   /**
+   /** ************************************************************************************** *
    * *******Edit Acc - открытие окна редактирования modalEditAct***************************** *
+   * **************************************************************************************** *
    */
    function editAcc(idObj){
 	   var id = idObj;
@@ -505,6 +486,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
         	   $('#modalEditAct #num_acnt').val(data.numAcnt);
         	   $('#modalEditAct #id_link_object').val(data.idLinkObject);
         	   $("#modalEditAct").modal();
+        	   openPersonAcnt(data.idLinkObject);
            },
            "error"  : function(){
                alert("Ошибка чтения данных!"); 
@@ -533,6 +515,28 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   	});
    	$("#modalEditAct").modal('hide');
   });
+
+   /**
+    * Добавление объекта л,сч ******************************************************
+    */
+    function openModalNewAccount(id_link, id_type){
+    	
+       if(id_type == 10){
+           $("#modalEditAct").modal();
+           $('#modalFormEditAct')[0].reset();
+           $('#modalFormEditAct #id_person_acnt').val(0);
+           $('#modalFormEditAct #id_link_object').val(id_link);
+           openPersonAcnt(id_link);
+           
+       }
+       else{
+    	   alert("Объект л/сч можно привязать только к объекту помещение!");
+       }
+    }
+    $('#modalFormEditAct').on('shown.bs.modal', function() {
+    	$('#num_acnt').focus();
+ 	 })
+
   /***************************************************************************/
   
   /**
@@ -540,8 +544,8 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
   */
   $('#modalEditAct').on('show.bs.modal', function(e) {
 	  //var idLink = $('#modalFormEditAct #id_link_object').val();
-	  var idLink = $('#modalEditAct #id_link_object').val();  
-	  openPersonAcnt(idLink);
+	  //var idLink = $('#modalEditAct #id_link_object').val();  
+	  //openPersonAcnt(idLink);
 	   
 	});
 
@@ -571,11 +575,17 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 	   				       '<td align="center"><input type="checkbox" name="my_check'+(idx)+'">' +
 	   				    '</tr>'
 	   				 );
-	                 $('input[name="my_check'+(idx)+'"]').prop('checked', (obj.idPersonAcnt == $("#modalEditAct #id_person_acnt").val()));
-	           	});
+	   				 //console.log("obj.idPersonAcnt "+obj.idPersonAcnt);
+	   				 //console.log('$("#modalEditAct #id_person_acnt").val() ' + $("#modalEditAct #id_person_acnt").val());
+	   				 if(!(obj.idPersonAcnt == 0 && $("#modalEditAct #id_person_acnt").val() == 0))
+	   				  $('input[name="my_check'+(idx)+'"]').prop('checked', (obj.idPersonAcnt == $("#modalEditAct #id_person_acnt").val()));
+	   		  	});
 	           },
 	           "error"  : function(){
-	               alert("Ошибка чтения данных!\nВозможно не привязаны счетчики к УСПД.\nОбратитесь к администратору."); 
+	        	    //Удалим тело таблицы/////////////////
+		           	var tableBody = $("#acntcounts tbody");
+		           	tableBody.empty();
+	                alert("Ошибка чтения данных!\nВозможно не привязаны счетчики к УСПД.\nОбратитесь к администратору."); 
 	           }
 			   });
 	}
