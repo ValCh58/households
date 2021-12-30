@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity(name="person_acnt")
 public class PersonAcnt implements Serializable {
 
+	/** Для записи ID счетчиков в форме $("#modalFormEditAct #person_counts").val(list)	 */
+	private transient List<String> personcounts;
     
 	private static final long serialVersionUID = 1L;
 
@@ -207,5 +209,17 @@ public class PersonAcnt implements Serializable {
         ret.put("idPersonAcnt", Integer.valueOf(getIdPersonAcnt()));
         return ret;
     }
+
+	public List<String> getPersoncounts() {
+		return personcounts;
+	}
+
+	public void setPersoncounts(List<String> personcounts) {
+		this.personcounts = personcounts;
+	}
+
+		
+
+	
 
 }

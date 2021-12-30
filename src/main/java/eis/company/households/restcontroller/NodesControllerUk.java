@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.LinkObjectDTO;
@@ -187,23 +188,27 @@ public class NodesControllerUk {
 	 */
 	@PostMapping(value = "/updateEditAcc")
 	public void updateAct(PersonAcnt pAcnt) {
-		try {
+		
+		PersonAcnt person = pAcnt;
+		
+		/*try {
 			if (pAcnt.getIdPersonAcnt() > 0) {
-				objUserSrv.updateAccount(pAcnt);
+				person = objUserSrv.updateAccount(pAcnt);
 			} else {
-				objUserSrv.insertPersonAcnt(pAcnt);
+				person = objUserSrv.insertPersonAcnt(pAcnt);
+			}
+            if(person != null) {
+			   	
 			}
 		} catch (SQLIntegrityConstraintViolationException e) {
-			
-			e.printStackTrace();
-		}
+				e.printStackTrace();
+		}*/
+		
 	}
 
-	/******************************************************************************************/
-	/**********************
-	 * The end editing and saving of UK objects
-	 ****************************/
-	/******************************************************************************************/
+	//******************************************************************************************/
+	//* The end editing and saving of UK objects
+	//******************************************************************************************/
 
 	/**
 	 * Удаление объеkтов из дерева УК
