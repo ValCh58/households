@@ -1,6 +1,5 @@
 package eis.company.households.queres;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class QueryAcntCountsDto {
 			
 			AcntCountsDTO ac = new AcntCountsDTO(
 					           (int)t.get("idCounts"),
-					           (int)t.get("idPersonAcnt"),
+					           t.get("idPersonAcnt") == null ? 0 : (int)t.get("idPersonAcnt"),
 					           (String)t.get("nameCount"),
 					           (String)t.get("serialNum"),
 					           ((java.sql.Date) t.get("dateExpire")).toLocalDate(),
