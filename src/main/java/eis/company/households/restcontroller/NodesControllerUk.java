@@ -23,7 +23,7 @@ import eis.company.households.queres.QueryLinkObjectRepoUkImpl;
 import eis.company.households.queres.QueryUspdFlat;
 import eis.company.households.service.ObjectUserService;
 
-@RestController
+@RestController(value="NodesControllerUk")
 public class NodesControllerUk {
 
 	List<LinkObjectDTO> queryList;

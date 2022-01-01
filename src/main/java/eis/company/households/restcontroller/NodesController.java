@@ -24,7 +24,7 @@ import eis.company.households.repository.TypeUspdRepository;
 import eis.company.households.repository.UspdDevRepository;
 import eis.company.households.service.UpdateEditSrv;
 
-@RestController
+@RestController(value="NodesController")
 public class NodesController {
 
 	List<LinkObjectDTO> queryList;

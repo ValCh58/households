@@ -1,0 +1,19 @@
+------Перенос артефакта в локальный репозитарий----------------------------
+
+c:\workspace\households>mvnw -X deploy:deploy-file -Dfile=c:\workspace\tmp\eis\test\myping\myping\0.0.1\myping-0.0.1.jar   -DgroupId=eis.test.myping -DartifactId=myping -Dversion=0.0.1 -Dpackaging=jar -Durl=file:./maven-repository/ -DrepositoryId=maven-repository -DupdateReleaseInfo=true
+
+
+    <repositories>
+       <repository>
+          <id>maven-repository</id>
+          <url>file:///${project.basedir}/maven-repository</url>
+       </repository>
+    </repositories>
+
+    <dependencies>
+	<!-- ping сервера связи -->
+	<dependency>
+	   <groupId>eis.test.myping</groupId>
+	   <artifactId>myping</artifactId>
+	<version>0.0.1</version>
+     </dependency>
