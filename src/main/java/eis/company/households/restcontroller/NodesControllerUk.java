@@ -1,6 +1,6 @@
 package eis.company.households.restcontroller;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.LinkObjectDTO;
@@ -191,7 +190,7 @@ public class NodesControllerUk {
 		
 		PersonAcnt person = pAcnt;
 		
-		/*try {
+		try {
 			if (pAcnt.getIdPersonAcnt() > 0) {
 				person = objUserSrv.updateAccount(pAcnt);
 			} else {
@@ -200,9 +199,9 @@ public class NodesControllerUk {
             if(person != null) {
 			   	
 			}
-		} catch (SQLIntegrityConstraintViolationException e) {
+		} catch (SQLException e) {
 				e.printStackTrace();
-		}*/
+		}
 		
 	}
 

@@ -1,6 +1,7 @@
 package eis.company.households.service;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eis.company.households.MyConst;
 import eis.company.households.funcinterface.SaveLinkObject;
+import eis.company.households.model.Counts;
 import eis.company.households.model.House;
 import eis.company.households.model.LinkObjectUk;
 import eis.company.households.model.ManagCompany;
@@ -19,6 +21,7 @@ import eis.company.households.model.Room;
 import eis.company.households.model.Street;
 import eis.company.households.model.TypeObject;
 import eis.company.households.model.UspdDev;
+import eis.company.households.repository.CountsRepository;
 import eis.company.households.repository.HouseRepository;
 import eis.company.households.repository.LinkObjectUkRepository;
 import eis.company.households.repository.ManagCompanyRepository;
@@ -39,7 +42,7 @@ public class ObjectUserService {
 	@Autowired private TypeObjectRepository typeObjRepo;
 	@Autowired private LinkObjectUkRepository linkObjectUkRepo;
 	@Autowired private UspdDevRepository uspdRepository;
-
+    @Autowired private CountsRepository countsRepository;
 		
 	/**
 	 * Lambda
@@ -400,16 +403,42 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt updateAccount(PersonAcnt pa) throws SQLIntegrityConstraintViolationException{
+	public PersonAcnt updateAccount(final PersonAcnt pa) throws SQLException{
 		Optional<PersonAcnt> opt = personAcntRepository.findById(pa.getIdPersonAcnt());
 		PersonAcnt personAcc = opt.isPresent() ? opt.get() : null;
 		if (personAcc == null) {
 			return null;
 		}
 		personAcc.setNumAcnt(pa.getNumAcnt());
-		personAcntRepository.save(personAcc);
+		personAcc = personAcntRepository.save(personAcc);
+		linkedAcntToCounts(personAcc, pa);
 		return personAcc;
 	}
+	
+	/**
+	 * Linking an PersonAcnt with a Counts
+	 */
+	private void linkedAcntToCounts(final PersonAcnt p, final PersonAcnt pa) {
+		if(p != null && pa != null) {
+			List<String> listCnt = pa.getPersoncounts();
+			for(String idCnt : listCnt) {
+				if(idCnt.indexOf("undefined") < 0) {
+			    	int id = Integer.valueOf(idCnt);
+				    Optional<Counts> opCnt = countsRepository.findById(Math.abs(id));
+				    Counts cnt = opCnt.get();
+				     //Добавление связи Acnt---<Counts
+				    if((id>0 && cnt.getPersonAcnt() == null) || 
+				    	(id>0 && cnt.getPersonAcnt() != null && cnt.getPersonAcnt().getIdPersonAcnt() != pa.getIdPersonAcnt())) {
+				       //opCnt.get().setPersonAcnt(id>0?p:null);
+				     p.addCounts(opCnt.get());	
+				    }//Удаление связи Acnt---<Counts
+				    else if(id<0 && cnt.getPersonAcnt()!=null && cnt.getPersonAcnt().getIdPersonAcnt() != pa.getIdPersonAcnt()) {
+				    	p.removeCounts(opCnt.get());
+				    }
+				}
+			}
+		}
+    }
 		
 	/**
 	 * Insert into PersonAcnt, Submit Form #modalFormAct, file modal_edit_act.html
@@ -417,7 +446,7 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt insertPersonAcnt(PersonAcnt pacnt) throws SQLIntegrityConstraintViolationException {
+	public PersonAcnt insertPersonAcnt(final PersonAcnt pacnt) throws SQLException {
 		LinkObjectUk linkObjUk = null;
 		Room room = null;
 		TypeObject typeObj = null;
@@ -434,7 +463,8 @@ public class ObjectUserService {
 		personAcnt.setIdLinkObject(pacnt.getIdLinkObject());
 		personAcnt.setRoom(room);
 		personAcnt.setTypeObject(typeObj);
-		personAcntRepository.save(personAcnt);
+		personAcnt = personAcntRepository.save(personAcnt);
+		linkedAcntToCounts(personAcnt, pacnt);
 		
 		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(personAcnt.getIdPersonAcnt()), 
 				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())); 
@@ -452,6 +482,7 @@ public class ObjectUserService {
 	public boolean delPersonAcnt(Integer idLinkObj) {
 		LinkObjectUk linkobject = null;
 		PersonAcnt personAcnt = null;
+		List<Counts> list = null;
 		
 		if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
 		Optional<PersonAcnt> opPersonAcnt = personAcntRepository.findById(linkobject.getIdObject());
@@ -459,6 +490,17 @@ public class ObjectUserService {
 		linkObjectUkRepo.deleteById(idLinkObj);
 		personAcnt.getRoom().removePersonAcnt(personAcnt);
 		personAcnt.getTypeObject().removePersonAcnt(personAcnt);
+		if((list = personAcnt.getCounts()) == null) {return false;}
+		//for(Counts c : list){
+		//	Optional<Counts> opCnt = countsRepository.findById(c.getIdCounts());
+		//	personAcnt.removeCounts(opCnt.get());
+		//}
+		for(Iterator<Counts> it = list.iterator(); it.hasNext();) {
+			Optional<Counts> opCnt = countsRepository.findById(it.next().getIdCounts());
+			//personAcnt.removeCounts(opCnt.get());
+			opCnt.get().setPersonAcnt(null);
+		}
+			
 		personAcntRepository.delete(personAcnt);
 		
 		return true;

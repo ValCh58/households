@@ -74,7 +74,7 @@ public class Room implements Serializable {
     }
     
     /************Helper functions**************/
-    public void removePersonAcnt(PersonAcnt personAcnt) { 
+    public void removePersonAcnt(PersonAcnt personAcnt) {                       
     	personAcnt.setRoom(null);
 	     this.personAcnt.remove(personAcnt); 
 	}

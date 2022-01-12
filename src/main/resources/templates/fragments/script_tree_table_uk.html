@@ -495,12 +495,12 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
    */
    $("#modalFormEditAct").on("submit", function(){
 
-	var list = [1,2,3];
-	$("#modalFormEditAct #person_counts").val(list);
-	   
-	if(!isCheckedAcntCounts())
+	var list = isCheckedAcntCounts();
+	
+	if(list.length == 0) 
 	   return;
-	   
+	//Отправка на сервер id счетчиков для записи idAcnt   
+	$("#modalFormEditAct #person_counts").val(list);   
 		   
   	$.ajax({
   		url: "/updateEditAcc",
@@ -582,7 +582,7 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 	* Проверка выбранных счетчиков в таблице acntcounts
 	*/
 	function isCheckedAcntCounts(){
-        //var idCounts = [1,2,3];
+        var idCounts = [];
 		var acntPerson = $("#modalEditAct #id_person_acnt").val(); //Номер л/сч в форме modalEditAct
 		var statusMsgErr = ''; //Запись ошибочных сообщений при -> acntPerson == id_person_acnt && checked != true
 	  		 
@@ -595,18 +595,23 @@ $('#modalEditFlat').on('show.bs.modal', function(e) {
 			if(acntPerson == array_row[2] && !($('input[name="my_check'+(i)+'"]').prop('checked'))){
                  statusMsgErr = statusMsgErr + ' ' + array_row[3] + ' №' + array_row[4];
 			}
+			if ($('input[name="my_check'+(i)+'"]').prop('checked')){
+                 idCounts.push(array_row[1]);//Запишем id счетчика for checked=true
+			}else{
+				  idCounts.push('-' + array_row[1]);//Запишем id счетчика for checked=false в виде отрицательного числа!
+				}
 			
 		});
 
-		if(statusMsgErr != ''){
+		if(statusMsgErr != '' && idCounts.length == 0){
            alert('Не связаны л.сч. и счетчик(и) ' + statusMsgErr);
-           return false;
+           return [];
 		}
 
-		return true;
+		return idCounts;
 	}
 
-/*********************************************************************/ 
+/* ******************************************************************* */ 
    
 </script>
       
