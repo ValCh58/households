@@ -66,9 +66,9 @@ public class PersonAcnt implements Serializable {
     	count.setPersonAcnt(this);
     }
     
-    public void removeCounts(Counts counts) { 
-    	counts.setPersonAcnt(null);
-   	     this.counts.remove(counts); 
+    public void removeCounts(Counts count) { 
+    	count.setPersonAcnt(null);
+   	     this.counts.remove(count); 
    	}
     /******************************************/
         

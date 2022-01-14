@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -412,30 +414,31 @@ public class ObjectUserService {
 		personAcc.setNumAcnt(pa.getNumAcnt());
 		personAcc = personAcntRepository.save(personAcc);
 		linkedAcntToCounts(personAcc, pa);
+		
 		return personAcc;
 	}
 	
 	/**
 	 * Linking an PersonAcnt with a Counts
+	 * @throws Throwable 
 	 */
-	private void linkedAcntToCounts(final PersonAcnt p, final PersonAcnt pa) {
-		if(p != null && pa != null) {
-			List<String> listCnt = pa.getPersoncounts();
+	private void linkedAcntToCounts(final PersonAcnt p, final PersonAcnt pa){
+		if(pa != null && p != null) {
+			List<String> listCnt = pa.getPersoncounts(); 
 			for(String idCnt : listCnt) {
-				if(idCnt.indexOf("undefined") < 0) {
-			    	int id = Integer.valueOf(idCnt);
-				    Optional<Counts> opCnt = countsRepository.findById(Math.abs(id));
-				    Counts cnt = opCnt.get();
-				     //Добавление связи Acnt---<Counts
-				    if((id>0 && cnt.getPersonAcnt() == null) || 
-				    	(id>0 && cnt.getPersonAcnt() != null && cnt.getPersonAcnt().getIdPersonAcnt() != pa.getIdPersonAcnt())) {
-				       //opCnt.get().setPersonAcnt(id>0?p:null);
-				     p.addCounts(opCnt.get());	
-				    }//Удаление связи Acnt---<Counts
-				    else if(id<0 && cnt.getPersonAcnt()!=null && cnt.getPersonAcnt().getIdPersonAcnt() != pa.getIdPersonAcnt()) {
-				    	p.removeCounts(opCnt.get());
-				    }
-				}
+			    int id = Integer.valueOf(idCnt);
+			    Optional<Counts> opCnt = countsRepository.findById(Math.abs(id)); 
+			    Counts cnt = opCnt.get();
+			    if(cnt == null) {
+			    	throw new RuntimeErrorException(null, "Counter object does not exist");
+			    }
+			     //Добавление связи Acnt---<Counts 
+			    if(id > 0) {//чек установлен
+			       p.addCounts(cnt);
+			    }//Удаление связи Acnt---<Counts else  
+			    if(id < 0) {//чек снят
+			       p.removeCounts(cnt); 
+			    } 
 			}
 		}
     }
@@ -464,7 +467,7 @@ public class ObjectUserService {
 		personAcnt.setRoom(room);
 		personAcnt.setTypeObject(typeObj);
 		personAcnt = personAcntRepository.save(personAcnt);
-		linkedAcntToCounts(personAcnt, pacnt);
+		//linkedAcntToCounts(personAcnt, pacnt);
 		
 		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(personAcnt.getIdPersonAcnt()), 
 				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())); 
@@ -491,15 +494,6 @@ public class ObjectUserService {
 		personAcnt.getRoom().removePersonAcnt(personAcnt);
 		personAcnt.getTypeObject().removePersonAcnt(personAcnt);
 		if((list = personAcnt.getCounts()) == null) {return false;}
-		//for(Counts c : list){
-		//	Optional<Counts> opCnt = countsRepository.findById(c.getIdCounts());
-		//	personAcnt.removeCounts(opCnt.get());
-		//}
-		for(Iterator<Counts> it = list.iterator(); it.hasNext();) {
-			Optional<Counts> opCnt = countsRepository.findById(it.next().getIdCounts());
-			//personAcnt.removeCounts(opCnt.get());
-			opCnt.get().setPersonAcnt(null);
-		}
 			
 		personAcntRepository.delete(personAcnt);
 		
