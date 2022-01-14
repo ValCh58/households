@@ -20,6 +20,13 @@
 		<bootstrap.version>4.5.3</bootstrap.version>
 		<webjars-locator.version>0.40</webjars-locator.version>
 	</properties>
+	
+	<repositories>
+       <repository>
+          <id>maven-repository</id>
+          <url>file:///${project.basedir}/maven-repository</url>
+       </repository>
+    </repositories>
 
 	<dependencies>
 		<!-- ping сервера связи -->
