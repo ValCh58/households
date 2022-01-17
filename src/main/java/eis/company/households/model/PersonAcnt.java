@@ -42,7 +42,7 @@ public class PersonAcnt implements Serializable {
     @Column(name="id_link_object")
     private int idLinkObject;
     
-    @OneToMany(mappedBy="personAcnt", orphanRemoval = true)
+    @OneToMany(mappedBy="personAcnt")
     private List<Counts> counts = new ArrayList<>();
     
     @ManyToOne(optional=false)
@@ -68,7 +68,7 @@ public class PersonAcnt implements Serializable {
     
     public void removeCounts(Counts count) { 
     	count.setPersonAcnt(null);
-   	     this.counts.remove(count); 
+   	    this.counts.remove(count); 
    	}
     /******************************************/
         

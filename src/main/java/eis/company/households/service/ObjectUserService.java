@@ -1,16 +1,15 @@
 package eis.company.households.service;
 
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.management.RuntimeErrorException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import eis.company.households.MyConst;
 import eis.company.households.funcinterface.SaveLinkObject;
@@ -45,6 +44,7 @@ public class ObjectUserService {
 	@Autowired private LinkObjectUkRepository linkObjectUkRepo;
 	@Autowired private UspdDevRepository uspdRepository;
     @Autowired private CountsRepository countsRepository;
+    
 		
 	/**
 	 * Lambda
@@ -449,7 +449,7 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt insertPersonAcnt(final PersonAcnt pacnt) throws SQLException {
+	public PersonAcnt insertPersonAcnt(final PersonAcnt pacnt){
 		LinkObjectUk linkObjUk = null;
 		Room room = null;
 		TypeObject typeObj = null;
@@ -467,7 +467,7 @@ public class ObjectUserService {
 		personAcnt.setRoom(room);
 		personAcnt.setTypeObject(typeObj);
 		personAcnt = personAcntRepository.save(personAcnt);
-		//linkedAcntToCounts(personAcnt, pacnt);
+		linkedAcntToCounts(personAcnt, pacnt);
 		
 		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(personAcnt.getIdPersonAcnt()), 
 				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())); 
@@ -494,7 +494,14 @@ public class ObjectUserService {
 		personAcnt.getRoom().removePersonAcnt(personAcnt);
 		personAcnt.getTypeObject().removePersonAcnt(personAcnt);
 		if((list = personAcnt.getCounts()) == null) {return false;}
-			
+		
+		List<Integer> listCountId = list.stream().map(count->count.getIdCounts()).collect(Collectors.toList());
+				
+		for(Integer id : listCountId) {
+			Optional<Counts> op = countsRepository.findById(id);
+			Counts c = op.isPresent()?op.get():null;
+			if(c !=null) {personAcnt.removeCounts(c);}
+		}
 		personAcntRepository.delete(personAcnt);
 		
 		return true;
