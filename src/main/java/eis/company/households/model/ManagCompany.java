@@ -73,7 +73,7 @@ public class ManagCompany implements Serializable {
     @JsonIgnore //Удаление рекурсии!!!
     private Set<ComServer> comServer;
     
-    @OneToMany(mappedBy="managCompany", orphanRemoval = true)
+    @OneToMany(mappedBy="managCompany")
     @JsonIgnore
     private Set<Street> street;
     

@@ -12,11 +12,11 @@ import eis.company.households.queres.QueryAcntCountsDto;
 @Service
 public class ReportsService {
 	
-	@Autowired QueryAcntCountsDto qacntCountDto;
+	@Autowired QueryAcntCountsDto qAcntCountDto;
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<AcntCountsDTO> getAcntCounts(Integer id){
 		
-		return qacntCountDto.getAcntCountsDTO(id);
+		return qAcntCountDto.getAcntCountsDTO(id);
 		
 	}
 

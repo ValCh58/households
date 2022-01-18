@@ -17,12 +17,12 @@ public class QueryAcntCountsDto {
 	private List<AcntCountsDTO> acntCntList = new ArrayList<>();
 	
 	@PersistenceContext(name="housingEntityManager")
-	private EntityManager me;
+	private EntityManager em;
 	
 	public List<AcntCountsDTO> getAcntCountsDTO(Integer id){
 		acntCntList.clear();
 		@SuppressWarnings("unchecked")
-		List<Tuple> list = me.createNativeQuery("SELECT co.id_counts as idCounts, co.id_person_acnt as idPersonAcnt,"
+		List<Tuple> list = em.createNativeQuery("SELECT co.id_counts as idCounts, co.id_person_acnt as idPersonAcnt,"
 				                              + " co.name_count as nameCount, co.serial_num as serialNum,"
 				                              + " co.date_expire as dateExpire, co.address as address \r\n"
 				                              + "FROM housing.room ro \r\n"

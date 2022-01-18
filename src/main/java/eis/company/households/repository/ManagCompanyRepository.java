@@ -10,4 +10,6 @@ import eis.company.households.model.ManagCompany;
 @Repository
 public interface ManagCompanyRepository extends JpaRepository<ManagCompany, Integer> {
    public Optional<ManagCompany> findById(Integer id);
+
+public ManagCompany findByNameCompany(String name);
 }
