@@ -20,11 +20,11 @@ import eis.company.households.repository.ManagCompanyRepository;
 class testJPA_ManagCompany {
 	
 	//@Autowired private EntityManager entityManager;
-	@Autowired private ManagCompanyRepository managCompanyRepository; 
+	//@Autowired private ManagCompanyRepository managCompanyRepository; 
 
 	@Test
 	void test() {
-		Optional<ManagCompany> mc = managCompanyRepository.findById(1);
+		//Optional<ManagCompany> mc = managCompanyRepository.findById(1);
 		//assertEquals("УК \"Наш дом 39\"", mc.getNameCompany().trim());
 		//System.out.println("TEST!!!!!!!!!!!!!!!!!!!!" + mc.getNameCompany().trim());
 	}
