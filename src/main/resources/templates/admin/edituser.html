@@ -70,8 +70,7 @@
 								style="height: 27px; vertical-align: middle;">Удалить</a></td>
 
 							<!-- -------------------------------Модальное окно------------------------->
-							<div class="modal modal-warning fade in"
-								th:id="modal-warning+${user.id }" data-backdrop="static"
+							<div class="modal modal-warning fade in" th:id="modal-warning+${user.id}" data-backdrop="static"
 								data-keyboard="false" tabindex="-1">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -81,25 +80,15 @@
 												aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
-											
 										</div>
 										<div class="modal-body">
 											<h6>Вы хотите удалить этого пользователя?</h6>
 										</div>
 										<div class="modal-footer">
 
-											<button type="button" class="btn btn-primary pull-left"
-												data-dismiss="modal">Нет</button>
-
-											<!--	
-					<a type="button" class="btn btn-outline"
-						th:href="@{/admin/deleteUsers/{id}(id=${user.id})}"><i
-						class="fa fa-check"></i>&nbsp;Да</a>
-					-->
-
-											<a type="button" class="btn btn-danger"
-												th:href="@{/admin/deleteUsers/{id}(id=${user.id})}"><i
-												class="fa fa-check"></i>&nbsp;Да</a>
+											<button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Нет</button>
+											<a type="button" class="btn btn-danger" th:href="@{/admin/deleteUsers/{id}(id=${user.id})}">
+											<i class="fa fa-check"></i>&nbsp;Да</a>
 
 										</div>
 									</div>

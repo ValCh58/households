@@ -1,6 +1,7 @@
 package eis.company.households.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ColdWaterFlowDTO {
 
-	private LocalDate timeStamp;
+	private LocalDateTime timeStamp;
 	private String addressLoc;
 	private String numAcnt;
 	private String nameCount;

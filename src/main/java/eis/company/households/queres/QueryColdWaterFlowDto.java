@@ -1,5 +1,6 @@
 package eis.company.households.queres;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,15 +8,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
 
+import org.springframework.stereotype.Component;
+
 import eis.company.households.dto.ColdWaterFlowDTO;
 
+@Component
 public class QueryColdWaterFlowDto {
 	
 	private List<ColdWaterFlowDTO> coldWaterFlowDTO = new ArrayList<>();
 	@PersistenceContext(name="housingEntityManager") private EntityManager em;
 	
-	@SuppressWarnings("unused")
-	private List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp){
+	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp){
 		
 		coldWaterFlowDTO.clear();
 		
@@ -36,13 +39,13 @@ public class QueryColdWaterFlowDto {
 		
 		for(Tuple t : list) {
 			ColdWaterFlowDTO cw = new ColdWaterFlowDTO(
-					((java.sql.Date) t.get("timeStamp")).toLocalDate(),
-					(String)t.get("addressLoc"),
-					(String)t.get("numAcnt"),
-					(String)t.get("nameCount"),
-					(double)t.get("countW"),
-					(String)t.get("serialNum"),
-					((java.sql.Date) t.get("dateExpire")).toLocalDate(),
+					((java.sql.Timestamp) t.get("timeStamp")).toLocalDateTime(),
+					t.get("addressLoc")!=null?(String)t.get("addressLoc"):"нет данных",
+					t.get("numAcnt")!=null?(String)t.get("numAcnt"):"нет данных",
+					t.get("nameCount")!=null?(String)t.get("nameCount"):"нет данных",
+					Double.valueOf(t.get("countW").toString()),
+					t.get("serialNum")!=null?(String)t.get("serialNum"):"нет данных",
+					t.get("dateExpire")!=null?((java.sql.Date) t.get("dateExpire")).toLocalDate():LocalDate.now(),
 					(String)t.get("factoryNumberUspd"),
 					(int)t.get("numCh")
 					);

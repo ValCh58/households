@@ -16,11 +16,11 @@ public class ReportsAndStatistics {
 	@Autowired ReportsService reportService;
 	
 	/**
-	 * Получение отчета по расходу холодной воды
-	 * 
+	 * Счетчики для связи с л/сч.
+	 * call JS function openPersonAcnt(idLink)
 	 * @return modelandview
 	 */
-	@GetMapping(value = "/user/cool_water/{id}")
+	@GetMapping(value = "/user/count_water/{id}")
 	public List<AcntCountsDTO> reportCoolWater(@PathVariable("id") Integer id) {
 		
 		List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);

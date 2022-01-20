@@ -7,17 +7,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import eis.company.households.dto.AcntCountsDTO;
+import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.queres.QueryAcntCountsDto;
+import eis.company.households.queres.QueryColdWaterFlowDto;
 
 @Service
 public class ReportsService {
 	
-	@Autowired QueryAcntCountsDto qAcntCountDto;
+	@Autowired private QueryAcntCountsDto qAcntCountDto;
+	@Autowired private QueryColdWaterFlowDto qColdWaterFlowDto; 
+
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<AcntCountsDTO> getAcntCounts(Integer id){
-		
-		return qAcntCountDto.getAcntCountsDTO(id);
-		
+	return qAcntCountDto.getAcntCountsDTO(id);
+	}
+	
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
+	public List<ColdWaterFlowDTO> getWaterFlowDto(){
+		List<ColdWaterFlowDTO> list = qColdWaterFlowDto.getQueryResult("%", "2022-12%"); 
+	return list;	
 	}
 
 }
