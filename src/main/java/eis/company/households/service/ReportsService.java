@@ -24,8 +24,8 @@ public class ReportsService {
 	
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ColdWaterFlowDTO> getWaterFlowDto(){
-		List<ColdWaterFlowDTO> list = qColdWaterFlowDto.getQueryResult("%", "2022-12%"); 
-	return list;	
+		List<ColdWaterFlowDTO> listFlowWaterCold = qColdWaterFlowDto.getQueryResult("%", "2022-01%"); 
+	return listFlowWaterCold;	
 	}
 
 }

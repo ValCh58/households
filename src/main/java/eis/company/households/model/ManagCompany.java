@@ -87,7 +87,7 @@ public class ManagCompany implements Serializable {
         super();
     }
 
-    /*** Helper methods **************************/
+    /** Helper methods **************************/
 	/*
 	 * public void addStreet(Street street) { 
 	 *    this.street.add(street);

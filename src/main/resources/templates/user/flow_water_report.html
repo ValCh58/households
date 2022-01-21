@@ -2,36 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-</head>
-<!----------------------------------Header block----------------------------------------------------------->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Расход по СХВ</title>
 
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Объекты УК</title>
-
-<link th:rel="stylesheet"
-	th:href="@{/assets/jquery-treetable/jquery.treetable.css}" />
-<link th:rel="stylesheet"
-	th:href="@{/assets/jquery-treetable/jquery.treetable.theme.default.css}" />
-<link th:rel="stylesheet"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " />
+<link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.css}" />
+<link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.theme.default.css}" />
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
 <link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
-<!--  link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
 	integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-	crossorigin="anonymous" / -->
+	crossorigin="anonymous"/>
 </head>
 
 <body>
-	<div>
-		<h5>flow_water_report</h5>
-	</div>
-
+  <div th:insert="~{fragments/flow_water_report_table :: fr_flow_water_report_table}"></div>
+      <div class="col-sm-8 justify-content-center offset-md-2">
+		  <table class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary 
+		                table-responsive-sm table-fixed" id="flowreporttablech1" style="font-size: 0.9em; line-height: 1em;">
+			<thead style="text-align: center;">
+				<tr>
+					<th>№</th>
+					<th>Дата<br> показаний</th>
+					<th>Адрес<br> объекта</th>
+					<th>Лицевой<br> счет</th>
+					<th>Наименование<br>счетчика</th>
+					<th>Показания<br> текущие</th>
+					<th>№<br> счетчика</th>
+					<th>Дата<br> поверки</th>
+					<th>№<br> УСПД</th>
+					<th>№<br>канала</th>
+			    	</tr>
+			</thead>
+				<tbody style="text-align: center;">
+				<tr th:each="cnt,idxStat : *{listWaterFlowReport}">
+				    <td th:text="${idxStat.index + 1}"></td>
+				    <td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy')}"></td>
+					<td th:text="${cnt.addressLoc}"></td>
+					<td th:text="${cnt.numAcnt}"></td>
+					<td th:text="${cnt.nameCount}"></td>
+					<td th:text="${cnt.countW}"></td>
+					<td th:text="${cnt.serialNum}"></td>
+					<td th:text="${#temporals.format(cnt.dateExpire, 'MM.yyyy')}"></td>
+					<td th:text="${cnt.factoryNumberUspd}"></td>
+					<td th:text="${cnt.numCh}"></td>
+				</tr>
+				</tbody>
+		 </table>
+	  </div>
+    
 
 
 </body>
