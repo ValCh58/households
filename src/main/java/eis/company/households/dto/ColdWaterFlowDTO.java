@@ -14,7 +14,9 @@ public class ColdWaterFlowDTO {
 	private String addressLoc;
 	private String numAcnt;
 	private String nameCount;
-	private Double countW;
+	private Double countW;   //текущий расход
+	private Double prevCountW;//предыдущий расход
+	private Double diffCountW;//разница 
 	private String serialNum;
 	private LocalDate dateExpire;
 	private String factoryNumberUspd;
