@@ -1,5 +1,6 @@
 package eis.company.households.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,16 @@ public class ReportsService {
 	}
 	
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
-	public List<ColdWaterFlowDTO> getWaterFlowDto(){
-		List<ColdWaterFlowDTO> listFlowWaterCold = qColdWaterFlowDto.getQueryResult("%", "2022-01%", "2021-12%", "1000"); 
+	public List<ColdWaterFlowDTO> getWaterFlowDto(String factoryNumberUspd, //"%", "2022-01%", "2021-12%", "1000" 
+			                                      LocalDate dateFrom, 
+			                                      String ratio){
+		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
+				
+		List<ColdWaterFlowDTO> listFlowWaterCold = qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
+				                                                                    dateCurr, 
+				                                                                    datePrev, 
+				                                                                    ratio); 
 	return listFlowWaterCold;	
 	}
 

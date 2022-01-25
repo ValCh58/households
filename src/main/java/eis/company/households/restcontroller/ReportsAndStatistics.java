@@ -1,5 +1,6 @@
 package eis.company.households.restcontroller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.AcntCountsDTO;
+import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.service.ReportsService;
 
 @RestController
@@ -16,16 +18,26 @@ public class ReportsAndStatistics {
 	@Autowired ReportsService reportService;
 	
 	/**
-	 * Счетчики для связи с л/сч.
+	 * REST Счетчики для связи с л/сч.
 	 * call JS function openPersonAcnt(idLink)
 	 * @return modelandview
 	 */
 	@GetMapping(value = "/user/count_water/{id}")
 	public List<AcntCountsDTO> reportCoolWater(@PathVariable("id") Integer id) {
-		
 		List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);
-		
 		return listAcnt.isEmpty() ? null : listAcnt;
 	}
+	
+	/**
+	 * REST Фильтрация данных по расходу холодной воды 
+	 * 
+	 */
+	@GetMapping(value="/user/flow_water_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public List<ColdWaterFlowDTO> reportFiltrCoolWater(@PathVariable("numUspd") String numUspd, 
+			                                           @PathVariable("dateFrom") LocalDate dateFrom){
+		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
+		return reportService.getWaterFlowDto(num, dateFrom, "1000");
+	}
+	
 
 }

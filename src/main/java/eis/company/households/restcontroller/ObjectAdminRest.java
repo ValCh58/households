@@ -36,12 +36,6 @@ public class ObjectAdminRest {
 	                                            {
 		
 		List<Measuring> list = objAdmSrv.retUpdateUspdObj(numUspd, dateFrom, dateTo); 
-		/*
-		 * //обработка исключений -> class GlobalExceptionHandler if(list.isEmpty()) {
-		 * throw new Exception("USPD not found for this parameters.");
-		 * //ResourceNotFoundException("USPD not found for this parameters."); }
-		 */
-				 
 		return list.isEmpty() ? null : list;
 	}
 	

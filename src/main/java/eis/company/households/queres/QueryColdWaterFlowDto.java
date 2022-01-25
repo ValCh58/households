@@ -64,6 +64,8 @@ public class QueryColdWaterFlowDto {
 					(int)t.get("numCh")
 					);
 			
+			System.out.println(cw.toString());//!!!
+			
 			coldWaterFlowDTO.add(cw);	
 			}
 		

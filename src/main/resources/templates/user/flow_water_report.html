@@ -87,8 +87,46 @@
 			  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
 			  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
 			  $('#datefrom').val(dateFrom);
-			  
-		  }) 
+
+
+			  $.ajax({
+			        "type": "get",
+			        "url": '/user/flow_water_report/numUspd/'+numUspd+'/dateFrom/'+dateFrom,
+			        "dataType": "json",
+			        "cache": "false",
+			        "data": "$(this).serialize()",
+			        success: function (data) {
+			        	//Удалим тело таблицы/////////////////
+			        	var tableBody = $("#flowreporttablech1 tbody");
+			        	tableBody.empty();
+			        	//Вставим новые записи////////////////
+			        	
+			        	$.each(data, function (idx, obj){
+			        		$("#flowreporttablech1 tbody").append(
+			        			"<tr>" + "<td>" + (idx+1) + "</td>" + 
+			        			         "<td>" + (new Date(obj.timeStamp)).toLocaleDateString() + "</td>" +
+			        			         "<td>" + obj.addressLoc + "</td>" + 
+			        			         "<td>" + obj.numAcnt + "</td>" + 
+			        			         "<td>" + obj.nameCount + "</td>" +
+			        			         "<td>" + obj.countW + "</td>" +
+			        			         "<td>" + obj.prevCountW + "</td>" +
+			        			         "<td>" + obj.diffCountW + "</td>" +
+			        			         "<td>" + obj.serialNum + "</td>" +
+			        			         "<td>" + (new Date(obj.dateExpire)).toLocaleDateString() + "</td>" +
+			        			         "<td>" + obj.factoryNumberUspd + "</td>" +
+			        			         "<td>" + obj.numCh + "</td>" +
+			        			"</tr>" 
+			        				
+			        		);
+			            });
+			        },
+			        error: function (x, e) {
+			        	var tableBody = $("#flowreporttablech1 tbody");
+			        	tableBody.empty();
+	                    alert('Данные не найдены. Измените параметры запроса');
+		        }
+			 });
+		  })
 	  });
 
 
@@ -106,7 +144,6 @@
    }	  
 
    </script> 
-
 
 </body>
 </html>

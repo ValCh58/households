@@ -1,5 +1,6 @@
 package eis.company.households.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,17 @@ public class FlowData {
 
 	@Autowired private ReportsService reportsService;
 	
+	/**
+	 * Отчет по расходу холодной воды
+	 * 
+	 * @return ModelAndView
+	 */
 	@GetMapping(value="/user/flow_water_report")
 	public ModelAndView getReportFlowWater() {
+		LocalDate dateFrom = LocalDate.now();
+						
 		ModelAndView modelAndView = new ModelAndView();
-		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto();
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000");
 		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
 		modelAndView.setViewName("user/flow_water_report");
 		return modelAndView;
