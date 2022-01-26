@@ -26,14 +26,14 @@ public class ReportsService {
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ColdWaterFlowDTO> getWaterFlowDto(String factoryNumberUspd, //"%", "2022-01%", "2021-12%", "1000" 
 			                                      LocalDate dateFrom, 
-			                                      String ratio){
+			                                      String ratio, String typeCount){
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
 		List<ColdWaterFlowDTO> listFlowWaterCold = qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
 				                                                                    dateCurr, 
 				                                                                    datePrev, 
-				                                                                    ratio); 
+				                                                                    ratio, typeCount); 
 	return listFlowWaterCold;	
 	}
 

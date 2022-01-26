@@ -18,7 +18,7 @@ public class QueryColdWaterFlowDto {
 	private List<ColdWaterFlowDTO> coldWaterFlowDTO = new ArrayList<>();
 	@PersistenceContext(name="housingEntityManager") private EntityManager em;
 	
-	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, String ratio){
+	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, String ratio, String typeCount){
 		
 		coldWaterFlowDTO.clear();
 		
@@ -32,12 +32,12 @@ public class QueryColdWaterFlowDto {
 				  + " from \r\n"
 				  + "(SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch  \r\n"
 				  + " FROM housing.report_all  \r\n"
-				  + " where  factory_number_uspd like :factoryNumberUspd and num_ch = 1 and time_stamp like :timeStamp \r\n"
+				  + " where  factory_number_uspd like :factoryNumberUspd and type_count = :typeCount and time_stamp like :timeStamp \r\n"
 				  + " group by factory_number_uspd\r\n"
 				  + " order by factory_number_uspd) curr left join \r\n"
 				  + " (SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch  \r\n"
 				  + " FROM housing.report_all  \r\n"
-				  + " where  factory_number_uspd like :factoryNumberUspd and num_ch = 1 and time_stamp like :timeStampPrev \r\n"
+				  + " where  factory_number_uspd like :factoryNumberUspd and type_count = :typeCount and time_stamp like :timeStampPrev \r\n"
 				  + " group by factory_number_uspd\r\n"
 				  + " order by factory_number_uspd) prev \r\n"
 				  + " on curr.factory_number_uspd = prev.factory_number_uspd", 
@@ -45,9 +45,10 @@ public class QueryColdWaterFlowDto {
 				            .setParameter("timeStamp", timeStamp)
 				            .setParameter("timeStampPrev", timeStampPrev)
 				            .setParameter("ratio", ratio)
+				            .setParameter("typeCount", typeCount)
 				            .getResultList();
 				
-		if(list.isEmpty())return null;
+		if(list.isEmpty()) {return null;}
 		
 		for(Tuple t : list) {
 			ColdWaterFlowDTO cw = new ColdWaterFlowDTO(
@@ -55,16 +56,14 @@ public class QueryColdWaterFlowDto {
 					t.get("addressLoc")!=null?(String)t.get("addressLoc"):"нет данных",
 					t.get("numAcnt")!=null?(String)t.get("numAcnt"):"нет данных",
 					t.get("nameCount")!=null?(String)t.get("nameCount"):"нет данных",
-					Double.valueOf(t.get("countW").toString()),
-					Double.valueOf(t.get("prevCountW").toString()),
-					Double.valueOf(t.get("diffCountW").toString()),
+					Double.valueOf(t.get("countW") != null ? t.get("countW").toString():"0.0"),
+					Double.valueOf(t.get("prevCountW") != null ? t.get("prevCountW").toString():"0.0"),
+					Double.valueOf(t.get("diffCountW") != null ? t.get("diffCountW").toString():"0.0"),
 					t.get("serialNum")!=null?(String)t.get("serialNum"):"нет данных",
 					t.get("dateExpire")!=null?((java.sql.Date) t.get("dateExpire")).toLocalDate():LocalDate.now(),
 					(String)t.get("factoryNumberUspd"),
 					(int)t.get("numCh")
 					);
-			
-			System.out.println(cw.toString());//!!!
 			
 			coldWaterFlowDTO.add(cw);	
 			}

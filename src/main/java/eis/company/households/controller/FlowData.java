@@ -26,9 +26,26 @@ public class FlowData {
 		LocalDate dateFrom = LocalDate.now();
 						
 		ModelAndView modelAndView = new ModelAndView();
-		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000");
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "1");
 		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
 		modelAndView.setViewName("user/flow_water_report");
+		return modelAndView;
+		
+	}
+	
+	/**
+	 * Отчет по расходу горячей воды
+	 * 
+	 * @return ModelAndView
+	 */
+	@GetMapping(value="/user/flow_water_hot_report")
+	public ModelAndView getReportFlowWaterHot() {
+		LocalDate dateFrom = LocalDate.now();
+						
+		ModelAndView modelAndView = new ModelAndView();
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "2");
+		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
+		modelAndView.setViewName("user/flow_water_hot_report");
 		return modelAndView;
 		
 	}

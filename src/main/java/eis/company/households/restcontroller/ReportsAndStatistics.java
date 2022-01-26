@@ -36,7 +36,18 @@ public class ReportsAndStatistics {
 	public List<ColdWaterFlowDTO> reportFiltrCoolWater(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return reportService.getWaterFlowDto(num, dateFrom, "1000");
+		return reportService.getWaterFlowDto(num, dateFrom, "1000", "1");
+	}
+	
+	/**
+	 * REST Фильтрация данных по расходу холодной воды 
+	 * 
+	 */
+	@GetMapping(value="/user/flow_water_hot_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public List<ColdWaterFlowDTO> reportFiltrHotWater(@PathVariable("numUspd") String numUspd, 
+			                                           @PathVariable("dateFrom") LocalDate dateFrom){
+		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
+		return reportService.getWaterFlowDto(num, dateFrom, "1000", "2");
 	}
 	
 
