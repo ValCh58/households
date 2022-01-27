@@ -30,7 +30,6 @@ public class FlowData {
 		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
 		modelAndView.setViewName("user/flow_water_report");
 		return modelAndView;
-		
 	}
 	
 	/**
@@ -47,6 +46,23 @@ public class FlowData {
 		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
 		modelAndView.setViewName("user/flow_water_hot_report");
 		return modelAndView;
-		
 	}
+	
+	/**
+	 * Отчет по расходу Эл. энергии
+	 * 
+	 * @return ModelAndView
+	 */
+	@GetMapping(value="/user/flow_el_en_report")
+	public ModelAndView getReportFlowElEn() {
+		LocalDate dateFrom = LocalDate.now();
+						
+		ModelAndView modelAndView = new ModelAndView();
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "2");
+		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
+		modelAndView.setViewName("user/flow_water_hot_report");
+		return modelAndView;
+	}
+	
+	
 }

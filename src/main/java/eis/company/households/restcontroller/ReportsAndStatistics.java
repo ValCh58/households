@@ -40,7 +40,7 @@ public class ReportsAndStatistics {
 	}
 	
 	/**
-	 * REST Фильтрация данных по расходу холодной воды 
+	 * REST Фильтрация данных по расходу горячей воды 
 	 * 
 	 */
 	@GetMapping(value="/user/flow_water_hot_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
