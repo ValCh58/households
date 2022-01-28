@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.dto.ColdWaterFlowDTO;
+import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.service.ReportsService;
 
 @RestController
@@ -48,6 +49,18 @@ public class ReportsAndStatistics {
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
 		return reportService.getWaterFlowDto(num, dateFrom, "1000", "2");
+	}
+	
+	/**
+	 * REST Фильтрация данных по расходу эл энергии 
+	 * 
+	 */
+	@GetMapping(value="/user/flow_el_en_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public List<ElEnFlowDTO> reportFiltrElEn(@PathVariable("numUspd") String numUspd, 
+			                                 @PathVariable("dateFrom") LocalDate dateFrom){
+		
+		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
+		return reportService.getElEnFlowDto(num, dateFrom);
 	}
 	
 

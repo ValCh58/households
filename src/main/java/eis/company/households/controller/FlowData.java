@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import eis.company.households.dto.ColdWaterFlowDTO;
+import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.service.ReportsService;
 
 @Controller
@@ -56,11 +57,10 @@ public class FlowData {
 	@GetMapping(value="/user/flow_el_en_report")
 	public ModelAndView getReportFlowElEn() {
 		LocalDate dateFrom = LocalDate.now();
-						
 		ModelAndView modelAndView = new ModelAndView();
-		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "2");
-		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
-		modelAndView.setViewName("user/flow_water_hot_report");
+		List<ElEnFlowDTO> lisElEnReport = reportsService.getElEnFlowDto("%", dateFrom);
+		modelAndView.addObject("lisElEnReport", lisElEnReport);
+		modelAndView.setViewName("user/flow_el_en_report");
 		return modelAndView;
 	}
 	
