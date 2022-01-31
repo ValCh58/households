@@ -41,8 +41,8 @@ public class ReportsService {
 	}
 	
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
-	public List<ElEnFlowDTO> getElEnFlowDto(String factoryNumberUspd, //"%", "2022-01%", "2021-12%" 
-			                                      LocalDate dateFrom){
+	public List<ElEnFlowDTO> getElEnFlowDto(String factoryNumberUspd, LocalDate dateFrom){ //"%", "2022-01%", "2021-12%" 
+			                                      
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				

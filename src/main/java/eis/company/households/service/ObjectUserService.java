@@ -130,9 +130,9 @@ public class ObjectUserService {
 	}
 
 	/**
-	 * Insert into Street, Submit Form #modalFormEditStreet, file
+	 * Insert into Street, Submit Form #modalFormEditStreet
 	 * POST
-	 * modal_edit_street.html
+	 * file modal_edit_street.html
 	 * 
 	 * @return Street
 	 */
