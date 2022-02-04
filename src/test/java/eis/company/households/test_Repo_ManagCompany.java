@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import eis.company.households.model.ManagCompany;
 import eis.company.households.repository.ManagCompanyRepository;
 import eis.company.households.repository.TypeObjectRepository;
 
-
+@Disabled
 @SpringBootTest
 @DisplayName(value = "Testing of ManagCompany")
 class test_Repo_ManagCompany {

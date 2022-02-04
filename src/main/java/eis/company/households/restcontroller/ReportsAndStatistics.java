@@ -24,8 +24,11 @@ public class ReportsAndStatistics {
 	 * @return modelandview
 	 */
 	@GetMapping(value = "/user/count_water/{id}")
-	public List<AcntCountsDTO> reportCoolWater(@PathVariable("id") Integer id) {
+	public List<AcntCountsDTO> getTableAcntCounts(@PathVariable("id") Integer id) {
+		
+		//System.out.println("List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);");
 		List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);
+		
 		return listAcnt.isEmpty() ? null : listAcnt;
 	}
 	

@@ -124,9 +124,27 @@
 
 
 	<build>
-
 		<finalName>households</finalName>
 		<plugins>
+			<!-- further plugins -->
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.0.0-M5</version><!--$NO-MVN-MAN-VER$-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<artifactId>>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M5</version>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -136,7 +154,7 @@
 				<artifactId>gmavenplus-plugin</artifactId>
 				<version>1.5</version>
 			</plugin>
-			
+
 		</plugins>
 
 	</build>

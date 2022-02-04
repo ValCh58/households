@@ -21,15 +21,31 @@ public class ReportsService {
 	@Autowired private QueryColdWaterFlowDto qColdWaterFlowDto; 
 	@Autowired private QueryElEnFlow queryElEnFlow;
 
+	
+	/**
+	 * Запрос счетчиков связанных с УСПД
+	 * @param id - Room.idRoom
+	 * @return
+	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<AcntCountsDTO> getAcntCounts(Integer id){
-	return qAcntCountDto.getAcntCountsDTO(id);
+		List<AcntCountsDTO> list = qAcntCountDto.getAcntCountsDTO(id);
+	return list;
 	}
 	
+	/**
+	 * Запрос по расчету расхода холодной или горячей воды 
+	 * @param factoryNumberUspd
+	 * @param dateFrom
+	 * @param ratio
+	 * @param typeCount
+	 * @return
+	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ColdWaterFlowDTO> getWaterFlowDto(String factoryNumberUspd, //"%", "2022-01%", "2021-12%", "1000" 
 			                                      LocalDate dateFrom, 
-			                                      String ratio, String typeCount){
+			                                      String ratio, 
+			                                      String typeCount){
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
@@ -40,6 +56,14 @@ public class ReportsService {
 	return listFlowWaterCold;	
 	}
 	
+	/**
+	 * Запрос по расчету электро энергии
+	 * @param factoryNumberUspd
+	 * @param dateFrom
+	 * @param ratio
+	 * @param typeCount
+	 * @return
+	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ElEnFlowDTO> getElEnFlowDto(String factoryNumberUspd, LocalDate dateFrom){ //"%", "2022-01%", "2021-12%" 
 			                                      
