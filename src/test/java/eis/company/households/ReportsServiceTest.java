@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.queres.QueryAcntCountsDto;
 import eis.company.households.service.ReportsService;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class ReportsServiceTest {
 	

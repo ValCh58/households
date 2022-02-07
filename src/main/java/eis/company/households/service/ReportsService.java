@@ -17,11 +17,21 @@ import eis.company.households.queres.QueryElEnFlow;
 @Service
 public class ReportsService {
 	
-	@Autowired private QueryAcntCountsDto qAcntCountDto;
-	@Autowired private QueryColdWaterFlowDto qColdWaterFlowDto; 
-	@Autowired private QueryElEnFlow queryElEnFlow;
+	private QueryAcntCountsDto qAcntCountDto;
+	private QueryColdWaterFlowDto qColdWaterFlowDto; 
+	private QueryElEnFlow queryElEnFlow;
 
 	
+	
+	
+	public ReportsService(QueryAcntCountsDto qAcntCountDto, QueryColdWaterFlowDto qColdWaterFlowDto,
+			QueryElEnFlow queryElEnFlow) {
+		super();
+		this.qAcntCountDto = qAcntCountDto;
+		this.qColdWaterFlowDto = qColdWaterFlowDto;
+		this.queryElEnFlow = queryElEnFlow;
+	}
+
 	/**
 	 * Запрос счетчиков связанных с УСПД
 	 * @param id - Room.idRoom

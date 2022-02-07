@@ -19,14 +19,20 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
+    
     private MyUserDetailsService userDetailsService;
-
-
+    
+    public WebSecurityConfiguration() {};
+    
+    @Autowired
+    public WebSecurityConfiguration(BCryptPasswordEncoder bCryptPasswordEncoder,
+			                        MyUserDetailsService userDetailsService) {
+		super();
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.userDetailsService = userDetailsService;
+	}
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -73,9 +79,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web
-        .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
     }
 
 }

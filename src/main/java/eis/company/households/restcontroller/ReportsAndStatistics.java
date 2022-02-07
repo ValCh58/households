@@ -16,8 +16,13 @@ import eis.company.households.service.ReportsService;
 @RestController
 public class ReportsAndStatistics {
 	
-	@Autowired ReportsService reportService;
+	private ReportsService reportService;
 	
+	public ReportsAndStatistics(ReportsService reportService) {
+		super();
+		this.reportService = reportService;
+	}
+
 	/**
 	 * REST Счетчики для связи с л/сч.
 	 * call JS function openPersonAcnt(idLink)

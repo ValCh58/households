@@ -18,11 +18,13 @@ import java.util.Set;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
+	
+	public MyUserDetailsService() {};
+      
+    @Autowired private UserService userService;
+   
 
-    @Autowired
-    private UserService userService;
-
-    @Override
+	@Override
     @Transactional
     public UserDetails loadUserByUsername(String userName)throws UsernameNotFoundException {
         User user = userService.findUserByUserName(userName);
