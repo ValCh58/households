@@ -10,27 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
+import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.queres.QueryAcntCountsDto;
 import eis.company.households.queres.QueryColdWaterFlowDto;
 import eis.company.households.queres.QueryElEnFlow;
+import eis.company.households.queres.QueryHotCountFlowDto;
+
 
 @Service
 public class ReportsService {
 	
-	private QueryAcntCountsDto qAcntCountDto;
-	private QueryColdWaterFlowDto qColdWaterFlowDto; 
-	private QueryElEnFlow queryElEnFlow;
-
-	
-	
-	
-	public ReportsService(QueryAcntCountsDto qAcntCountDto, QueryColdWaterFlowDto qColdWaterFlowDto,
-			QueryElEnFlow queryElEnFlow) {
-		super();
-		this.qAcntCountDto = qAcntCountDto;
-		this.qColdWaterFlowDto = qColdWaterFlowDto;
-		this.queryElEnFlow = queryElEnFlow;
-	}
+	@Autowired private QueryAcntCountsDto qAcntCountDto;
+	@Autowired private QueryColdWaterFlowDto qColdWaterFlowDto; 
+	@Autowired private QueryElEnFlow queryElEnFlow;
+	@Autowired private QueryHotCountFlowDto queryHotCountFlowDto; 
 
 	/**
 	 * Запрос счетчиков связанных с УСПД
@@ -42,6 +35,23 @@ public class ReportsService {
 		List<AcntCountsDTO> list = qAcntCountDto.getAcntCountsDTO(id);
 	return list;
 	}
+	
+	/**
+	 * Запрос по расчету расхода тепловой энергии 
+	 * @param factoryNumberUspd
+	 * @param dateFrom
+	 * @return
+	 */
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
+	public List<HotCountFlowDTO> getHotCountDto(String factoryNumberUspd, LocalDate dateFrom){
+		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
+		
+		List<HotCountFlowDTO> listHotCountDto = queryHotCountFlowDto.getQueryResult(factoryNumberUspd, dateCurr, datePrev);
+		
+		return listHotCountDto;
+	}
+	
 	
 	/**
 	 * Запрос по расчету расхода холодной или горячей воды 

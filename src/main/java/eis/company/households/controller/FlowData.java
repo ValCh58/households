@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
+import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
 
 @Controller
@@ -18,8 +19,23 @@ public class FlowData {
 	@Autowired private ReportsService reportsService;
 	
 	/**
+	 * Отчет по расходу тепловой энергии
+	 * @return ModelAndView
+	 */
+	@GetMapping(value="/user/flow_hot_report")
+	public ModelAndView getReportFlowHot() {
+		LocalDate dateFrom = LocalDate.now();
+	    
+		ModelAndView modelAndView = new ModelAndView();
+		List<HotCountFlowDTO> listHotFlowReport = reportsService.getHotCountDto("%", dateFrom);
+		modelAndView.addObject("listHotFlowReport", listHotFlowReport);
+		modelAndView.setViewName("user/flow_hot_report");
+		return modelAndView;
+	}
+	
+	
+	/**
 	 * Отчет по расходу холодной воды
-	 * 
 	 * @return ModelAndView
 	 */
 	@GetMapping(value="/user/flow_water_report")
@@ -35,7 +51,6 @@ public class FlowData {
 	
 	/**
 	 * Отчет по расходу горячей воды
-	 * 
 	 * @return ModelAndView
 	 */
 	@GetMapping(value="/user/flow_water_hot_report")
@@ -51,7 +66,6 @@ public class FlowData {
 	
 	/**
 	 * Отчет по расходу Эл. энергии
-	 * 
 	 * @return ModelAndView
 	 */
 	@GetMapping(value="/user/flow_el_en_report")

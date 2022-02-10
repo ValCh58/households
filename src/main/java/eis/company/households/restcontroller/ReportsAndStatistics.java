@@ -11,17 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
+import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
 
 @RestController
 public class ReportsAndStatistics {
 	
-	private ReportsService reportService;
+	@Autowired private ReportsService reportService;
 	
-	public ReportsAndStatistics(ReportsService reportService) {
-		super();
-		this.reportService = reportService;
-	}
 
 	/**
 	 * REST Счетчики для связи с л/сч.
@@ -31,11 +28,23 @@ public class ReportsAndStatistics {
 	@GetMapping(value = "/user/count_water/{id}")
 	public List<AcntCountsDTO> getTableAcntCounts(@PathVariable("id") Integer id) {
 		
-		//System.out.println("List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);");
 		List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);
 		
 		return listAcnt.isEmpty() ? null : listAcnt;
 	}
+	
+	
+	/**
+	 * REST Фильтрация данных по расходу тепловой энергии 
+	 * 
+	 */
+	@GetMapping(value="/user/flow_hotreport/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public List<HotCountFlowDTO> reportFiltrHot(@PathVariable("numUspd") String numUspd, 
+			                                           @PathVariable("dateFrom") LocalDate dateFrom){
+		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
+		return reportService.getHotCountDto(num, dateFrom);
+	}
+	
 	
 	/**
 	 * REST Фильтрация данных по расходу холодной воды 

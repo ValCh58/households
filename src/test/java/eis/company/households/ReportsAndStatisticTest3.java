@@ -31,7 +31,7 @@ import eis.company.households.service.ReportsService;
 @SpringBootTest
 class ReportsAndStatisticTest3 {
 	List<AcntCountsDTO> listDto = new ArrayList<>();
-	
+	/*
 	@MockBean
 	ReportsService reportsService;
 	
@@ -58,5 +58,5 @@ class ReportsAndStatisticTest3 {
 	    .andExpect(MockMvcResultMatchers.status().isOk());
 			
 	}
-
+*/
 }
