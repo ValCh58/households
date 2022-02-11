@@ -13,11 +13,12 @@ import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
-
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 @RestController
 public class ReportsAndStatistics {
 	
-	@Autowired private ReportsService reportService;
+	private final ReportsService reportService;
 	
 
 	/**

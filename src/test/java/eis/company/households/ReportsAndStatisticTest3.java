@@ -31,7 +31,7 @@ import eis.company.households.service.ReportsService;
 @SpringBootTest
 class ReportsAndStatisticTest3 {
 	List<AcntCountsDTO> listDto = new ArrayList<>();
-	/*
+	
 	@MockBean
 	ReportsService reportsService;
 	
@@ -47,16 +47,16 @@ class ReportsAndStatisticTest3 {
 	@Test
 	void test() throws Exception {
 		listDto.add(new AcntCountsDTO(1, 12, "СХВ", "12345", LocalDate.now(), "Адрес 1"));
-		listDto.add(new AcntCountsDTO(3, 32, "СГВ", "12347", LocalDate.now(), "Адрес 3"));
+		
 		
 		Mockito.when(reportsService.getAcntCounts(anyInt())).thenReturn(listDto);
 				
 		 this.mockMvc
-	    .perform(MockMvcRequestBuilders.get("/user/count_water/{id}", 3)
+	    .perform(MockMvcRequestBuilders.get("/user/count_water/{id}", anyInt())
 	    .accept(MediaType.APPLICATION_JSON))
 	    .andDo(print())
 	    .andExpect(MockMvcResultMatchers.status().isOk());
 			
 	}
-*/
+
 }

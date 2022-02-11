@@ -14,7 +14,7 @@ import eis.company.households.model.ManagCompany;
 import eis.company.households.repository.ManagCompanyRepository;
 import eis.company.households.repository.TypeObjectRepository;
 
-@Disabled
+
 @SpringBootTest
 @DisplayName(value = "Testing of ManagCompany")
 class test_Repo_ManagCompany {

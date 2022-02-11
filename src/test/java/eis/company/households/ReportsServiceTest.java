@@ -20,7 +20,7 @@ import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.queres.QueryAcntCountsDto;
 import eis.company.households.service.ReportsService;
 
-@Disabled
+
 @ExtendWith(MockitoExtension.class)
 class ReportsServiceTest {
 	
@@ -34,8 +34,7 @@ class ReportsServiceTest {
 	void testGetAcntCounts() {
 		List<AcntCountsDTO> listDto = new ArrayList<>();
 		listDto.add(new AcntCountsDTO(1, 12, "СХВ", "12345", LocalDate.now(), "Адрес 1"));
-		listDto.add(new AcntCountsDTO(3, 32, "СГВ", "12347", LocalDate.now(), "Адрес 3"));
-		
+				
 		when(queryAcntCountsDtoMock.getAcntCountsDTO(any())).thenReturn(listDto);
 		List<AcntCountsDTO> dto = qAcntCountDto.getAcntCounts(any());
 		assertNotNull(dto);
@@ -46,14 +45,6 @@ class ReportsServiceTest {
 		assertEquals("12345", dto.get(0).getSerialNum());
 		assertNotNull(dto.get(0).getDateExpire());
 		assertEquals("Адрес 1", dto.get(0).getAddress());
-		
-		assertEquals(3, dto.get(1).getIdCounts());
-		assertEquals(32, dto.get(1).getIdPersonAcnt());
-		assertEquals("СГВ", dto.get(1).getNameCount());
-		assertEquals("12347", dto.get(1).getSerialNum());
-		assertNotNull(dto.get(1).getDateExpire());
-		assertEquals("Адрес 3", dto.get(1).getAddress());
-		
 		
 	}
 
