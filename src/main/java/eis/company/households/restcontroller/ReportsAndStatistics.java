@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
 import lombok.AllArgsConstructor;
+import static org.springframework.http.HttpStatus.OK;
+
 @AllArgsConstructor
 @RestController
 public class ReportsAndStatistics {
@@ -27,12 +30,11 @@ public class ReportsAndStatistics {
 	 * @return modelandview
 	 */
 	@GetMapping(value = "/user/count_water/{id}")
-	public List<AcntCountsDTO> getTableAcntCounts(@PathVariable("id") Integer id) {
+	public ResponseEntity<List<AcntCountsDTO>> getTableAcntCounts(@PathVariable("id") Integer id) {
 		
-		List<AcntCountsDTO> listAcnt = reportService.getAcntCounts(id);
-		
-		return listAcnt.isEmpty() ? null : listAcnt;
-	}
+		return ResponseEntity.status(OK)
+				.body(reportService.getAcntCounts(id));
+    }
 	
 	
 	/**
@@ -40,10 +42,11 @@ public class ReportsAndStatistics {
 	 * 
 	 */
 	@GetMapping(value="/user/flow_hotreport/numUspd/{numUspd}/dateFrom/{dateFrom}")
-	public List<HotCountFlowDTO> reportFiltrHot(@PathVariable("numUspd") String numUspd, 
+	public ResponseEntity<List<HotCountFlowDTO>> reportFiltrHot(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return reportService.getHotCountDto(num, dateFrom);
+		return ResponseEntity.status(OK)
+				.body(reportService.getHotCountDto(num, dateFrom));
 	}
 	
 	
@@ -52,10 +55,11 @@ public class ReportsAndStatistics {
 	 * 
 	 */
 	@GetMapping(value="/user/flow_water_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
-	public List<ColdWaterFlowDTO> reportFiltrCoolWater(@PathVariable("numUspd") String numUspd, 
+	public ResponseEntity<List<ColdWaterFlowDTO>> reportFiltrCoolWater(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return reportService.getWaterFlowDto(num, dateFrom, "1000", "1");
+		return ResponseEntity.status(OK)
+				.body(reportService.getWaterFlowDto(num, dateFrom, "1000", "1"));
 	}
 	
 	/**
@@ -63,10 +67,11 @@ public class ReportsAndStatistics {
 	 * 
 	 */
 	@GetMapping(value="/user/flow_water_hot_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
-	public List<ColdWaterFlowDTO> reportFiltrHotWater(@PathVariable("numUspd") String numUspd, 
+	public ResponseEntity<List<ColdWaterFlowDTO>> reportFiltrHotWater(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return reportService.getWaterFlowDto(num, dateFrom, "1000", "2");
+		return ResponseEntity.status(OK)
+				.body(reportService.getWaterFlowDto(num, dateFrom, "1000", "2"));
 	}
 	
 	/**
@@ -74,11 +79,11 @@ public class ReportsAndStatistics {
 	 * 
 	 */
 	@GetMapping(value="/user/flow_el_en_report/numUspd/{numUspd}/dateFrom/{dateFrom}")
-	public List<ElEnFlowDTO> reportFiltrElEn(@PathVariable("numUspd") String numUspd, 
+	public ResponseEntity<List<ElEnFlowDTO>> reportFiltrElEn(@PathVariable("numUspd") String numUspd, 
 			                                 @PathVariable("dateFrom") LocalDate dateFrom){
 		
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return reportService.getElEnFlowDto(num, dateFrom);
+		return ResponseEntity.status(OK).body(reportService.getElEnFlowDto(num, dateFrom));
 	}
 	
 
