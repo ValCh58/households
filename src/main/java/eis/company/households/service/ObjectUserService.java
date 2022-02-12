@@ -405,7 +405,7 @@ public class ObjectUserService {
 	 * @return PersonAcnt
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
-	public PersonAcnt updateAccount(final PersonAcnt pa) throws SQLException{
+	public PersonAcnt updateAccount(final PersonAcnt pa){
 		Optional<PersonAcnt> opt = personAcntRepository.findById(pa.getIdPersonAcnt());
 		PersonAcnt personAcc = opt.isPresent() ? opt.get() : null;
 		if (personAcc == null) {

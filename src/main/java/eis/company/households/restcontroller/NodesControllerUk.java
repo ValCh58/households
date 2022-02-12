@@ -1,10 +1,12 @@
 package eis.company.households.restcontroller;
 
-import java.sql.SQLException;
+import static org.springframework.http.HttpStatus.OK;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,18 +24,15 @@ import eis.company.households.queres.QueryLinkObjectRepoUkImpl;
 import eis.company.households.queres.QueryUspdFlat;
 import eis.company.households.service.ObjectUserService;
 
-@RestController(value="NodesControllerUk")
+@RestController
 public class NodesControllerUk {
 
 	List<LinkObjectDTO> queryList;
 	List<LinkObjectDTO> retList = new ArrayList<LinkObjectDTO>();
 
-	@Autowired
-	private QueryLinkObjectRepoUkImpl queryLinkObj;
-	@Autowired
-	private ObjectUserService objUserSrv;
-	@Autowired
-	private QueryUspdFlat queryUspdFlat;
+	@Autowired 	private QueryLinkObjectRepoUkImpl queryLinkObj;
+	@Autowired 	private ObjectUserService objUserSrv;
+	@Autowired 	private QueryUspdFlat queryUspdFlat;
 
 	/**
 	 * Получение списка данных для построения tree table объектов УК
@@ -41,8 +40,9 @@ public class NodesControllerUk {
 	 * @return список объектов для дерева
 	 */
 	@GetMapping(value = "nodes_tree_uk")
-	public List<LinkObjectDTO> nodes() {
-		return makeTree();
+	public ResponseEntity<List<LinkObjectDTO>> nodes() {
+		
+		return ResponseEntity.status(OK).body(makeTree());
 	}
 
 	/******************************************************************************************/
@@ -86,8 +86,8 @@ public class NodesControllerUk {
 	 * @return ManagCompany
 	 */
 	@GetMapping(value = "nodeEditUk/{id}")
-	public ManagCompany getManageCompany(@PathVariable("id") Integer id) {
-		return objUserSrv.getDataManagCompany(id);
+	public ResponseEntity<ManagCompany> getManageCompany(@PathVariable("id") Integer id) {
+		return ResponseEntity.status(OK).body(objUserSrv.getDataManagCompany(id));
 	}
 
 	/**
@@ -105,8 +105,8 @@ public class NodesControllerUk {
 	 * @return Street
 	 */
 	@GetMapping(value = "nodeEditStreet/{id}")
-	public Street getStreet(@PathVariable("id") Integer id) {
-		return objUserSrv.getStreet(id);
+	public ResponseEntity<Street> getStreet(@PathVariable("id") Integer id) {
+		return ResponseEntity.status(OK).body(objUserSrv.getStreet(id));
 	}
 
 	/**
@@ -128,8 +128,8 @@ public class NodesControllerUk {
 	 * @return House
 	 */
 	@GetMapping(value = "nodeEditHouse/{id}")
-	public House getHouse(@PathVariable("id") Integer id) {
-		return objUserSrv.getHouse(id);
+	public ResponseEntity<House> getHouse(@PathVariable("id") Integer id) {
+		return ResponseEntity.status(OK).body(objUserSrv.getHouse(id));
 	}
 
 	/**
@@ -151,10 +151,10 @@ public class NodesControllerUk {
 	 * @return Room
 	 */
 	@GetMapping(value = "nodeEditFlat/{id}")
-	public Room getFlat(@PathVariable("id") Integer id) {
+	public ResponseEntity<Room> getFlat(@PathVariable("id") Integer id) {
 		Room room = objUserSrv.getRoom(id);
 		room.setId_uspd(room.getUspdDev().getIdUspdDev());
-		return room;
+		return ResponseEntity.status(OK).body(room);
 	}
 
 	/**
@@ -178,30 +178,22 @@ public class NodesControllerUk {
 	 * @return PersonAcnt
 	 */
 	@GetMapping(value = "nodeEditAcc/{id}")
-	public PersonAcnt getPersonAcc(@PathVariable("id") Integer id) {
-		return objUserSrv.getPersonAcnt(id);
+	public ResponseEntity<PersonAcnt> getPersonAcc(@PathVariable("id") Integer id) {
+		return  ResponseEntity.status(OK).body(objUserSrv.getPersonAcnt(id));
 	}
 
 	/**
 	 * Update or insert л.сч
 	 */
 	@PostMapping(value = "/updateEditAcc")
-	public void updateAct(PersonAcnt pAcnt) {
+	public void updateAct(final PersonAcnt pAcnt) {
 		
-		PersonAcnt person = pAcnt;
-		
-		try {
 			if (pAcnt.getIdPersonAcnt() > 0) {
-				person = objUserSrv.updateAccount(pAcnt);
+				objUserSrv.updateAccount(pAcnt);
 			} else {
-				person = objUserSrv.insertPersonAcnt(pAcnt);
+				objUserSrv.insertPersonAcnt(pAcnt);
 			}
-            if(person != null) {
-			   	
-			}
-		} catch (SQLException e) {
-				e.printStackTrace();
-		}
+          
 		
 	}
 
@@ -245,8 +237,8 @@ public class NodesControllerUk {
 	 ************************/
 	/*****************************************************************************************/
 	@GetMapping(value = "/flatUspdEdit")
-	public List<UspdFlatDto> getFlatUspdEdit() {
-		return queryUspdFlat.retUspdFlatDto();
+	public ResponseEntity<List<UspdFlatDto>> getFlatUspdEdit() {
+		return  ResponseEntity.status(OK).body(queryUspdFlat.retUspdFlatDto());
 	}
 	/*****************************************************************************************/
 }

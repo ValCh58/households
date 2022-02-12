@@ -1,9 +1,10 @@
 package eis.company.households.restcontroller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,6 @@ import eis.company.households.modeleis.Measuring;
 import eis.company.households.modeleis.RawData;
 import eis.company.households.service.ObjectAdminService;
 import lombok.AllArgsConstructor;
-import static org.springframework.http.HttpStatus.OK;
 
 
 @RestController
@@ -36,9 +36,7 @@ public class ObjectAdminRest {
 	@GetMapping(value = "/admin/object_uspd/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
 	public ResponseEntity<List<Measuring>> updateViewUspdPar(@PathVariable("numUspd") String numUspd,
 			                                 @PathVariable("dateFrom")  LocalDate dateFrom, 
-			                                 @PathVariable("dateTo")  LocalDate dateTo)
-			                                		 //throws ResourceNotFoundException{
-	                                            {
+			                                 @PathVariable("dateTo")  LocalDate dateTo) {
 		
 		return ResponseEntity.status(OK)
 				.body(objAdmSrv.retUpdateUspdObj(numUspd, dateFrom, dateTo)); 

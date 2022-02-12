@@ -1,11 +1,14 @@
 package eis.company.households.restcontroller;
 
+import static org.springframework.http.HttpStatus.OK;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +27,7 @@ import eis.company.households.repository.TypeUspdRepository;
 import eis.company.households.repository.UspdDevRepository;
 import eis.company.households.service.UpdateEditSrv;
 
-@RestController(value="NodesController")
+@RestController
 public class NodesController {
 
 	List<LinkObjectDTO> queryList;
@@ -45,8 +48,8 @@ public class NodesController {
 	 * @return список объектов для дерева
 	 */
 	@GetMapping(value = "nodes")
-	public List<LinkObjectDTO> nodes() {
-		return makeTree();
+	public ResponseEntity<List<LinkObjectDTO>> nodes() {
+		return ResponseEntity.status(OK).body(makeTree());
 	}
 
 //******************************************************************************************
@@ -79,9 +82,9 @@ public class NodesController {
 	}
 //******************************************************************************************/
 
-	@GetMapping(value = "nodeEditCount/{id}")
-	public void getCountObj(@PathVariable("id") Integer id) {
-	}
+	//@GetMapping(value = "nodeEditCount/{id}")
+	//public void getCountObj(@PathVariable("id") Integer id) {
+	//}
 
 	/**
 	 * Заполнение полей формы "Редактирование УСПД"
@@ -90,9 +93,9 @@ public class NodesController {
 	 * @return EditUspdDTO
 	 */
 	@GetMapping(value = "nodeEditUspd/{id}")
-	public EditUspdDTO getUspdDev(@PathVariable("id") Integer id) {
+	public ResponseEntity<EditUspdDTO> getUspdDev(@PathVariable("id") Integer id) {
 		Optional<UspdDev> opUspdDev = uspdDevRep.getByIdUspdDev(id);
-		EditUspdDTO editUspdDto;
+		EditUspdDTO editUspdDto = null;
 
 		if (opUspdDev.isPresent()) {
 			editUspdDto = new EditUspdDTO(opUspdDev.get().getIdUspdDev(), opUspdDev.get().getNameUspdDev(),
@@ -101,9 +104,9 @@ public class NodesController {
 					typeUspdRepository.findAll());
 
 		} else {
-			return null;
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(editUspdDto);
 		}
-		return editUspdDto;
+		return ResponseEntity.status(HttpStatus.OK).body(editUspdDto);
 	}
 
 	/**
@@ -112,10 +115,10 @@ public class NodesController {
 	 * @return editUspdDto - заполнит список типами УСПД в модальном окне
 	 */
 	@GetMapping(value = "nodeNewUspd")
-	public EditUspdDTO createNewUspd() {
+	public ResponseEntity<EditUspdDTO> createNewUspd() {
 		EditUspdDTO editUspdDto = new EditUspdDTO(0, "", "", "", 0, 0, 0, 0, 0, typeUspdRepository.findAll());
 
-		return editUspdDto;
+		return ResponseEntity.status(OK).body(editUspdDto);
 	}
 
 	/**
@@ -124,10 +127,10 @@ public class NodesController {
 	 * @return countsDt
 	 */
 	@GetMapping(value = "nodeNewCount")
-	public CountsDTO createCount() {
+	public ResponseEntity<CountsDTO> createCount() {
 		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 0);
 
-		return countsDto;
+		return ResponseEntity.status(OK).body(countsDto);
 	}
 
 	/**
@@ -137,10 +140,10 @@ public class NodesController {
 	 * @return EditServerDTO объект - результат запроса для модального окна
 	 */
 	@GetMapping(value = "nodeEditSrv/{id}")
-	public EditServerDTO getNode(@PathVariable("id") Integer id) {
+	public ResponseEntity<EditServerDTO> getNode(@PathVariable("id") Integer id) {
 		// LinkObject linkObject = updEditSrv.getDataFromTree(id);
 		List<EditServerDTO> retList = queryEditSrv.queryEditModalFormRepository(id);
-		return retList.size() == 1 ? retList.get(0) : null;
+		return ResponseEntity.status(OK).body(retList.get(0));
 	}
 
 	/**
@@ -150,8 +153,8 @@ public class NodesController {
 	 * @return
 	 */
 	@GetMapping(value = "nodeCounts/{id}")
-	public CountsDTO getCountsDto(@PathVariable("id") Integer id) {
-		return queryCountsDto.retCountsDto(id);
+	public ResponseEntity<CountsDTO> getCountsDto(@PathVariable("id") Integer id) {
+		return ResponseEntity.status(OK).body(queryCountsDto.retCountsDto(id));
 	}
 
 	/**
