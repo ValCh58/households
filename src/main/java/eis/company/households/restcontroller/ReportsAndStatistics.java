@@ -1,9 +1,10 @@
 package eis.company.households.restcontroller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +16,7 @@ import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
 import lombok.AllArgsConstructor;
-import static org.springframework.http.HttpStatus.OK;
+
 
 @AllArgsConstructor
 @RestController

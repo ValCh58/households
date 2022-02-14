@@ -8,10 +8,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.CountsDTO;
@@ -106,7 +108,8 @@ public class NodesController {
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(editUspdDto);
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(editUspdDto);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(editUspdDto);
 	}
 
 	/**
@@ -118,7 +121,8 @@ public class NodesController {
 	public ResponseEntity<EditUspdDTO> createNewUspd() {
 		EditUspdDTO editUspdDto = new EditUspdDTO(0, "", "", "", 0, 0, 0, 0, 0, typeUspdRepository.findAll());
 
-		return ResponseEntity.status(OK).body(editUspdDto);
+		return ResponseEntity.status(OK)
+				.body(editUspdDto);
 	}
 
 	/**
@@ -130,7 +134,8 @@ public class NodesController {
 	public ResponseEntity<CountsDTO> createCount() {
 		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 0);
 
-		return ResponseEntity.status(OK).body(countsDto);
+		return ResponseEntity.status(OK)
+				.body(countsDto);
 	}
 
 	/**
@@ -143,7 +148,8 @@ public class NodesController {
 	public ResponseEntity<EditServerDTO> getNode(@PathVariable("id") Integer id) {
 		// LinkObject linkObject = updEditSrv.getDataFromTree(id);
 		List<EditServerDTO> retList = queryEditSrv.queryEditModalFormRepository(id);
-		return ResponseEntity.status(OK).body(retList.get(0));
+		return ResponseEntity.status(OK)
+				.body(retList.get(0));
 	}
 
 	/**
@@ -154,7 +160,8 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodeCounts/{id}")
 	public ResponseEntity<CountsDTO> getCountsDto(@PathVariable("id") Integer id) {
-		return ResponseEntity.status(OK).body(queryCountsDto.retCountsDto(id));
+		return ResponseEntity.status(OK)
+				.body(queryCountsDto.retCountsDto(id));
 	}
 
 	/**
@@ -163,8 +170,10 @@ public class NodesController {
 	 * @param countsDto
 	 */
 	@PostMapping(value = "updateCounts")
-	public void saveCount(CountsDTO countsDto) {
+	public ResponseEntity<CountsDTO> saveCount(CountsDTO countsDto) {
 		updEditSrv.updateCounts(countsDto);
+		
+		return ResponseEntity.status(OK).body(countsDto);
 	}
 
 	/**
@@ -194,20 +203,20 @@ public class NodesController {
 	}
 
 	@PostMapping(value = "delObjectTree")
-	public void delObjectTree(final selectIdFromLinkObj selectidfromlinkobj) {
+	public void delObjectTree(selectIdFromLinkObj selectidfromlinkobj) {
 		Integer selectTypeObj = selectidfromlinkobj.getId_type_object();
 		Integer idLinkObjTree = selectidfromlinkobj.getId_link_object();
 
 		switch (selectTypeObj) {
-		case 2:// MyConst.TYPE_OBJECT_SERVER
+		case 2:
 			updEditSrv.delServerObj(idLinkObjTree);
 			break;
 
-		case 3:// MyConst.TYPE_OBJECT_USPD
+		case 3:
 			updEditSrv.delUspdObj(idLinkObjTree);
 			break;
 
-		case 4:// MyConst.TYPE_OBJECT_COUNT
+		case 4:
             updEditSrv.delCounts(idLinkObjTree);
 			break;
 		}

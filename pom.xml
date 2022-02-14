@@ -120,6 +120,9 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		
+
 	</dependencies>
 
 
@@ -129,7 +132,7 @@
 			<!-- further plugins -->
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M5</version><!--$NO-MVN-MAN-VER$-->
+				<version>3.0.0-M5</version> <!--$NO-MVN-MAN-VER$-->
 				<executions>
 					<execution>
 						<goals>
@@ -139,12 +142,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<artifactId>>maven-surefire-plugin</artifactId>
 				<version>3.0.0-M5</version>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
