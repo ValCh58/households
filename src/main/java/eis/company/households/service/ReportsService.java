@@ -20,10 +20,20 @@ import eis.company.households.queres.QueryHotCountFlowDto;
 @Service
 public class ReportsService {
 	
-	@Autowired private QueryAcntCountsDto qAcntCountDto;
-	@Autowired private QueryColdWaterFlowDto qColdWaterFlowDto; 
-	@Autowired private QueryElEnFlow queryElEnFlow;
-	@Autowired private QueryHotCountFlowDto queryHotCountFlowDto; 
+	private QueryAcntCountsDto qAcntCountDto;
+	private QueryColdWaterFlowDto qColdWaterFlowDto; 
+	private QueryElEnFlow queryElEnFlow;
+	private QueryHotCountFlowDto queryHotCountFlowDto; 
+	
+	@Autowired
+	public ReportsService(QueryAcntCountsDto qAcntCountDto, QueryColdWaterFlowDto qColdWaterFlowDto,
+			QueryElEnFlow queryElEnFlow, QueryHotCountFlowDto queryHotCountFlowDto) {
+		super();
+		this.qAcntCountDto = qAcntCountDto;
+		this.qColdWaterFlowDto = qColdWaterFlowDto;
+		this.queryElEnFlow = queryElEnFlow;
+		this.queryHotCountFlowDto = queryHotCountFlowDto;
+	}
 
 	/**
 	 * Запрос счетчиков связанных с УСПД

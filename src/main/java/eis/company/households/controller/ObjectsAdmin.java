@@ -20,11 +20,17 @@ import eis.company.households.service.ObjectAdminService;
 @Controller
 public class ObjectsAdmin {
 
-	@Autowired private QueryComSrvDto queryComSrv;
-	@Autowired private ObjectAdminService objAdmSrv;
+	private QueryComSrvDto queryComSrv;
+	private ObjectAdminService objAdmSrv;
 	
-	
-	
+	@Autowired	
+	public ObjectsAdmin(QueryComSrvDto queryComSrv, ObjectAdminService objAdmSrv) {
+		super();
+		this.queryComSrv = queryComSrv;
+		this.objAdmSrv = objAdmSrv;
+	}
+
+
 	/**
 	 * Получение данных о связи с серверами УСПД
 	 * @return modelView

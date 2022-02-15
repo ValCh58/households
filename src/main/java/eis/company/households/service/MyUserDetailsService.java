@@ -1,7 +1,12 @@
 package eis.company.households.service;
 
-import eis.company.households.model.Role;
-import eis.company.households.model.User;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,19 +15,21 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import eis.company.households.model.Role;
+import eis.company.households.model.User;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 	
 	public MyUserDetailsService() {};
       
-    @Autowired private UserService userService;
+    private UserService userService;
    
+    @Autowired
+	public MyUserDetailsService(UserService userService) {
+		super();
+		this.userService = userService;
+	}
 
 	@Override
     @Transactional

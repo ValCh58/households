@@ -28,15 +28,26 @@ import eis.company.households.repository.UspdDevRepository;
 @Service
 public class UpdateEditSrv {
 
-	@Autowired private CountsRepository countsRep;
-	@Autowired private ComServerRepository comServerRepository;
-	@Autowired private LinkObjectRepository linkObjRep;
-	@Autowired private ManagCompanyRepository managCompanyRepository;
-	@Autowired private TypeObjectRepository typeObjectRepository;
-	@Autowired private UspdDevRepository uspdDevRep;
-	@Autowired private TypeUspdRepository typeUspdRepo;
+	private CountsRepository countsRep;
+	private ComServerRepository comServerRepository;
+	private LinkObjectRepository linkObjRep;
+	private ManagCompanyRepository managCompanyRepository;
+	private TypeObjectRepository typeObjectRepository;
+	private UspdDevRepository uspdDevRep;
+	private TypeUspdRepository typeUspdRepo;
 
-	public UpdateEditSrv() {
+	@Autowired
+	public UpdateEditSrv(CountsRepository countsRep, ComServerRepository comServerRepository,
+			LinkObjectRepository linkObjRep, ManagCompanyRepository managCompanyRepository,
+			TypeObjectRepository typeObjectRepository, UspdDevRepository uspdDevRep, TypeUspdRepository typeUspdRepo) {
+		super();
+		this.countsRep = countsRep;
+		this.comServerRepository = comServerRepository;
+		this.linkObjRep = linkObjRep;
+		this.managCompanyRepository = managCompanyRepository;
+		this.typeObjectRepository = typeObjectRepository;
+		this.uspdDevRep = uspdDevRep;
+		this.typeUspdRepo = typeUspdRepo;
 	}
 
 	/**

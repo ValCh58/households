@@ -30,17 +30,35 @@ import eis.company.households.repoeisystems.RepositoryMeasuringFilter;
 @Service
 public class ObjectAdminService {
 
-	@Autowired private MeasuringRepository measuringRepo;
-	@Autowired private CountElEnRepository countElEnRepo;
-	@Autowired private RetCountWaterDTOPar2 countWaterPar2;
-	@Autowired private RepositoryMeasuringFilter repoMeasuringFiltr;
-	@Autowired private RawDataRepository repoRawData;
-	@Autowired private QueryAlarmDto querAlarmDto;
-	@Autowired private QueryAlarmDto queryAlarm;
-	@Autowired private RepoAlarm repoAlarm;
-	@Autowired private QueryCountWaterDto queryCountWater;
-	@Autowired private CountHeaterRepository countHeaterRepo;
-	
+	private MeasuringRepository measuringRepo;
+	private CountElEnRepository countElEnRepo;
+	private RetCountWaterDTOPar2 countWaterPar2;
+	private RepositoryMeasuringFilter repoMeasuringFiltr;
+	private RawDataRepository repoRawData;
+	private QueryAlarmDto querAlarmDto;
+	private QueryAlarmDto queryAlarm;
+	private RepoAlarm repoAlarm;
+	private QueryCountWaterDto queryCountWater;
+	private CountHeaterRepository countHeaterRepo;
+		
+	@Autowired
+	public ObjectAdminService(MeasuringRepository measuringRepo, CountElEnRepository countElEnRepo,
+			RetCountWaterDTOPar2 countWaterPar2, RepositoryMeasuringFilter repoMeasuringFiltr,
+			RawDataRepository repoRawData, QueryAlarmDto querAlarmDto, QueryAlarmDto queryAlarm, RepoAlarm repoAlarm,
+			QueryCountWaterDto queryCountWater, CountHeaterRepository countHeaterRepo) {
+		super();
+		this.measuringRepo = measuringRepo;
+		this.countElEnRepo = countElEnRepo;
+		this.countWaterPar2 = countWaterPar2;
+		this.repoMeasuringFiltr = repoMeasuringFiltr;
+		this.repoRawData = repoRawData;
+		this.querAlarmDto = querAlarmDto;
+		this.queryAlarm = queryAlarm;
+		this.repoAlarm = repoAlarm;
+		this.queryCountWater = queryCountWater;
+		this.countHeaterRepo = countHeaterRepo;
+	}
+
 	/**
 	 * Service repository УСПД 
 	 * @return List<Measuring>
@@ -48,12 +66,6 @@ public class ObjectAdminService {
 
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<Measuring> retUspdObj() {
-		// List<Measuring> list = measuringRepo.findAll();
-		// TypedSort<Measuring> measuring = Sort.sort(Measuring.class);
-		// Sort sort = measuring.by(Measuring::getTimeStamp).ascending();
-		// List<Measuring> list = measuringRepo.findFirst1000ByOrderByTimeStamp(sort);
-		// List<Measuring> list = measuringRepo.findFirst1000ByOrderByTimeStampAsc();
-		// List<Measuring> list = measuringRepo.findFirst1000ByOrderByTimeStampDesc();
 		List<Measuring> list = measuringRepo.findTop1000ByOrderByTimeStampDesc();
 		return list;
 	}
@@ -108,7 +120,7 @@ public class ObjectAdminService {
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountElEn> retCountElEn() {
-		// List<CountElEn> list = countElEnRepo.findAll();
+		
 		List<CountElEn> list = countElEnRepo.findFirst1000ByOrderByTimeStampDesc();
 		return list;
 	}

@@ -5,6 +5,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,15 +18,20 @@ import eis.company.households.modeleis.CountHeat;
 import eis.company.households.modeleis.Measuring;
 import eis.company.households.modeleis.RawData;
 import eis.company.households.service.ObjectAdminService;
-import lombok.AllArgsConstructor;
 
 
 @RestController
-@AllArgsConstructor
 public class ObjectAdminRest {
 	
-	private final ObjectAdminService objAdmSrv; 
+	private ObjectAdminService objAdmSrv;
 	
+	
+	@Autowired
+	public ObjectAdminRest(ObjectAdminService objAdmSrv) {
+		super();
+		this.objAdmSrv = objAdmSrv;
+	}
+
 	/**
 	 * REST УСПД фильтрация
 	 * @param numUspd

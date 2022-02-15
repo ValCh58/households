@@ -16,8 +16,15 @@ import eis.company.households.service.ReportsService;
 @Controller
 public class FlowData {
 
-	@Autowired private ReportsService reportsService;
+	private ReportsService reportsService;
 	
+	@Autowired
+	public FlowData(ReportsService reportsService) {
+		super();
+		this.reportsService = reportsService;
+	}
+
+
 	/**
 	 * Отчет по расходу тепловой энергии
 	 * @return ModelAndView

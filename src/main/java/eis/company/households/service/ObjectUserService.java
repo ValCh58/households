@@ -35,17 +35,34 @@ import eis.company.households.repository.UspdDevRepository;
 @Service
 public class ObjectUserService {
 
-	@Autowired private StreetRepository streetRepository;
-	@Autowired private ManagCompanyRepository managCompanyRepo;
-	@Autowired private HouseRepository houseRepository;
-	@Autowired private RoomRepository roomRepository;
-	@Autowired private PersonAcntRepository personAcntRepository;
-	@Autowired private TypeObjectRepository typeObjRepo;
-	@Autowired private LinkObjectUkRepository linkObjectUkRepo;
-	@Autowired private UspdDevRepository uspdRepository;
-    @Autowired private CountsRepository countsRepository;
+	private StreetRepository streetRepository;
+	private ManagCompanyRepository managCompanyRepo;
+	private HouseRepository houseRepository;
+	private RoomRepository roomRepository;
+	private PersonAcntRepository personAcntRepository;
+	private TypeObjectRepository typeObjRepo;
+	private LinkObjectUkRepository linkObjectUkRepo;
+	private UspdDevRepository uspdRepository;
+    private CountsRepository countsRepository;
     
-		
+    @Autowired	
+	public ObjectUserService(StreetRepository streetRepository, ManagCompanyRepository managCompanyRepo,
+			HouseRepository houseRepository, RoomRepository roomRepository, PersonAcntRepository personAcntRepository,
+			TypeObjectRepository typeObjRepo, LinkObjectUkRepository linkObjectUkRepo, UspdDevRepository uspdRepository,
+			CountsRepository countsRepository, SaveLinkObject<LinkObjectUk, Integer, TypeObject, Integer> slo) {
+		super();
+		this.streetRepository = streetRepository;
+		this.managCompanyRepo = managCompanyRepo;
+		this.houseRepository = houseRepository;
+		this.roomRepository = roomRepository;
+		this.personAcntRepository = personAcntRepository;
+		this.typeObjRepo = typeObjRepo;
+		this.linkObjectUkRepo = linkObjectUkRepo;
+		this.uspdRepository = uspdRepository;
+		this.countsRepository = countsRepository;
+		this.slo = slo;
+	}
+
 	/**
 	 * Lambda
 	 * Вставка записи в link_object_uk/LinkObjectUk

@@ -27,12 +27,22 @@ import javax.validation.Valid;
 @Controller
 public class LoginController {
 
-    @Autowired private UserService userService;
-    @Autowired private RoleRepository roleRepository;
-    @Autowired private UserRepository userRepository;
-    @Autowired private QueryUsersRepositoryImpl usersRepositoryImpl;
+    private UserService userService;
+    private RoleRepository roleRepository;
+    private UserRepository userRepository;
+    private QueryUsersRepositoryImpl usersRepositoryImpl;
+    
+    @Autowired
+    public LoginController(UserService userService, RoleRepository roleRepository, UserRepository userRepository,
+			QueryUsersRepositoryImpl usersRepositoryImpl) {
+		super();
+		this.userService = userService;
+		this.roleRepository = roleRepository;
+		this.userRepository = userRepository;
+		this.usersRepositoryImpl = usersRepositoryImpl;
+	}
 
-    @GetMapping(value={"/", "/login"})
+	@GetMapping(value={"/", "/login"})
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
@@ -42,8 +52,6 @@ public class LoginController {
     @GetMapping(value="/admin/edituser")
     public ModelAndView editUser() {
     	ModelAndView modelAndView = new ModelAndView();
-       	//UsersRolesDTO userRoleDto = new UsersRolesDTO(null, null, null, null, null, null, null);
-    	//modelAndView.addObject("userRoleDto", userRoleDto);
        	List<UsersRolesDTO> listUsers = usersRepositoryImpl.queryUsersRoles();
     	modelAndView.addObject("listUsers", listUsers);
     	modelAndView.setViewName("admin/edituser");

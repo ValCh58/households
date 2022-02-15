@@ -5,7 +5,9 @@ import static org.springframework.http.HttpStatus.OK;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +32,18 @@ public class NodesControllerUk {
 	List<LinkObjectDTO> queryList;
 	List<LinkObjectDTO> retList = new ArrayList<LinkObjectDTO>();
 
-	@Autowired 	private QueryLinkObjectRepoUkImpl queryLinkObj;
-	@Autowired 	private ObjectUserService objUserSrv;
-	@Autowired 	private QueryUspdFlat queryUspdFlat;
+	private QueryLinkObjectRepoUkImpl queryLinkObj;
+	private ObjectUserService objUserSrv;
+	private QueryUspdFlat queryUspdFlat;
+	
+	@Autowired
+	public NodesControllerUk(QueryLinkObjectRepoUkImpl queryLinkObj, ObjectUserService objUserSrv,
+			QueryUspdFlat queryUspdFlat) {
+		super();
+		this.queryLinkObj = queryLinkObj;
+		this.objUserSrv = objUserSrv;
+		this.queryUspdFlat = queryUspdFlat;
+	}
 
 	/**
 	 * Получение списка данных для построения tree table объектов УК
@@ -94,8 +105,10 @@ public class NodesControllerUk {
 	 * Update параметров УК
 	 */
 	@PostMapping(value = "updateEditUk")
-	public void updateUk(ManagCompany mc) {
-		objUserSrv.updateDataManagCompany(mc);
+	public ResponseEntity<ManagCompany> updateUk(ManagCompany mc) {
+		ManagCompany managCompany =  objUserSrv.updateDataManagCompany(mc);
+		
+		return ResponseEntity.status(OK).body(managCompany);
 	}
 
 	// ******************************************************************************************/
@@ -113,12 +126,16 @@ public class NodesControllerUk {
 	 * Update or Insert параметров улицы
 	 */
 	@PostMapping(value = "/updateEditStreet")
-	public void updateStreet(Street st) {
+	public ResponseEntity<Street> updateStreet(Street st) {
+		Street street = null;
+		
 		if (st.getIdStreet() > 0) {
-			objUserSrv.updateStreet(st);
+			street = objUserSrv.updateStreet(st);
 		} else {
-			objUserSrv.insertStreet(st);
+			street = objUserSrv.insertStreet(st);
 		}
+		
+		return ResponseEntity.status(OK).body(street);
 	}
 
 	// ******************************************************************************************/
@@ -136,12 +153,16 @@ public class NodesControllerUk {
 	 * Update or Insert House
 	 */
 	@PostMapping(value = "/updateEditHome")
-	public void updateHome(House hs) {
+	public ResponseEntity<House> updateHome(House hs) {
+		House house = null;
+		
 		if (hs.getIdHouse() > 0) {
-			objUserSrv.updateHouse(hs);
+			house = objUserSrv.updateHouse(hs);
 		} else {
-			objUserSrv.insertHouse(hs);
+			house = objUserSrv.insertHouse(hs);
 		}
+		
+		return ResponseEntity.status(OK).body(house);
 	}
 
 	// ******************************************************************************************/
@@ -161,14 +182,16 @@ public class NodesControllerUk {
 	 * Update параметров квартиры
 	 */
 	@PostMapping(value = "/updateEditFlat")
-	public void updateFlat(Room rm) {
-
+	public ResponseEntity<Room> updateFlat(Room rm) {
+		Room room = null;
+		
 		if (rm.getIdRoom() > 0) {
-			objUserSrv.updateRoom(rm);
+			room = objUserSrv.updateRoom(rm);
 		} else {
-			objUserSrv.insertRoom(rm);
+			room = objUserSrv.insertRoom(rm);
 		}
-
+		
+        return ResponseEntity.status(OK).body(room); 
 	}
 
 	// ******************************************************************************************/
@@ -186,15 +209,16 @@ public class NodesControllerUk {
 	 * Update or insert л.сч
 	 */
 	@PostMapping(value = "/updateEditAcc")
-	public void updateAct(final PersonAcnt pAcnt) {
+	public ResponseEntity<PersonAcnt> updateAct(final PersonAcnt pAcnt) {
+		PersonAcnt personAcnt = null;
 		
 			if (pAcnt.getIdPersonAcnt() > 0) {
-				objUserSrv.updateAccount(pAcnt);
+				personAcnt = objUserSrv.updateAccount(pAcnt);
 			} else {
-				objUserSrv.insertPersonAcnt(pAcnt);
+				personAcnt = objUserSrv.insertPersonAcnt(pAcnt);
 			}
-          
-		
+             
+		    return ResponseEntity.status(OK).body(personAcnt);
 	}
 
 	//******************************************************************************************/
@@ -208,27 +232,33 @@ public class NodesControllerUk {
 	 */
 
 	@PostMapping(value = "/delObjectTreeUk")
-	public void delObjectTree(final selectIdFromLinkObj selectidfromlinkobj) {
+	public BodyBuilder delObjectTree(final selectIdFromLinkObj selectidfromlinkobj) {
 		Integer selectTypeObj = selectidfromlinkobj.getId_type_object();
 		Integer idLinkObjTree = selectidfromlinkobj.getId_link_object();
 
 		switch (selectTypeObj) {
 		case 9:// Street del
-			objUserSrv.delStreet(idLinkObjTree);
+			if(objUserSrv.delStreet(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 
 		case 8:// House del
-			objUserSrv.delHouse(idLinkObjTree);
+			if(objUserSrv.delHouse(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 
 		case 10:// Room del
-			objUserSrv.delRoom(idLinkObjTree);
+			if(objUserSrv.delRoom(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 
 		case 11:// Account del
-			objUserSrv.delPersonAcnt(idLinkObjTree);
+			if(objUserSrv.delPersonAcnt(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 		}
+		
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	/*****************************************************************************************/
