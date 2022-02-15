@@ -1,19 +1,16 @@
 package eis.company.households.restcontroller;
 
-import static org.springframework.http.HttpStatus.OK;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.CountsDTO;
@@ -21,6 +18,7 @@ import eis.company.households.dto.EditServerDTO;
 import eis.company.households.dto.EditUspdDTO;
 import eis.company.households.dto.LinkObjectDTO;
 import eis.company.households.dto.selectIdFromLinkObj;
+import eis.company.households.model.ComServer;
 import eis.company.households.model.UspdDev;
 import eis.company.households.queres.QueryCountsDto;
 import eis.company.households.queres.QueryEditSrvRepositoryImpl;
@@ -35,14 +33,24 @@ public class NodesController {
 	List<LinkObjectDTO> queryList;
 	List<LinkObjectDTO> retList = new ArrayList<LinkObjectDTO>();
 
-	@Autowired private QueryCountsDto queryCountsDto;
-	@Autowired private UspdDevRepository uspdDevRep;
-	@Autowired private TypeUspdRepository typeUspdRepository;
-	@Autowired private QueryLinkObjectRepoImpl queryLinkObj;
-	@Autowired private QueryEditSrvRepositoryImpl queryEditSrv;
-	@Autowired private UpdateEditSrv updEditSrv;
-
-	public NodesController() {}
+	private QueryCountsDto queryCountsDto;
+	private UspdDevRepository uspdDevRep;
+	private TypeUspdRepository typeUspdRepository;
+	private QueryLinkObjectRepoImpl queryLinkObj;
+	private QueryEditSrvRepositoryImpl queryEditSrv;
+	private UpdateEditSrv updEditSrv;
+	
+	public NodesController(QueryCountsDto queryCountsDto, UspdDevRepository uspdDevRep,
+			TypeUspdRepository typeUspdRepository, QueryLinkObjectRepoImpl queryLinkObj,
+			QueryEditSrvRepositoryImpl queryEditSrv, UpdateEditSrv updEditSrv) {
+		super();
+		this.queryCountsDto = queryCountsDto;
+		this.uspdDevRep = uspdDevRep;
+		this.typeUspdRepository = typeUspdRepository;
+		this.queryLinkObj = queryLinkObj;
+		this.queryEditSrv = queryEditSrv;
+		this.updEditSrv = updEditSrv;
+	}
 
 	/**
 	 * Получение списка данных для построения tree table
@@ -51,7 +59,7 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodes")
 	public ResponseEntity<List<LinkObjectDTO>> nodes() {
-		return ResponseEntity.status(OK).body(makeTree());
+		return ResponseEntity.status(HttpStatus.OK).body(makeTree());
 	}
 
 //******************************************************************************************
@@ -108,8 +116,7 @@ public class NodesController {
 		} else {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(editUspdDto);
 		}
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(editUspdDto);
+		return ResponseEntity.status(HttpStatus.OK).body(editUspdDto);
 	}
 
 	/**
@@ -121,7 +128,7 @@ public class NodesController {
 	public ResponseEntity<EditUspdDTO> createNewUspd() {
 		EditUspdDTO editUspdDto = new EditUspdDTO(0, "", "", "", 0, 0, 0, 0, 0, typeUspdRepository.findAll());
 
-		return ResponseEntity.status(OK)
+		return ResponseEntity.status(HttpStatus.OK)
 				.body(editUspdDto);
 	}
 
@@ -134,7 +141,7 @@ public class NodesController {
 	public ResponseEntity<CountsDTO> createCount() {
 		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 0);
 
-		return ResponseEntity.status(OK)
+		return ResponseEntity.status(HttpStatus.OK)
 				.body(countsDto);
 	}
 
@@ -148,7 +155,7 @@ public class NodesController {
 	public ResponseEntity<EditServerDTO> getNode(@PathVariable("id") Integer id) {
 		// LinkObject linkObject = updEditSrv.getDataFromTree(id);
 		List<EditServerDTO> retList = queryEditSrv.queryEditModalFormRepository(id);
-		return ResponseEntity.status(OK)
+		return ResponseEntity.status(HttpStatus.OK)
 				.body(retList.get(0));
 	}
 
@@ -160,7 +167,7 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodeCounts/{id}")
 	public ResponseEntity<CountsDTO> getCountsDto(@PathVariable("id") Integer id) {
-		return ResponseEntity.status(OK)
+		return ResponseEntity.status(HttpStatus.OK)
 				.body(queryCountsDto.retCountsDto(id));
 	}
 
@@ -173,7 +180,7 @@ public class NodesController {
 	public ResponseEntity<CountsDTO> saveCount(CountsDTO countsDto) {
 		updEditSrv.updateCounts(countsDto);
 		
-		return ResponseEntity.status(OK).body(countsDto);
+		return ResponseEntity.status(HttpStatus.OK).body(countsDto);
 	}
 
 	/**
@@ -182,8 +189,10 @@ public class NodesController {
 	 * @param editUspdDto
 	 */
 	@PostMapping(value = "updateUspdDev")
-	public void updateUspdDev(EditUspdDTO editUspdDto) {
-		updEditSrv.saveUspdDev(editUspdDto);
+	public ResponseEntity<UspdDev> updateUspdDev(EditUspdDTO editUspdDto) {
+		UspdDev uspdDev = updEditSrv.saveUspdDev(editUspdDto);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(uspdDev);
 	}
 
 	/**
@@ -193,33 +202,41 @@ public class NodesController {
 	 *                      EditServerDTO на класс ComServer!!!
 	 */
 	@PostMapping(value = "updateEditSrv")
-	public void updateEditSrvFromModal(EditServerDTO editServerDto) {
-		updEditSrv.saveComServer(editServerDto);
+	public ResponseEntity<ComServer> updateEditSrvFromModal(EditServerDTO editServerDto) {
+		ComServer comServer = updEditSrv.saveComServer(editServerDto);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(comServer);
 	}
 
 	@PostMapping(value = "newSrv")
-	public void addNewServer(EditServerDTO editServerDto) {
-		updEditSrv.saveNewComServer(editServerDto);
+	public ResponseEntity<ComServer> addNewServer(EditServerDTO editServerDto) {
+		ComServer comServer = updEditSrv.saveNewComServer(editServerDto);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(comServer);
 	}
 
 	@PostMapping(value = "delObjectTree")
-	public void delObjectTree(selectIdFromLinkObj selectidfromlinkobj) {
+	public BodyBuilder delObjectTree(selectIdFromLinkObj selectidfromlinkobj) {
 		Integer selectTypeObj = selectidfromlinkobj.getId_type_object();
 		Integer idLinkObjTree = selectidfromlinkobj.getId_link_object();
 
 		switch (selectTypeObj) {
 		case 2:
-			updEditSrv.delServerObj(idLinkObjTree);
+			if(updEditSrv.delServerObj(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 
 		case 3:
-			updEditSrv.delUspdObj(idLinkObjTree);
+			if(updEditSrv.delUspdObj(idLinkObjTree))
+				return ResponseEntity.status(HttpStatus.OK);
 			break;
 
 		case 4:
-            updEditSrv.delCounts(idLinkObjTree);
+            if(updEditSrv.delCounts(idLinkObjTree))
+            	return ResponseEntity.status(HttpStatus.OK);
 			break;
 		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 }
