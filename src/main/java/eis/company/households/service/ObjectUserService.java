@@ -151,33 +151,30 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public Street insertStreet(Street st) {
-		LinkObjectUk linkObjUk = null;
-		ManagCompany mc = null;
-		TypeObject typeObj = null;
-
+		
 		Optional<LinkObjectUk> optLnOb = linkObjectUkRepo.findById(st.getIdLinkObject());
-		if ((linkObjUk = optLnOb.isPresent() ? optLnOb.get() : null) == null) {return null;}
+		LinkObjectUk linkObjUk = optLnOb.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found")); 
 		Optional<ManagCompany> optmc = managCompanyRepo.findById(linkObjUk.getIdObject());
-		if ((mc = optmc.isPresent() ? optmc.get() : null) == null) {return null;}
+		ManagCompany mc = optmc.orElseThrow(()->new ResourceNotFoundException("Object ManagCompany Not found"));
 		Optional<TypeObject> optTobj = typeObjRepo.findById(MyConst.TYPE_OBJECT_STREET);
-		if ((typeObj = optTobj.isPresent() ? optTobj.get() : null) == null) {return null;}
-
+		TypeObject typeObj = optTobj.orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
+		
 		Street street = new Street();
 		street.setNameStreet(st.getNameStreet());
 		street.setDistrict(st.getDistrict());
 		street.setIdLinkObject(st.getIdLinkObject());
 		street.setManagCompany(mc);
 		street.setTypeObject(typeObj);
-		street = streetRepository.save(street);
-		if (street == null) {return null;}
-		
+		street = Optional.ofNullable(streetRepository.save(street))
+				         .orElseThrow(()->new SaveResourceErrorException("Save resource error Street"));
+				
         mc.getStreet().add(street);
         typeObj.getStreet().add(street);
-		
-		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(street.getIdStreet()), 
-				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject()));
-		
-		return(linkObjectUkRepo.save(retLinkObj)) != null ? street : null;
+		LinkObjectUk retLinkObj = slo
+         .saveLinkUk(new LinkObjectUk(), Integer.valueOf(street.getIdStreet()),typeObj, Integer.valueOf(linkObjUk.getIdLinkObject()));
+		retLinkObj = Optional.ofNullable(linkObjectUkRepo.save(retLinkObj))
+				             .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk"));
+		return street;
 	}
 	
 	/**
@@ -188,12 +185,17 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delStreet(Integer idLinkObj) {
-		LinkObjectUk linkobject = null;
-		Street street = null;
+		//LinkObjectUk linkobject = null;
+		//Street street = null;
+		LinkObjectUk linkobject = Optional.ofNullable(isDelLinkObjUk(idLinkObj))
+				                          .orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
+		//if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
 		
-		if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
+		
 		Optional<Street> opStreet = streetRepository.findById(linkobject.getIdObject());
-		if((street = opStreet.isPresent() ? opStreet.get() : null) == null) {return false;}
+		Street street = opStreet.orElseThrow(()->new ResourceNotFoundException("Object Street Not found"));
+		//if((street = opStreet.isPresent() ? opStreet.get() : null) == null) {return false;}
+		
 		linkObjectUkRepo.deleteById(idLinkObj);
 		street.getManagCompany().removeStreet(street);
 		street.getTypeObject().removeStreet(street);
