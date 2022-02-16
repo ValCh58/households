@@ -28,7 +28,6 @@ public class RetCountWaterDTOPar2 {
 	countList.clear();	
 	Query q = null;
 	
-	//LocalDateTime dateFrom, LocalDateTime dateTo
 	if(numUspd.equalsIgnoreCase("0")) {
 	      q = em.createNativeQuery("select b.id_count_water as idCountWater, b.factory_number_uspd as factoryNumberUspd, b.id_measuring as id_Measuring, \r\n"
 			+ " b.count_w as countW, b.time_stamp as timeStamp, b.type_count as typeCount, b.num_ch as numCh  from(\r\n"
@@ -42,7 +41,7 @@ public class RetCountWaterDTOPar2 {
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
 			+ " where b.time_stamp >= ?1 and b.time_stamp <= ?2 "
 			+ " and b.type_count <> 0 and b.count_w <> 0 "
-			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 5000;", Tuple.class);
+			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 1000;", Tuple.class);
 	q.setParameter(1, dateFrom);
 	q.setParameter(2, dateTo);
 	}
@@ -59,15 +58,13 @@ public class RetCountWaterDTOPar2 {
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
 			+ " where b.time_stamp >= ?1 and b.time_stamp <= ?2 and b.factory_number_uspd=?3 "
 			+ " and b.type_count <> 0 and b.count_w <> 0 "
-			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 5000;", Tuple.class);
+			+ " order by b.factory_number_uspd, b.time_stamp desc, b.num_ch limit 1000;", Tuple.class);
 	q.setParameter(1, dateFrom);
 	q.setParameter(2, dateTo);
 	q.setParameter(3, numUspd);
 	}
 	else {return null;}
-	//
-	//String numUspd, LocalDate dateFrom, LocalDate dateTo
-	
+		
 	@SuppressWarnings("unchecked")
 	List<Tuple> list = q.getResultList();
 	if (list.isEmpty())

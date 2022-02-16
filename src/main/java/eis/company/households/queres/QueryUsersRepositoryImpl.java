@@ -30,7 +30,7 @@ public class QueryUsersRepositoryImpl implements QueryUsersRepository{
 				                                                    + "users.active, "
 			                                                     	+ "users.email, "
 				                                                    + "roles.role"
-		    	          + " FROM users, user_role, roles "
+		    	                                                    + " FROM users, user_role, roles "
 		    	          + "where users.user_id = user_role.user_id and user_role.role_id = roles.role_id order by users.last_name")
 				.unwrap( org.hibernate.query.Query.class )
 				.setResultTransformer(

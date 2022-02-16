@@ -3,6 +3,7 @@ package eis.company.households.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.transaction.Transactional;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.model.Role;
 import eis.company.households.model.User;
 
@@ -34,8 +36,14 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
     @Transactional
     public UserDetails loadUserByUsername(String userName)throws UsernameNotFoundException {
-        User user = userService.findUserByUserName(userName);
+        
+        User user = Optional.ofNullable(userService.findUserByUserName(userName))
+        		            .orElseThrow(()->new ResourceNotFoundException("User not found"));
+        
         List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
+        if(authorities.isEmpty()) 
+           throw new ResourceNotFoundException("User Roles not found");
+        
         return buildUserForAuthentication(user, authorities);
     }
 

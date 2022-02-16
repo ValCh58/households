@@ -1,6 +1,5 @@
 package eis.company.households.service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import eis.company.households.MyConst;
+import eis.company.households.Exceptions.ResourceNotFoundException;
+import eis.company.households.Exceptions.SaveResourceErrorException;
 import eis.company.households.funcinterface.SaveLinkObject;
 import eis.company.households.model.Counts;
 import eis.company.households.model.House;
@@ -49,7 +50,7 @@ public class ObjectUserService {
 	public ObjectUserService(StreetRepository streetRepository, ManagCompanyRepository managCompanyRepo,
 			HouseRepository houseRepository, RoomRepository roomRepository, PersonAcntRepository personAcntRepository,
 			TypeObjectRepository typeObjRepo, LinkObjectUkRepository linkObjectUkRepo, UspdDevRepository uspdRepository,
-			CountsRepository countsRepository, SaveLinkObject<LinkObjectUk, Integer, TypeObject, Integer> slo) {
+			CountsRepository countsRepository) {
 		super();
 		this.streetRepository = streetRepository;
 		this.managCompanyRepo = managCompanyRepo;
@@ -60,7 +61,6 @@ public class ObjectUserService {
 		this.linkObjectUkRepo = linkObjectUkRepo;
 		this.uspdRepository = uspdRepository;
 		this.countsRepository = countsRepository;
-		this.slo = slo;
 	}
 
 	/**
@@ -87,11 +87,12 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public ManagCompany getDataManagCompany(Integer id) {
 		Optional<ManagCompany> omc = managCompanyRepo.findById(id);
-		return omc.isPresent() ? omc.get() : new ManagCompany();
+		ManagCompany mc = omc.orElseThrow(()->new ResourceNotFoundException("Object ManagCompany:" + id.toString() + " Not found"));
+		return mc;
 	}
 
 	/**
-	 * Update данных УК POST
+	 * Update данных УК, POST
 	 * 
 	 * @param ManagCompany
 	 * @return ManagCompany
@@ -99,24 +100,19 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager")
 	public ManagCompany updateDataManagCompany(ManagCompany mc) {
 		Optional<ManagCompany> opt = managCompanyRepo.findById(mc.getIdManagCompany());
-		ManagCompany managCompany = opt.isPresent() ? opt.get() : null;
-		if (managCompany == null) {return null;}
-		
+		ManagCompany managCompany = opt.orElseThrow(()->new ResourceNotFoundException("Object ManagCompany Not found"));
 		managCompany.setNameCompany(mc.getNameCompany());
 		managCompany.setPhone(mc.getPhone());
 		managCompany.setAddress1(mc.getAddress1());
 		managCompany.setAddress2(mc.getAddress2());
-		managCompanyRepo.save(managCompany);
+		managCompany = Optional.ofNullable(managCompanyRepo.save(managCompany))
+				               .orElseThrow(()->new SaveResourceErrorException("Save resource error Alarm"));
 		
 		return managCompany;
 	}
 	
-	/***********************************************************************************/
-	/******************Street***********************************************************/
-    /***********************************************************************************/
-
 	/**
-	 * Чтение данных улицы GET
+	 * Чтение данных улицы, GET
 	 * 
 	 * @param id
 	 * @return Street
@@ -124,11 +120,12 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public Street getStreet(Integer id) {
 		Optional<Street> opt = streetRepository.findById(id);
-		return opt == null ? new Street() : opt.get();
+		Street street = opt.orElseThrow(()->new ResourceNotFoundException("Object Sttreet:" + id.toString() + " Not found"));
+		return street;
 	}
 
 	/**
-	 * Update данных улицы POST
+	 * Update данных улицы, POST
 	 * 
 	 * @param Street
 	 * @return Street
@@ -136,14 +133,13 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager")
 	public Street updateStreet(Street street) {
 		Optional<Street> opt = streetRepository.findById(street.getIdStreet());
-		Street str = opt.isPresent() ? opt.get() : null;
-		if (str == null) {return null;}
-		
+		Street str = opt.orElseThrow(()->new ResourceNotFoundException("Object Street Not found"));
 		str.setNameStreet(street.getNameStreet());
 		str.setDistrict(street.getDistrict());
 		str.setIdLinkObject(street.getIdLinkObject());
-		
-		return streetRepository.save(str);
+		str = Optional.ofNullable(streetRepository.save(str))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error Street"));
+		return str;
 	}
 
 	/**

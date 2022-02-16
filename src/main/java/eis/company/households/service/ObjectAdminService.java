@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
+import eis.company.households.Exceptions.SaveResourceErrorException;
 import eis.company.households.dto.AlarmDTO;
 import eis.company.households.dto.CountWaterDTO;
 import eis.company.households.modeleis.Alarm;
@@ -220,12 +222,13 @@ public class ObjectAdminService {
 	@Transactional(transactionManager = "eisystemsTransactionManager")
 	public AlarmDTO retUpdAlarmDTO(Integer idalarm) {
 		Optional<Alarm> opt = repoAlarm.findById(idalarm);
-		if(opt.isEmpty()) {return new AlarmDTO();}
-		Alarm al = opt.get();
+		Alarm al = opt.orElseThrow(()->new ResourceNotFoundException("Object Alarm:" + idalarm.toString() + " Not found"));
 		al.setActive("1");
-		if(repoAlarm.save(al) == null) {return new AlarmDTO();}
-		AlarmDTO ad = queryAlarm.retAlarmDto(idalarm);
-		if(ad == null) return new AlarmDTO();
+		al = Optional.ofNullable(repoAlarm.save(al))
+				     .orElseThrow(()->new SaveResourceErrorException("Save resource error Alarm"));
+		AlarmDTO ad = Optional.ofNullable(queryAlarm.retAlarmDto(idalarm))
+				              .orElseThrow(()->new SaveResourceErrorException("Request execution error for AlarmDTO"));
+			
 		return ad;
 	}
 
