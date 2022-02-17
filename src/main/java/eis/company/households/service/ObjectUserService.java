@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.management.RuntimeErrorException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +74,8 @@ public class ObjectUserService {
 		                                          return linkObjkUk;
     };
     /***********************************************************************************/
-	
-    /******************Manage Company***************************************************/
+	/******************Manage Company***************************************************/
+    
 	/**
 	 * Чтение данных УК GET
 	 * 
@@ -111,6 +109,9 @@ public class ObjectUserService {
 		return managCompany;
 	}
 	
+	/***********************************************************************************/
+	/***********************Street******************************************************/
+	/***********************************************************************************/
 	/**
 	 * Чтение данных улицы, GET
 	 * 
@@ -153,11 +154,14 @@ public class ObjectUserService {
 	public Street insertStreet(Street st) {
 		
 		Optional<LinkObjectUk> optLnOb = linkObjectUkRepo.findById(st.getIdLinkObject());
-		LinkObjectUk linkObjUk = optLnOb.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found")); 
+		LinkObjectUk linkObjUk = optLnOb
+				.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found")); 
 		Optional<ManagCompany> optmc = managCompanyRepo.findById(linkObjUk.getIdObject());
-		ManagCompany mc = optmc.orElseThrow(()->new ResourceNotFoundException("Object ManagCompany Not found"));
+		ManagCompany mc = optmc
+				.orElseThrow(()->new ResourceNotFoundException("Object ManagCompany Not found"));
 		Optional<TypeObject> optTobj = typeObjRepo.findById(MyConst.TYPE_OBJECT_STREET);
-		TypeObject typeObj = optTobj.orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
+		TypeObject typeObj = optTobj
+				.orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
 		
 		Street street = new Street();
 		street.setNameStreet(st.getNameStreet());
@@ -185,23 +189,22 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delStreet(Integer idLinkObj) {
-		//LinkObjectUk linkobject = null;
-		//Street street = null;
-		LinkObjectUk linkobject = Optional.ofNullable(isDelLinkObjUk(idLinkObj))
-				                          .orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
-		//if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
-		
-		
+		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
 		Optional<Street> opStreet = streetRepository.findById(linkobject.getIdObject());
-		Street street = opStreet.orElseThrow(()->new ResourceNotFoundException("Object Street Not found"));
-		//if((street = opStreet.isPresent() ? opStreet.get() : null) == null) {return false;}
-		
+		Street street = opStreet
+				.orElseThrow(()->new ResourceNotFoundException("Object Street Not found"));
 		linkObjectUkRepo.deleteById(idLinkObj);
 		street.getManagCompany().removeStreet(street);
 		street.getTypeObject().removeStreet(street);
 		streetRepository.delete(street);
-		
 		return true;
+	}
+	
+	/***********************************************************************************/
+	private LinkObjectUk getLinkObjectUK(Integer idLinkObj) {
+		
+		return Optional.ofNullable(isDelLinkObjUk(idLinkObj))
+                .orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
 	}
 	
 	/***********************************************************************************/
@@ -217,7 +220,7 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public House getHouse(Integer id) {
 		Optional<House> opt = houseRepository.findById(id);
-		return opt == null ? new House() : opt.get();
+		return opt.orElseThrow(()->new ResourceNotFoundException("Object House Not found"));
 	}
 
 	/**
@@ -228,13 +231,11 @@ public class ObjectUserService {
 	@Transactional(transactionManager = "housingTransactionManager")
 	public House updateHouse(House house) {
 		Optional<House> opt = houseRepository.findById(house.getIdHouse());
-		House hs = opt.isPresent() ? opt.get() : null;
-		if (hs == null) {
-			return null;
-		}
+		House hs = opt.orElseThrow(()->new ResourceNotFoundException("Object House Not found"));
 		hs.setNameHouse(house.getNameHouse());
 		hs.setAddress(house.getAddress());
-		houseRepository.save(hs);
+		hs = Optional.ofNullable(houseRepository.save(hs))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error House"));
 		return hs;
 	}
 
@@ -245,33 +246,32 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public House insertHouse(House house) {
-		LinkObjectUk linkObjUk = null;
-		Street street = null;
-		TypeObject typeObj = null;
-
 		Optional<LinkObjectUk> optLnOb = linkObjectUkRepo.findById(house.getIdLinkObject());
-		if ((linkObjUk = optLnOb.isPresent() ? optLnOb.get() : null) == null) {return null;}
+		LinkObjectUk linkObjUk = optLnOb
+				.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
 		Optional<Street> optStreet = streetRepository.findById(linkObjUk.getIdObject());
-		if ((street = optStreet.isPresent() ? optStreet.get() : null) == null) {return null;}
+		Street street = optStreet
+				.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk::Street Not found"));
 		Optional<TypeObject> optTypeobj = typeObjRepo.findById(MyConst.TYPE_OBJECT_HOUSE);
-		if ((typeObj = optTypeobj.isPresent() ? optTypeobj.get() : null) == null) {return null;}
-
+		TypeObject typeObj = optTypeobj
+				.orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
 		House hs = new House();
 		hs.setNameHouse(house.getNameHouse());
 		hs.setAddress(house.getAddress());
 		hs.setIdLinkObject(house.getIdLinkObject());
 		hs.setStreet(street);
 		hs.setTypeObject(typeObj);
-		hs = houseRepository.save(hs);
-		if (hs == null) {return null;}
-		
-        street.getHouse().add(hs);
+		hs = Optional.ofNullable(houseRepository.save(hs))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error House"));
+		street.getHouse().add(hs);
 		typeObj.getHouse().add(hs);
-        
-		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(hs.getIdHouse()), typeObj,
-		                                         Integer.valueOf(linkObjUk.getIdLinkObject())); 
-	    
-		return  linkObjectUkRepo.save(retLinkObj) != null ? hs : null;
+     	LinkObjectUk retLinkObj = Optional.ofNullable(slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(hs.getIdHouse()), typeObj,
+		                                   Integer.valueOf(linkObjUk.getIdLinkObject())))
+				                          .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk")); 
+		retLinkObj = Optional
+		.ofNullable(linkObjectUkRepo.save(retLinkObj)).orElseThrow(()->new SaveResourceErrorException("Save resource error House"));
+		
+		return hs;
 	}
 	
 	/**
@@ -282,17 +282,14 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delHouse(Integer idLinkObj) {
-		LinkObjectUk linkobject = null;
-		House house = null;
-		
-		if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
+		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
 		Optional<House> opHouse = houseRepository.findById(linkobject.getIdObject());
-		if((house = opHouse.isPresent() ? opHouse.get() : null) == null) {return false;}
+		House house = opHouse
+				.orElseThrow(()->new ResourceNotFoundException("Object House Not found"));
 		linkObjectUkRepo.deleteById(idLinkObj);
 		house.getStreet().removeHouse(house);
 		house.getTypeObject().removeHouse(house);
 		houseRepository.delete(house);
-		
 		return true;
 	}
 	
@@ -308,8 +305,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public Room getRoom(Integer id) {
-		Optional<Room> opt = roomRepository.findById(id);
-		return opt == null ? new Room() : opt.get();
+		return roomRepository.findById(id)
+				.orElseThrow(()->new ResourceNotFoundException("Object Room Not found"));
 	}
 
 	/**
@@ -319,17 +316,16 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public Room updateRoom(Room room) {
-		Optional<Room> opt = roomRepository.findById(room.getIdRoom());
-		Room rm = opt.isPresent() ? opt.get() : null;
-		if (rm == null) {return null;}
+		Room rm = roomRepository.findById(room.getIdRoom())
+				.orElseThrow(()->new ResourceNotFoundException("Object Room Not found"));
 		rm.setNameRoom(room.getNameRoom());
 		rm.setNumberRoom(room.getNumberRoom());
 		rm.setNumberUspd(room.getNumberUspd());
-		UspdDev uspdDev = null;
-		Optional<UspdDev> opUspdDev = uspdRepository.findById(room.getId_uspd());
-		if((uspdDev = opUspdDev.isPresent() ? opUspdDev.get() : null) == null) {return null;}
+		UspdDev uspdDev = uspdRepository.findById(room.getId_uspd())
+				.orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
 		rm.setUspdDev(uspdDev);
-		roomRepository.save(rm);
+		rm = Optional.ofNullable(roomRepository.save(rm))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error Room"));
 		rm.getUspdDev().getRoom().add(rm);
 		
 		return rm;
@@ -342,20 +338,14 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public Room insertRoom(Room rm) {
-		LinkObjectUk linkObjUk = null;
-		House house = null;
-		TypeObject typeObj = null;
-		UspdDev uspdDev = null;
-
-		Optional<LinkObjectUk> optLnOb = linkObjectUkRepo.findById(rm.getIdLinkObject());
-		if ((linkObjUk = optLnOb.isPresent() ? optLnOb.get() : null) == null) {return null;}
-		Optional<House> optHouse = houseRepository.findById(linkObjUk.getIdObject());//Parent object
-		if ((house = optHouse.isPresent() ? optHouse.get() : null) == null) {return null;}
-		Optional<TypeObject> optTypeobj = typeObjRepo.findById(MyConst.TYPE_OBJECT_ROOM);
-		if ((typeObj = optTypeobj.isPresent() ? optTypeobj.get() : null) == null) {return null;}
-		Optional<UspdDev> opUspdDev = uspdRepository.findById(rm.getId_uspd());
-		if((uspdDev = opUspdDev.isPresent() ? opUspdDev.get() : null) == null) {return null;}
-				
+		LinkObjectUk linkObjUk = linkObjectUkRepo.findById(rm.getIdLinkObject())
+				                  .orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
+		House house = houseRepository.findById(linkObjUk.getIdObject())
+				                  .orElseThrow(()->new ResourceNotFoundException("Object House Not found"));
+		TypeObject typeObj = typeObjRepo.findById(MyConst.TYPE_OBJECT_ROOM)
+				                  .orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
+		UspdDev uspdDev = uspdRepository.findById(rm.getId_uspd())
+				                  .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
 		Room room = new Room();
 		room.setNameRoom(rm.getNameRoom());
 		room.setNumberRoom(rm.getNumberRoom());
@@ -364,15 +354,17 @@ public class ObjectUserService {
 		room.setHouse(house);
 		room.setTypeObject(typeObj);
 		room.setUspdDev(uspdDev);
-		room = roomRepository.save(room);
+		room = Optional.ofNullable(roomRepository.save(room))
+				                   .orElseThrow(()->new SaveResourceErrorException("Save resource error Room"));
 		house.getRoom().add(room);
 	    typeObj.getRoom().add(room);
 	    uspdDev.getRoom().add(room);
-		
-	    LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(room.getIdRoom()), 
-	          	                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())); 
-	    
-		return  linkObjectUkRepo.save(retLinkObj) != null ? room : null;
+	    LinkObjectUk retLinkObj = Optional.ofNullable(slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(room.getIdRoom()), 
+	          	                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())))
+	    		                  .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk")); 
+	    retLinkObj = Optional.ofNullable(linkObjectUkRepo.save(retLinkObj))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk"));
+	    return room;
 	}
 	
 	/**
@@ -383,12 +375,10 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delRoom(Integer idLinkObj) {
-		LinkObjectUk linkobject = null;
-		Room room = null;
+		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
+		Room room = roomRepository.findById(linkobject.getIdObject())
+				                  .orElseThrow(()->new ResourceNotFoundException("Object Room Not found"));
 		
-		if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
-		Optional<Room> opRoom = roomRepository.findById(linkobject.getIdObject());
-		if((room = opRoom.isPresent() ? opRoom.get() : null) == null) {return false;}
 		linkObjectUkRepo.deleteById(idLinkObj);
 		room.getHouse().removeRoom(room);
 		room.getTypeObject().removeRoom(room);
@@ -399,7 +389,7 @@ public class ObjectUserService {
 	}
 	
 	/**********************************************************************************/
-	/*****************************PersonalAccaunt**************************************/
+	/*****************************PersonalAccount**************************************/
 	/**********************************************************************************/
 
 	/**
@@ -410,8 +400,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public PersonAcnt getPersonAcnt(Integer id) {
-		Optional<PersonAcnt> opt = personAcntRepository.findById(id);
-		return opt == null ? new PersonAcnt() : opt.get();
+		return personAcntRepository.findById(id)
+				.orElseThrow(()->new ResourceNotFoundException("Object PersonAcnt Not found"));
 	}
 
 	/**
@@ -421,13 +411,11 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public PersonAcnt updateAccount(final PersonAcnt pa){
-		Optional<PersonAcnt> opt = personAcntRepository.findById(pa.getIdPersonAcnt());
-		PersonAcnt personAcc = opt.isPresent() ? opt.get() : null;
-		if (personAcc == null) {
-			return null;
-		}
+		PersonAcnt personAcc = personAcntRepository.findById(pa.getIdPersonAcnt())
+				                        .orElseThrow(()->new ResourceNotFoundException("Object PersonAcnt Not found"));
 		personAcc.setNumAcnt(pa.getNumAcnt());
-		personAcc = personAcntRepository.save(personAcc);
+		personAcc =  Optional.ofNullable(personAcntRepository.save(personAcc))
+				                        .orElseThrow(()->new SaveResourceErrorException("Save resource error PersonAcnt"));
 		linkedAcntToCounts(personAcc, pa);
 		
 		return personAcc;
@@ -442,12 +430,9 @@ public class ObjectUserService {
 			List<String> listCnt = pa.getPersoncounts(); 
 			for(String idCnt : listCnt) {
 			    int id = Integer.valueOf(idCnt);
-			    Optional<Counts> opCnt = countsRepository.findById(Math.abs(id)); 
-			    Counts cnt = opCnt.get();
-			    if(cnt == null) {
-			    	throw new RuntimeErrorException(null, "Counter object does not exist");
-			    }
-			     //Добавление связи Acnt---<Counts 
+			    Counts cnt = countsRepository.findById(Math.abs(id))
+			    		    .orElseThrow(()->new SaveResourceErrorException("Counter object does not exist"));
+			    //Добавление связи Acnt---<Counts 
 			    if(id > 0) {//чек установлен
 			       p.addCounts(cnt);
 			    }//Удаление связи Acnt---<Counts else  
@@ -465,29 +450,27 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public PersonAcnt insertPersonAcnt(final PersonAcnt pacnt){
-		LinkObjectUk linkObjUk = null;
-		Room room = null;
-		TypeObject typeObj = null;
-		
-		Optional<LinkObjectUk> optLnOb = linkObjectUkRepo.findById(pacnt.getIdLinkObject());
-		if ((linkObjUk = optLnOb.isPresent() ? optLnOb.get() : null) == null) {return null;}
-		Optional<Room> optRoom = roomRepository.findById(linkObjUk.getIdObject());
-		if ((room = optRoom.isPresent() ? optRoom.get() : null) == null) {return null;}
-		Optional<TypeObject> optTypeobj = typeObjRepo.findById(MyConst.TYPE_OBJECT_PERSON_ACNT);
-		if ((typeObj = optTypeobj.isPresent() ? optTypeobj.get() : null) == null) {return null;}
-		
+		LinkObjectUk linkObjUk = linkObjectUkRepo.findById(pacnt.getIdLinkObject())
+			                	.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
+		Room room = roomRepository.findById(linkObjUk.getIdObject())
+				                .orElseThrow(()->new ResourceNotFoundException("Object Room Not found"));
+		TypeObject typeObj = typeObjRepo.findById(MyConst.TYPE_OBJECT_PERSON_ACNT)
+				                .orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
 		PersonAcnt personAcnt = new PersonAcnt();
 		personAcnt.setNumAcnt(pacnt.getNumAcnt());
 		personAcnt.setIdLinkObject(pacnt.getIdLinkObject());
 		personAcnt.setRoom(room);
 		personAcnt.setTypeObject(typeObj);
-		personAcnt = personAcntRepository.save(personAcnt);
+		personAcnt = Optional.ofNullable(personAcntRepository.save(personAcnt))
+				             .orElseThrow(()->new SaveResourceErrorException("Save resource error PersonAcnt"));
 		linkedAcntToCounts(personAcnt, pacnt);
 		
-		LinkObjectUk retLinkObj = slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(personAcnt.getIdPersonAcnt()), 
-				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())); 
-	    
-		return  linkObjectUkRepo.save(retLinkObj) != null ? personAcnt : null;
+		LinkObjectUk retLinkObj = Optional.ofNullable(slo.saveLinkUk(new LinkObjectUk(), Integer.valueOf(personAcnt.getIdPersonAcnt()), 
+				                                 typeObj, Integer.valueOf(linkObjUk.getIdLinkObject())))
+				                          .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk")); 
+		retLinkObj = Optional.ofNullable(linkObjectUkRepo.save(retLinkObj))
+				             .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk"));
+	    return personAcnt;
 	}
 	
 	/**
@@ -498,24 +481,21 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delPersonAcnt(Integer idLinkObj) {
-		LinkObjectUk linkobject = null;
-		PersonAcnt personAcnt = null;
+		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);;
+		PersonAcnt personAcnt = personAcntRepository.findById(linkobject.getIdObject())
+				                                    .orElseThrow(()->new ResourceNotFoundException("Object PersonAcnt Not found"));
 		List<Counts> list = null;
-		
-		if((linkobject = isDelLinkObjUk(idLinkObj)) == null) {return false;}
-		Optional<PersonAcnt> opPersonAcnt = personAcntRepository.findById(linkobject.getIdObject());
-		if((personAcnt = opPersonAcnt.isPresent() ? opPersonAcnt.get() : null) == null) {return false;}
 		linkObjectUkRepo.deleteById(idLinkObj);
 		personAcnt.getRoom().removePersonAcnt(personAcnt);
 		personAcnt.getTypeObject().removePersonAcnt(personAcnt);
-		if((list = personAcnt.getCounts()) == null) {return false;}
-		
+		if((list = personAcnt.getCounts()) == null) 
+		  {throw new ResourceNotFoundException("Object List<Counts> Not found");}
 		List<Integer> listCountId = list.stream().map(count->count.getIdCounts()).collect(Collectors.toList());
 				
 		for(Integer id : listCountId) {
-			Optional<Counts> op = countsRepository.findById(id);
-			Counts c = op.isPresent()?op.get():null;
-			if(c !=null) {personAcnt.removeCounts(c);}
+			Counts c = countsRepository.findById(id)
+					  .orElseThrow(()->new ResourceNotFoundException("Object PersonAcnt Not found"));
+			personAcnt.removeCounts(c);
 		}
 		personAcntRepository.delete(personAcnt);
 		
@@ -537,8 +517,8 @@ public class ObjectUserService {
 
 		Optional<LinkObjectUk> oplink = linkObjectUkRepo.findById(idLink);
 		LinkObjectUk linkobject = oplink.isPresent() ? oplink.get() : null;
-		if (linkobject == null) {return MyConst.ERROR_OBJECT_NOT_FOUND;}
-
+		if (linkobject == null) 
+		   {return MyConst.ERROR_OBJECT_NOT_FOUND;}
 		return (linkobject.getIdParent() > 0) ? MyConst.RET_OK : MyConst.ERROR_TREE_ROOT;
 	}
 	

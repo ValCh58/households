@@ -5,7 +5,6 @@ import static org.springframework.http.HttpStatus.OK;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -232,33 +231,33 @@ public class NodesControllerUk {
 	 */
 
 	@PostMapping(value = "/delObjectTreeUk")
-	public BodyBuilder delObjectTree(final selectIdFromLinkObj selectidfromlinkobj) {
+	public ResponseEntity<String> delObjectTree(final selectIdFromLinkObj selectidfromlinkobj) {
 		Integer selectTypeObj = selectidfromlinkobj.getId_type_object();
 		Integer idLinkObjTree = selectidfromlinkobj.getId_link_object();
 
 		switch (selectTypeObj) {
 		case 9:// Street del
 			if(objUserSrv.delStreet(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK);
+				return ResponseEntity.status(HttpStatus.OK).body("Delete Street");
 			break;
 
 		case 8:// House del
 			if(objUserSrv.delHouse(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK);
+				return ResponseEntity.status(HttpStatus.OK).body("Delete House");
 			break;
 
 		case 10:// Room del
 			if(objUserSrv.delRoom(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK);
+				return ResponseEntity.status(HttpStatus.OK).body("Delete Room");
 			break;
 
 		case 11:// Account del
 			if(objUserSrv.delPersonAcnt(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK);
+				return ResponseEntity.status(HttpStatus.OK).body("Delete Account");
 			break;
 		}
 		
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Deletion error");
 	}
 
 	/*****************************************************************************************/
