@@ -238,22 +238,19 @@ public class NodesControllerUk {
 		switch (selectTypeObj) {
 		case 9:// Street del
 			if(objUserSrv.delStreet(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK).body("Delete Street");
+			   return ResponseEntity.status(HttpStatus.OK).body("Delete Street");
 			break;
-
 		case 8:// House del
 			if(objUserSrv.delHouse(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK).body("Delete House");
+			   return ResponseEntity.status(HttpStatus.OK).body("Delete House");
 			break;
-
 		case 10:// Room del
 			if(objUserSrv.delRoom(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK).body("Delete Room");
+			   return ResponseEntity.status(HttpStatus.OK).body("Delete Room");
 			break;
-
 		case 11:// Account del
 			if(objUserSrv.delPersonAcnt(idLinkObjTree))
-				return ResponseEntity.status(HttpStatus.OK).body("Delete Account");
+			   return ResponseEntity.status(HttpStatus.OK).body("Delete Account");
 			break;
 		}
 		

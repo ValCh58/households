@@ -174,8 +174,10 @@ public class ObjectUserService {
 				
         mc.getStreet().add(street);
         typeObj.getStreet().add(street);
+        
 		LinkObjectUk retLinkObj = slo
          .saveLinkUk(new LinkObjectUk(), Integer.valueOf(street.getIdStreet()),typeObj, Integer.valueOf(linkObjUk.getIdLinkObject()));
+		
 		retLinkObj = Optional.ofNullable(linkObjectUkRepo.save(retLinkObj))
 				             .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjectUk"));
 		return street;
@@ -189,6 +191,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delStreet(Integer idLinkObj) {
+		//Проверка на подчиненные узлы и корневой узел перед удалением
+		if (!(isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK)) {return false;}
 		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
 		Optional<Street> opStreet = streetRepository.findById(linkobject.getIdObject());
 		Street street = opStreet
@@ -282,6 +286,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delHouse(Integer idLinkObj) {
+		//Проверка на подчиненные узлы и корневой узел перед удалением
+		if (!(isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK)) {return false;}
 		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
 		Optional<House> opHouse = houseRepository.findById(linkobject.getIdObject());
 		House house = opHouse
@@ -375,6 +381,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delRoom(Integer idLinkObj) {
+		//Проверка на подчиненные узлы и корневой узел перед удалением
+		if (!(isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK)) {return false;}
 		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);
 		Room room = roomRepository.findById(linkobject.getIdObject())
 				                  .orElseThrow(()->new ResourceNotFoundException("Object Room Not found"));
@@ -384,7 +392,6 @@ public class ObjectUserService {
 		room.getTypeObject().removeRoom(room);
 		room.getUspdDev().removeRoom(room);
 		roomRepository.delete(room);
-		
 		return true;
 	}
 	
@@ -435,7 +442,7 @@ public class ObjectUserService {
 			    //Добавление связи Acnt---<Counts 
 			    if(id > 0) {//чек установлен
 			       p.addCounts(cnt);
-			    }//Удаление связи Acnt---<Counts else  
+			    }//Удаление связи Acnt---<Counts  
 			    if(id < 0) {//чек снят
 			       p.removeCounts(cnt); 
 			    } 
@@ -481,6 +488,8 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delPersonAcnt(Integer idLinkObj) {
+		//Проверка на подчиненные узлы и корневой узел перед удалением
+		if (!(isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK)) {return false;}
 		LinkObjectUk linkobject = getLinkObjectUK(idLinkObj);;
 		PersonAcnt personAcnt = personAcntRepository.findById(linkobject.getIdObject())
 				                                    .orElseThrow(()->new ResourceNotFoundException("Object PersonAcnt Not found"));
@@ -498,7 +507,6 @@ public class ObjectUserService {
 			personAcnt.removeCounts(c);
 		}
 		personAcntRepository.delete(personAcnt);
-		
 		return true;
 	}
 	
@@ -514,7 +522,6 @@ public class ObjectUserService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public Integer isNotRootObj(Integer idLink) {
-
 		Optional<LinkObjectUk> oplink = linkObjectUkRepo.findById(idLink);
 		LinkObjectUk linkobject = oplink.isPresent() ? oplink.get() : null;
 		if (linkobject == null) 
@@ -536,17 +543,13 @@ public class ObjectUserService {
 	}
 	
 	/**
-	 * Проверка на подчиненные узлы и корневой узел перед удалением
+	 * Получим ID ключ объекта
 	 * @param idLinkObj ID ключа из LinkObjectUk
 	 * @return LinkObjectUk
 	 */
 	public LinkObjectUk isDelLinkObjUk(Integer idLinkObj) {
-		LinkObjectUk retLink = null;
-		
-		if (isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK) {
-			Optional<LinkObjectUk> oplink = linkObjectUkRepo.findById(idLinkObj);
-			retLink = oplink.isPresent() ? oplink.get() : null;
-		}
+		LinkObjectUk retLink = linkObjectUkRepo.findById(idLinkObj)
+				.orElseThrow(()->new ResourceNotFoundException("Object LinkObjectUk Not found"));
 		return retLink;
 	}
 	

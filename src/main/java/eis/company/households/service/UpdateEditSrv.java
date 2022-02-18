@@ -7,12 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import eis.company.households.MyConst;
+import eis.company.households.Exceptions.ResourceNotFoundException;
+import eis.company.households.Exceptions.SaveResourceErrorException;
 import eis.company.households.dto.CountsDTO;
 import eis.company.households.dto.EditServerDTO;
 import eis.company.households.dto.EditUspdDTO;
+import eis.company.households.funcinterface.SaveLinkObject;
 import eis.company.households.model.ComServer;
 import eis.company.households.model.Counts;
 import eis.company.households.model.LinkObject;
+import eis.company.households.model.LinkObjectUk;
 import eis.company.households.model.ManagCompany;
 import eis.company.households.model.TypeObject;
 import eis.company.households.model.TypeUspd;
@@ -49,17 +53,19 @@ public class UpdateEditSrv {
 		this.uspdDevRep = uspdDevRep;
 		this.typeUspdRepo = typeUspdRepo;
 	}
+	
+	/***********************************************************************************/
 
 	/**
 	 * Получение данных для построения дерева
 	 * @param id значение поля id_link_object таблицы link_object
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public LinkObject getDataFromTree(Integer id) {
-		Optional<LinkObject> optLinkRep = linkObjRep.findById(id);
-		LinkObject linkObject = optLinkRep.isPresent() ? optLinkRep.get() : null;
-
+		
+		LinkObject linkObject = linkObjRep.findById(id).
+				orElseThrow(()->new ResourceNotFoundException("Object LinkObject Not found"));
 		return linkObject;
 	}
 
@@ -69,18 +75,17 @@ public class UpdateEditSrv {
 	 * @param esd - объект полей формы
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public ComServer saveComServer(EditServerDTO esd) {
-		Optional<ComServer> opcomserver = comServerRepository.findById(esd.getId_com_server());
-		ComServer comserver = opcomserver.isPresent() ? opcomserver.get() : null;
-		if (comserver == null) {
-			return null;
-		}
-
+				
+		ComServer comserver = comServerRepository.findById(esd.getId_com_server())
+				.orElseThrow(()->new ResourceNotFoundException("Object ComServer Not found"));
 		comserver.setIpServer(esd.getIp_server());
 		comserver.setNameServer(esd.getName_server());
 		comserver.setPortServer(esd.getPort_server());
-		comserver = comServerRepository.save(comserver);
+		
+		comserver = Optional.ofNullable(comServerRepository.save(comserver))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error ComServer"));
 		return comserver;
 	}
 
@@ -90,13 +95,11 @@ public class UpdateEditSrv {
 	 * @param countsDto
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public Counts saveCounts(CountsDTO countsDto) {
-		Optional<Counts> opCounts = countsRep.findById(countsDto.getIdCounts());
-		Counts counts = opCounts.isPresent() ? opCounts.get() : null;
-		if (counts == null) {
-			return null;
-		}
+				
+		Counts counts = countsRep.findById(countsDto.getIdCounts())
+				.orElseThrow(()->new ResourceNotFoundException("Object Counts Not found"));
 		counts.setAddress(countsDto.getAddress());
 		counts.setDateExpire(countsDto.getDateExpire());
 		counts.setDatePlug(countsDto.getDatePlug());
@@ -105,8 +108,8 @@ public class UpdateEditSrv {
 		counts.setSerialNum(countsDto.getSerialNum());
 		counts.setTypeCount(countsDto.getTypeCount());
 		counts.setNumCh(countsDto.getNumCh());
-		countsRep.save(counts);
-
+		counts = Optional.ofNullable(countsRep.save(counts))
+				.orElseThrow(()->new SaveResourceErrorException("Save resource error ComServer"));
 		return counts;
 	}
 	
@@ -116,7 +119,7 @@ public class UpdateEditSrv {
 	 * @param countsDto данные из формы
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public Counts newCounts(CountsDTO countsDto) {
 		Counts counts = new Counts();
 		counts.setAddress(countsDto.getAddress());
@@ -126,25 +129,25 @@ public class UpdateEditSrv {
 		counts.setSerialNum(countsDto.getSerialNum());
 		counts.setTypeCount(countsDto.getTypeCount());
 		counts.setNumCh(countsDto.getNumCh());
+		
+		LinkObject opLinkObj = linkObjRep.findById(countsDto.getIdLinkObject())
+		                     .orElseThrow(()->new ResourceNotFoundException("Object LinkObject Not found"));
+		UspdDev opUspdDev = uspdDevRep.findById(opLinkObj.getIdObject())
+				          .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
+		opUspdDev.addCounts(counts);
+		TypeObject opTypeObject = typeObjectRepository.findById(MyConst.TYPE_OBJECT_COUNT)
+				                .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
+		opTypeObject.addCounts(counts);
 
-		Optional<LinkObject> opLinkObj = linkObjRep.findById(countsDto.getIdLinkObject());
-		if (!opLinkObj.isPresent()) {return null;}
-
-		Optional<UspdDev> opUspdDev = uspdDevRep.findById(opLinkObj.get().getIdObject());
-		if (!opUspdDev.isPresent()) {return null;}
-		opUspdDev.get().addCounts(counts);
-
-		Optional<TypeObject> opTypeObject = typeObjectRepository.findById(MyConst.TYPE_OBJECT_COUNT);
-		if (!opTypeObject.isPresent()) {return null;}
-		opTypeObject.get().addCounts(counts);
-
-		countsRep.save(counts);
+		counts = Optional.ofNullable(countsRep.save(counts))
+			   .orElseThrow(()->new SaveResourceErrorException("Save resource error Counts"));
 				
 		LinkObject linkObject = new LinkObject();
 		linkObject.setIdObject(counts.getIdCounts());
-		linkObject.setIdParent(opLinkObj.get().getIdLinkObject());
-		linkObject.setTypeObject(opTypeObject.get());
-		linkObjRep.save(linkObject);
+		linkObject.setIdParent(opLinkObj.getIdLinkObject());
+		linkObject.setTypeObject(opTypeObject);
+		linkObject = Optional.ofNullable(linkObjRep.save(linkObject))
+				   .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObject"));
 		
 		return counts;
 	}
@@ -155,6 +158,7 @@ public class UpdateEditSrv {
 	 * @param editUspdDto объект полученый из формы "Редактирование УСПД"
 	 * @return
 	 */
+	@Transactional(transactionManager = "housingTransactionManager")
 	public UspdDev saveUspdDev(EditUspdDTO editUspdDto) {
 
 		if (editUspdDto.getIdTypeUspdDev() > 0) {
@@ -162,8 +166,7 @@ public class UpdateEditSrv {
 		} else if (editUspdDto.getIdTypeUspdDev() == 0) {
 			return saveNewUspd(editUspdDto); // Insert
 		}
-
-		return null;
+		throw new SaveResourceErrorException("Save resource error UspdDev");
 	}
 
 	/**
@@ -171,12 +174,12 @@ public class UpdateEditSrv {
 	 * 
 	 * @param countsDto
 	 */
-	public void updateCounts(CountsDTO countsDto) {
+	@Transactional(transactionManager = "housingTransactionManager")
+	public Counts updateCounts(CountsDTO countsDto) {
 		if (countsDto.getIdCounts() > 0) {
-			saveCounts(countsDto);
-		} else {
-			newCounts(countsDto);
-		}
+		   return	saveCounts(countsDto);
+		} 
+	    return newCounts(countsDto);
 	}
 
 	/**
@@ -184,14 +187,11 @@ public class UpdateEditSrv {
 	 * 
 	 * @return UspdDev
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	private UspdDev saveAfterEditUspd(EditUspdDTO editUspdDto) {
-		UspdDev uspdDev;
-		Optional<UspdDev> opUspdDev = uspdDevRep.getByIdUspdDev(editUspdDto.getIdUspdDev());
-		if (!opUspdDev.isPresent()) {
-			return null;
-		} else {
-			uspdDev = opUspdDev.get();
+		UspdDev uspdDev = uspdDevRep.getByIdUspdDev(editUspdDto.getIdUspdDev())
+				        .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
+		
 			uspdDev.setIdUspdDev(editUspdDto.getIdUspdDev());
 			uspdDev.setNameUspdDev(editUspdDto.getNameUspdDev());
 			uspdDev.setNumUspdDev(editUspdDto.getNumUspdDev());
@@ -207,8 +207,8 @@ public class UpdateEditSrv {
 				TypeUspd typeUspd = typeUspdRepo.getOne(retIdTypeUspd);
 				typeUspd.addUspdDev(uspdDev);
 			}
-			return uspdDevRep.save(uspdDev);
-		}
+			return Optional.ofNullable(uspdDevRep.save(uspdDev))
+					       .orElseThrow(()->new SaveResourceErrorException("Save resource error UspdDev"));
 	}
 
 	/**
@@ -217,14 +217,15 @@ public class UpdateEditSrv {
 	 * @param editUspdDto
 	 * @return UspdDev
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	private UspdDev saveNewUspd(EditUspdDTO editUspdDto) {
 
-		Optional<LinkObject> opLinkObject = linkObjRep.findById(editUspdDto.getIdLinkObject());
-		if (!opLinkObject.isPresent()) {return null;}
-
-		Optional<ComServer> opComServer = comServerRepository.findById(opLinkObject.get().getIdObject());
-		TypeObject typeObject = typeObjectRepository.getOne(MyConst.TYPE_OBJECT_USPD);
+		LinkObject opLinkObject = linkObjRep.findById(editUspdDto.getIdLinkObject())
+				                          .orElseThrow(()->new ResourceNotFoundException("Object LinkObject Not found"));
+		ComServer opComServer = comServerRepository.findById(opLinkObject.getIdObject())
+				                                   .orElseThrow(()->new ResourceNotFoundException("Object ComServer Not found"));
+		TypeObject typeObject = Optional.ofNullable(typeObjectRepository.getOne(MyConst.TYPE_OBJECT_USPD))
+				              .orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
 
 		UspdDev uspdDev = new UspdDev();
 		uspdDev.setNameUspdDev(editUspdDto.getNameUspdDev());
@@ -232,32 +233,35 @@ public class UpdateEditSrv {
 		uspdDev.setAddressLoc(editUspdDto.getAddressLoc());
 		uspdDev.setIdCounts(editUspdDto.getIdCounts());
 		uspdDev.setIdConfigUspd(editUspdDto.getIdConfigUspd());
-		uspdDev.setComServer(opComServer.get());
+		uspdDev.setComServer(opComServer);
 		uspdDev.setTypeObject(typeObject);
 		Integer retIdTypeUspd = editUspdDto.getRetIdTypeUspdDev(); // Значение из списка: Тип УСПД//
 
 		if (retIdTypeUspd != 0 && editUspdDto.getIdTypeUspdDev() == 0) {
-			TypeUspd typeUspd = typeUspdRepo.getOne(retIdTypeUspd);
+			TypeUspd typeUspd =  Optional.ofNullable(typeUspdRepo.getOne(retIdTypeUspd))
+					                     .orElseThrow(()->new ResourceNotFoundException("Object TypeUspd Not found"));
 			typeUspd.addUspdDev(uspdDev);
 		}
-		uspdDevRep.save(uspdDev);
+		uspdDev = Optional.ofNullable(uspdDevRep.save(uspdDev))
+				          .orElseThrow(()->new SaveResourceErrorException("Save resource error UspdDev"));
 
 		LinkObject linkObject = new LinkObject();
 		linkObject.setIdObject(uspdDev.getIdUspdDev());
-		linkObject.setIdParent(opLinkObject.get().getIdLinkObject());
+		linkObject.setIdParent(opLinkObject.getIdLinkObject());
 		linkObject.setTypeObject(typeObject);
-		linkObjRep.save(linkObject);
-
+		
+		linkObject = Optional.ofNullable(linkObjRep.save(linkObject))
+				             .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObject"));
 		return uspdDev;
 	}
 
-	/**
+	/** Продолжить 21-02!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 * Создаем новый объект Сервера связi
 	 * 
 	 * @param esd - объект полей формы
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public ComServer saveNewComServer(EditServerDTO esd) {
 		
 		// Найдем корневой элемент дерева//
@@ -296,7 +300,7 @@ public class UpdateEditSrv {
 	 * @param idLink ID дерева объектов
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public Integer isNotRootObj(Integer idLink) {
 
 		Optional<LinkObject> oplink = linkObjRep.findById(idLink);
@@ -304,7 +308,6 @@ public class UpdateEditSrv {
 		if (linkobject == null) {
 			return MyConst.ERROR_OBJECT_NOT_FOUND;
 		}
-
 		return (linkobject.getIdParent() > 0) ? MyConst.RET_OK : MyConst.ERROR_TREE_ROOT;
 	}
 
@@ -314,7 +317,7 @@ public class UpdateEditSrv {
 	 * @param idLink ID дерева объектов
 	 * @return
 	 */
-	@Transactional(readOnly = true)
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public Integer isNotChildObj(Integer idLink) {
 		Optional<LinkObject> oplinkparent = linkObjRep.findByIdParent(idLink);
 		LinkObject linkobject = oplinkparent.isPresent() ? oplinkparent.get() : null;
@@ -327,7 +330,7 @@ public class UpdateEditSrv {
 	 * @param idLinkObj ID дерева объектов
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delServerObj(Integer idLinkObj) {
 		if (isNotRootObj(idLinkObj) == MyConst.RET_OK && isNotChildObj(idLinkObj) == MyConst.RET_OK) {
 			Optional<LinkObject> oplink = linkObjRep.findById(idLinkObj);
@@ -357,7 +360,7 @@ public class UpdateEditSrv {
 	 * @param idLinkObj
 	 * @return
 	 */
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delUspdObj(Integer idLinkObj) {
 		/* Проверим -есть ли подчиненные объекты счетчики */
 		if (isNotChildObj(idLinkObj) == MyConst.RET_OK) {
@@ -388,7 +391,7 @@ public class UpdateEditSrv {
 	 * @return
 	 */
 	
-	@Transactional
+	@Transactional(transactionManager = "housingTransactionManager")
 	public boolean delCounts(Integer idLinkObj) {
 		/* Проверим -есть ли подчиненные объекты счетчики */
 		if (isNotChildObj(idLinkObj) == MyConst.RET_OK) {
