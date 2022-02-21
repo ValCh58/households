@@ -2,12 +2,15 @@ package eis.company.households.service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
+import eis.company.households.Exceptions.SaveResourceErrorException;
 import eis.company.households.model.Role;
 import eis.company.households.model.User;
 import eis.company.households.repository.RoleRepository;
@@ -29,22 +32,26 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(transactionManager = "housingTransactionManager", readOnly = true)
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return Optional.ofNullable(userRepository.findByEmail(email))
+        		       .orElseThrow(()->new ResourceNotFoundException("User.email not found"));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(transactionManager = "housingTransactionManager", readOnly = true)
     public User findUserByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+        return Optional.ofNullable(userRepository.findByUserName(userName))
+        		       .orElseThrow(()->new ResourceNotFoundException("User.userName not found"));
     }
     
-    @Transactional
+    @Transactional(transactionManager = "housingTransactionManager")
     public User saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByRole(user.getNameRole());
+        Role userRole = Optional.ofNullable(roleRepository.findByRole(user.getNameRole()))
+        		                .orElseThrow(()->new ResourceNotFoundException("Role not found"));
         user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
-        return userRepository.save(user);
+        return Optional.ofNullable(userRepository.save(user))
+        		       .orElseThrow(()->new SaveResourceErrorException("Save resource error User"));
     }
     
     public void deleteUser(Long id) {

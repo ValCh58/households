@@ -12,11 +12,9 @@ import eis.company.households.Exceptions.SaveResourceErrorException;
 import eis.company.households.dto.CountsDTO;
 import eis.company.households.dto.EditServerDTO;
 import eis.company.households.dto.EditUspdDTO;
-import eis.company.households.funcinterface.SaveLinkObject;
 import eis.company.households.model.ComServer;
 import eis.company.households.model.Counts;
 import eis.company.households.model.LinkObject;
-import eis.company.households.model.LinkObjectUk;
 import eis.company.households.model.ManagCompany;
 import eis.company.households.model.TypeObject;
 import eis.company.households.model.TypeUspd;
@@ -136,7 +134,7 @@ public class UpdateEditSrv {
 				          .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
 		opUspdDev.addCounts(counts);
 		TypeObject opTypeObject = typeObjectRepository.findById(MyConst.TYPE_OBJECT_COUNT)
-				                .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
+				                 .orElseThrow(()->new ResourceNotFoundException("Object UspdDev Not found"));
 		opTypeObject.addCounts(counts);
 
 		counts = Optional.ofNullable(countsRep.save(counts))
@@ -147,7 +145,7 @@ public class UpdateEditSrv {
 		linkObject.setIdParent(opLinkObj.getIdLinkObject());
 		linkObject.setTypeObject(opTypeObject);
 		linkObject = Optional.ofNullable(linkObjRep.save(linkObject))
-				   .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObject"));
+				    .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObject"));
 		
 		return counts;
 	}
@@ -162,9 +160,11 @@ public class UpdateEditSrv {
 	public UspdDev saveUspdDev(EditUspdDTO editUspdDto) {
 
 		if (editUspdDto.getIdTypeUspdDev() > 0) {
-			return saveAfterEditUspd(editUspdDto); // Update
+			return Optional.ofNullable(saveAfterEditUspd(editUspdDto))
+					       .orElseThrow(()->new SaveResourceErrorException("Update resource error UspdDev")); // Update
 		} else if (editUspdDto.getIdTypeUspdDev() == 0) {
-			return saveNewUspd(editUspdDto); // Insert
+			return Optional.ofNullable(saveNewUspd(editUspdDto))
+					       .orElseThrow(()->new SaveResourceErrorException("Insert resource error UspdDev")); // Insert
 		}
 		throw new SaveResourceErrorException("Save resource error UspdDev");
 	}
@@ -177,9 +177,11 @@ public class UpdateEditSrv {
 	@Transactional(transactionManager = "housingTransactionManager")
 	public Counts updateCounts(CountsDTO countsDto) {
 		if (countsDto.getIdCounts() > 0) {
-		   return	saveCounts(countsDto);
+		   return	Optional.ofNullable(saveCounts(countsDto))
+				            .orElseThrow(()->new SaveResourceErrorException("Update resource error Counts"));
 		} 
-	    return newCounts(countsDto);
+	    return Optional.ofNullable(newCounts(countsDto))
+	    		       .orElseThrow(()->new SaveResourceErrorException("Insert resource error Counts"));
 	}
 
 	/**
@@ -255,7 +257,7 @@ public class UpdateEditSrv {
 		return uspdDev;
 	}
 
-	/** Продолжить 21-02!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	/** 
 	 * Создаем новый объект Сервера связi
 	 * 
 	 * @param esd - объект полей формы
@@ -265,32 +267,27 @@ public class UpdateEditSrv {
 	public ComServer saveNewComServer(EditServerDTO esd) {
 		
 		// Найдем корневой элемент дерева//
-		Optional<LinkObject> oplink = linkObjRep.findByIdParent(MyConst.TREE_ROOT);
-		LinkObject linkobject = oplink.isPresent() ? oplink.get() : null;
-		if (linkobject == null) {return null;}
-
+		LinkObject linkobject = (linkObjRep.findByIdParent(MyConst.TREE_ROOT))
+				                       .orElseThrow(()->new ResourceNotFoundException("Object LinkObject Not found"));
 		ComServer comserver = new ComServer();
 		comserver.setIpServer(esd.getIp_server());
 		comserver.setNameServer(esd.getName_server());
 		comserver.setPortServer(esd.getPort_server());
 
-		Optional<ManagCompany> opmcomp = managCompanyRepository.findById(1);// Сделать выбор из списка УК
-		ManagCompany manageCompany = opmcomp.isPresent() ? opmcomp.get() : null;
-		if (manageCompany == null) {return null;}
+		ManagCompany manageCompany = (managCompanyRepository.findById(1))// Сделать выбор из списка УК
+				                                     .orElseThrow(()->new ResourceNotFoundException("Object ManagCompany Not found"));
 		comserver.setManagCompany(manageCompany);
-
-		Optional<TypeObject> optobject = typeObjectRepository.findById(MyConst.TYPE_OBJECT_SERVER);
-		TypeObject typeObject = optobject.isPresent() ? optobject.get() : null;
-		if (typeObject == null) {return null;}
+		TypeObject typeObject = (typeObjectRepository.findById(MyConst.TYPE_OBJECT_SERVER))
+				                        .orElseThrow(()->new ResourceNotFoundException("Object TypeObject Not found"));
 		comserver.setTypeObject(typeObject);
-		comserver = comServerRepository.save(comserver);
-
+		comserver = Optional.ofNullable(comServerRepository.save(comserver))
+				            .orElseThrow(()->new SaveResourceErrorException("Save resource error ComServer"));
 		LinkObject linkObject = new LinkObject();
 		linkObject.setIdObject(comserver.getIdComServer());
 		linkObject.setIdParent(linkobject.getIdLinkObject());
 		linkObject.setTypeObject(typeObject);
-		linkObjRep.save(linkObject);
-		
+		linkObject = Optional.ofNullable(linkObjRep.save(linkObject))
+		        .orElseThrow(()->new SaveResourceErrorException("Save resource error LinkObjec"));
 		return comserver;
 	}
 

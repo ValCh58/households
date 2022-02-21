@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.CountsDTO;
 import eis.company.households.dto.EditServerDTO;
 import eis.company.households.dto.EditUspdDTO;
@@ -71,7 +72,8 @@ public class NodesController {
 	 * @return retList список с объектами LinkObjectDTO
 	 */
 	private List<LinkObjectDTO> makeTree() {
-		queryList = queryLinkObj.queryLinkObjectReository();
+		queryList = Optional.ofNullable(queryLinkObj.queryLinkObjectReository())
+				            .orElseThrow(()->new ResourceNotFoundException("Object list LinkObjectDTO Not found"));
 		retList.clear();
 		int id = queryList.get(0).getId_link_object();
 		retList.add(queryList.get(0));
@@ -93,10 +95,6 @@ public class NodesController {
 		}
 	}
 //******************************************************************************************/
-
-	//@GetMapping(value = "nodeEditCount/{id}")
-	//public void getCountObj(@PathVariable("id") Integer id) {
-	//}
 
 	/**
 	 * Заполнение полей формы "Редактирование УСПД"
@@ -130,8 +128,7 @@ public class NodesController {
 	public ResponseEntity<EditUspdDTO> createNewUspd() {
 		EditUspdDTO editUspdDto = new EditUspdDTO(0, "", "", "", 0, 0, 0, 0, 0, typeUspdRepository.findAll());
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(editUspdDto);
+		return ResponseEntity.status(HttpStatus.OK).body(editUspdDto);
 	}
 
 	/**
@@ -143,8 +140,7 @@ public class NodesController {
 	public ResponseEntity<CountsDTO> createCount() {
 		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 0);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(countsDto);
+		return ResponseEntity.status(HttpStatus.OK).body(countsDto);
 	}
 
 	/**
@@ -156,9 +152,9 @@ public class NodesController {
 	@GetMapping(value = "nodeEditSrv/{id}")
 	public ResponseEntity<EditServerDTO> getNode(@PathVariable("id") Integer id) {
 		// LinkObject linkObject = updEditSrv.getDataFromTree(id);
-		List<EditServerDTO> retList = queryEditSrv.queryEditModalFormRepository(id);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(retList.get(0));
+		List<EditServerDTO> retList = Optional.ofNullable(queryEditSrv.queryEditModalFormRepository(id))
+				                     .orElseThrow(()->new ResourceNotFoundException("Object EditServerDTO Not found"));
+		return ResponseEntity.status(HttpStatus.OK).body(retList.get(0));
 	}
 
 	/**
@@ -169,8 +165,9 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodeCounts/{id}")
 	public ResponseEntity<CountsDTO> getCountsDto(@PathVariable("id") Integer id) {
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(queryCountsDto.retCountsDto(id));
+		CountsDTO countDto = Optional.ofNullable(queryCountsDto.retCountsDto(id))
+				            .orElseThrow(()->new ResourceNotFoundException("Object CountsDTO Not found"));
+		return ResponseEntity.status(HttpStatus.OK).body(countDto);
 	}
 
 	/**
@@ -180,8 +177,7 @@ public class NodesController {
 	 */
 	@PostMapping(value = "updateCounts")
 	public ResponseEntity<CountsDTO> saveCount(CountsDTO countsDto) {
-		updEditSrv.updateCounts(countsDto);
-		
+	    updEditSrv.updateCounts(countsDto);
 		return ResponseEntity.status(HttpStatus.OK).body(countsDto);
 	}
 
@@ -206,14 +202,12 @@ public class NodesController {
 	@PostMapping(value = "updateEditSrv")
 	public ResponseEntity<ComServer> updateEditSrvFromModal(EditServerDTO editServerDto) {
 		ComServer comServer = updEditSrv.saveComServer(editServerDto);
-		
 		return ResponseEntity.status(HttpStatus.OK).body(comServer);
 	}
 
 	@PostMapping(value = "newSrv")
 	public ResponseEntity<ComServer> addNewServer(EditServerDTO editServerDto) {
 		ComServer comServer = updEditSrv.saveNewComServer(editServerDto);
-		
 		return ResponseEntity.status(HttpStatus.CREATED).body(comServer);
 	}
 

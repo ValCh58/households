@@ -21,9 +21,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     }
 	
 	@ExceptionHandler(SaveResourceErrorException.class)
-    public ResponseEntity<?> globleExcpetionHandler(SaveResourceErrorException ex, WebRequest request) {
+    public ResponseEntity<?> saveResourceErrorException(SaveResourceErrorException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+	
+	@ExceptionHandler(ResourceDeletionErrorException.class)
+	public ResponseEntity<?> resourceDeletionErrorException(ResourceDeletionErrorException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+	
+	@ExceptionHandler(Exception.class)
+    public ResponseEntity<?> globalExcpetionHandler(Exception ex, WebRequest request) {
+    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+    return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

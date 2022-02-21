@@ -17,7 +17,7 @@ import minaclient.MyPing;
 @Component
 public class QueryComSrvDto {
 	List<ServerObjDTO> retList = new ArrayList<ServerObjDTO>();
-	@PersistenceContext
+	@PersistenceContext(name="housingEntityManager")
 	private EntityManager em;
 	
 	public List<ServerObjDTO> retComSrvDto(){

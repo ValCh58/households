@@ -15,7 +15,7 @@ public class QueryUsersRepositoryImpl implements QueryUsersRepository{
 	
 	public QueryUsersRepositoryImpl() {}
 
-	@PersistenceContext
+	@PersistenceContext(name="housingEntityManager")
     private EntityManager em;
 
 	@SuppressWarnings("unchecked")

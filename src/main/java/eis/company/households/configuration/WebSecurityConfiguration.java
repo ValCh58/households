@@ -20,8 +20,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    
     private MyUserDetailsService userDetailsService;
     
     public WebSecurityConfiguration() {};

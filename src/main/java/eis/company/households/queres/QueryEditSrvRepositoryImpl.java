@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 
 import eis.company.households.dto.EditServerDTO;
 import eis.company.households.repository.QueryEditSrvRepository;
-
+//Переделать!!!
 @Component
 public class QueryEditSrvRepositoryImpl implements QueryEditSrvRepository {
 	
 	public QueryEditSrvRepositoryImpl() {}
 	
-	@PersistenceContext
+	@PersistenceContext(name="housingEntityManager")
     private EntityManager em;
 	
 	@SuppressWarnings("unchecked")

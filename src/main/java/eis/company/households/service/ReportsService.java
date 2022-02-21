@@ -2,11 +2,13 @@ package eis.company.households.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
@@ -42,7 +44,8 @@ public class ReportsService {
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<AcntCountsDTO> getAcntCounts(Integer id){
-		List<AcntCountsDTO> list = qAcntCountDto.getAcntCountsDTO(id);
+		List<AcntCountsDTO> list = Optional.ofNullable(qAcntCountDto.getAcntCountsDTO(id))
+				                           .orElseThrow(()->new ResourceNotFoundException("Object list AcntCountsDTO Not found"));
 	return list;
 	}
 	
@@ -57,8 +60,8 @@ public class ReportsService {
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 		
-		List<HotCountFlowDTO> listHotCountDto = queryHotCountFlowDto.getQueryResult(factoryNumberUspd, dateCurr, datePrev);
-		
+		List<HotCountFlowDTO> listHotCountDto = Optional.ofNullable(queryHotCountFlowDto.getQueryResult(factoryNumberUspd, dateCurr, datePrev))
+				                               .orElseThrow(()->new ResourceNotFoundException("Object list HotCountFlowDTO Not found"));
 		return listHotCountDto;
 	}
 	
@@ -79,10 +82,11 @@ public class ReportsService {
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
-		List<ColdWaterFlowDTO> listFlowWaterCold = qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
+		List<ColdWaterFlowDTO> listFlowWaterCold = Optional.ofNullable(qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
 				                                                                    dateCurr, 
 				                                                                    datePrev, 
-				                                                                    ratio, typeCount); 
+				                                                                    ratio, typeCount))
+				                                  .orElseThrow(()->new ResourceNotFoundException("Object list ColdWaterFlowDTO Not found")); 
 	return listFlowWaterCold;	
 	}
 	
@@ -100,7 +104,8 @@ public class ReportsService {
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
-		List<ElEnFlowDTO> listFlowElEn = queryElEnFlow.getQueryResult(factoryNumberUspd, dateCurr, datePrev); 
+		List<ElEnFlowDTO> listFlowElEn = Optional.ofNullable(queryElEnFlow.getQueryResult(factoryNumberUspd, dateCurr, datePrev))
+				                        .orElseThrow(()->new ResourceNotFoundException("Object list ElEnFlowDTO Not found")); 
 	return listFlowElEn;	
 	}
 

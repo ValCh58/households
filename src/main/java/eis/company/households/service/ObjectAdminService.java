@@ -68,7 +68,8 @@ public class ObjectAdminService {
 
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<Measuring> retUspdObj() {
-		List<Measuring> list = measuringRepo.findTop1000ByOrderByTimeStampDesc();
+		List<Measuring> list = Optional.ofNullable(measuringRepo.findTop1000ByOrderByTimeStampDesc())
+				                       .orElseThrow(()->new ResourceNotFoundException("Object list Measuring Not found"));
 		return list;
 	}
 	
@@ -84,9 +85,11 @@ public class ObjectAdminService {
 		List<Measuring> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = repoMeasuringFiltr.findFirst1000ByTimeStampBetween(from, to, sort);
+			list = Optional.ofNullable(repoMeasuringFiltr.findFirst1000ByTimeStampBetween(from, to, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter1 list Measuring Not found"));
 		} else {
-			list = repoMeasuringFiltr.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = Optional.ofNullable(repoMeasuringFiltr.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter2 list Measuring Not found"));
 		}
 		return list;
 	}
@@ -100,7 +103,8 @@ public class ObjectAdminService {
 		LocalDateTime from = dateFrom.atStartOfDay();
 		LocalDate dayTo = dateTo.plusDays(1);
 		LocalDateTime to = dayTo.atStartOfDay();
-		List<CountWaterDTO> list = countWaterPar2.retCountWaterDTOPar2(numUspd, from, to);
+		List<CountWaterDTO> list = Optional.ofNullable(countWaterPar2.retCountWaterDTOPar2(numUspd, from, to))
+				                           .orElseThrow(()->new ResourceNotFoundException("Object filter list CountWaterDTO Not found"));
 			
 		return list;
 	}
@@ -112,7 +116,8 @@ public class ObjectAdminService {
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountWaterDTO> retCountWater() {
 		//List<CountWater> list = countWaterRepo.findFirst1000ByOrderByTimeStampDesc();
-		List<CountWaterDTO> list = queryCountWater.retCountWaterDTO();
+		List<CountWaterDTO> list = Optional.ofNullable(queryCountWater.retCountWaterDTO())
+				                           .orElseThrow(()->new ResourceNotFoundException("Object list CountWaterDTO Not found"));
 		return list;
 	}
 	
@@ -123,7 +128,8 @@ public class ObjectAdminService {
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountElEn> retCountElEn() {
 		
-		List<CountElEn> list = countElEnRepo.findFirst1000ByOrderByTimeStampDesc();
+		List<CountElEn> list = Optional.ofNullable(countElEnRepo.findFirst1000ByOrderByTimeStampDesc())
+				                       .orElseThrow(()->new ResourceNotFoundException("Object list CountElEn Not found"));
 		return list;
 	}
 	
@@ -133,7 +139,8 @@ public class ObjectAdminService {
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<RawData> retRawData(){
-		List<RawData> list = repoRawData.findFirst1000ByOrderByEventTimeDesc();
+		List<RawData> list = Optional.ofNullable(repoRawData.findFirst1000ByOrderByEventTimeDesc())
+				                     .orElseThrow(()->new ResourceNotFoundException("Object list RawData Not found"));
 		return list;
 	}
 	
@@ -143,7 +150,8 @@ public class ObjectAdminService {
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly=true)
 	public List<AlarmDTO> retAlarmMsg(){
-		List<AlarmDTO> list = querAlarmDto.retAlarmDto();
+		List<AlarmDTO> list = Optional.ofNullable(querAlarmDto.retAlarmDto())
+				                      .orElseThrow(()->new ResourceNotFoundException("Object list AlarmDTO Not found"));
 		return list;
 	}
 	
@@ -159,9 +167,11 @@ public class ObjectAdminService {
 		List<CountElEn> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = countElEnRepo.findFirst1000ByTimeStampBetween(from, to, sort);
+			list = Optional.ofNullable(countElEnRepo.findFirst1000ByTimeStampBetween(from, to, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter1 list CountElEn Not found"));
 		} else {
-			list = countElEnRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = Optional.ofNullable(countElEnRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort))
+                			.orElseThrow(()->new ResourceNotFoundException("Object filter2 list CountElEn Not found"));
 		}
 		
 		return list;
@@ -179,9 +189,11 @@ public class ObjectAdminService {
 		List<CountHeat> list;
 		Sort sort = Sort.by("timeStamp").descending();
 		if (numUspd.equals("0")) {
-			list = countHeaterRepo.findFirst1000ByTimeStampBetween(from, to, sort);
+			list = Optional.ofNullable(countHeaterRepo.findFirst1000ByTimeStampBetween(from, to, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter1 list CountHeat Not found"));
 		} else {
-			list = countHeaterRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort);
+			list = Optional.ofNullable(countHeaterRepo.findFirst1000ByTimeStampBetweenAndFactoryNumberUspd(from, to, numUspd, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter1 list CountHeat Not found"));
 		}
 		return list;
 	}
@@ -192,7 +204,8 @@ public class ObjectAdminService {
 	 */
 	@Transactional(transactionManager = "eisystemsTransactionManager", readOnly = true)
 	public List<CountHeat> retCountHeater(){
-		List<CountHeat> list = countHeaterRepo.findFirst1000ByOrderByTimeStampDesc();
+		List<CountHeat> list = Optional.ofNullable(countHeaterRepo.findFirst1000ByOrderByTimeStampDesc())
+				                       .orElseThrow(()->new ResourceNotFoundException("Object list CountHeat Not found"));
 		return list;
 	}
 	
@@ -208,9 +221,11 @@ public class ObjectAdminService {
 		List<RawData> list;
 		Sort sort = Sort.by("eventTime").descending();
 		if (numUspd.equals("0")) {
-			list = repoRawData.findFirst1000ByEventTimeBetween(from, to, sort);
+			list = Optional.ofNullable(repoRawData.findFirst1000ByEventTimeBetween(from, to, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter1 list RawData Not found"));
 		} else {
-			list = repoRawData.findFirst1000ByEventTimeBetweenAndNumUspd(from, to, numUspd, sort);
+			list = Optional.ofNullable(repoRawData.findFirst1000ByEventTimeBetweenAndNumUspd(from, to, numUspd, sort))
+					       .orElseThrow(()->new ResourceNotFoundException("Object filter2 list RawData Not found"));
 		}
 		return list;
 	}

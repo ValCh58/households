@@ -15,7 +15,7 @@ import eis.company.households.dto.CountsDTO;
 @Component
 public class QueryCountsDto {
 
-	@PersistenceContext
+	@PersistenceContext(name="housingEntityManager")
     private EntityManager em;
 	public CountsDTO retCountsDto(Integer id){
 	
