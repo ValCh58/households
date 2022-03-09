@@ -74,8 +74,8 @@ $(document).ready(function(){
 				array_row.push($(this).text());
 			});
 			var y = array_row[1];
-			if($("#finder").val() == y){//!!!!!!!!!!!!!!
-			   console.log($(this).index() + ' --- ' + y );
+			yy = new String(y);
+			if(yy.toLowerCase().indexOf($("#finder").val().toLowerCase()) > 0){
 			   var td = $($(this));
 			   var pos = td.offset();
 			   //console.log(pos);
