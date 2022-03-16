@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- 2022-03-15T09:42:01 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="uspd" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6b82d24c-25e9-4af0-b404-4c2514acc36c">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="251"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="743"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapterHousing "/>
+	<subDataset name="Empty Dataset1" uuid="784fec6c-9c6d-4ba3-bdce-97a7d126d955"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT `FACTORY_NUMBER_USPD`,
+	`INPUT_STATUS_USPD`,
+	`OUTPUT_STATUS_USPD`,
+	`POWER_BATTERY_USPD`,
+	`LOW_POWER_BATTERY_USPD`,
+	`THRESHOLD_COUNTER_USPD`,
+	`ALARM_STATUS_ANALOG_SENSOR`,
+	`TIME_STAMP`
+FROM eisystems.measuring]]>
+	</queryString>
+	<field name="FACTORY_NUMBER_USPD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="FACTORY_NUMBER_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="FACTORY_NUMBER_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Заводской номер]]></fieldDescription>
+	</field>
+	<field name="INPUT_STATUS_USPD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="INPUT_STATUS_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="INPUT_STATUS_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Состояние входов]]></fieldDescription>
+	</field>
+	<field name="OUTPUT_STATUS_USPD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="OUTPUT_STATUS_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="OUTPUT_STATUS_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Состояние выходов]]></fieldDescription>
+	</field>
+	<field name="POWER_BATTERY_USPD" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="POWER_BATTERY_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="POWER_BATTERY_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Напряжение батареи]]></fieldDescription>
+	</field>
+	<field name="LOW_POWER_BATTERY_USPD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="LOW_POWER_BATTERY_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="LOW_POWER_BATTERY_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Низкий заряд батареи]]></fieldDescription>
+	</field>
+	<field name="THRESHOLD_COUNTER_USPD" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="THRESHOLD_COUNTER_USPD"/>
+		<property name="com.jaspersoft.studio.field.label" value="THRESHOLD_COUNTER_USPD"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+		<fieldDescription><![CDATA[Позиция счётчика с превышением порога]]></fieldDescription>
+	</field>
+	<field name="ALARM_STATUS_ANALOG_SENSOR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="ALARM_STATUS_ANALOG_SENSOR"/>
+		<property name="com.jaspersoft.studio.field.label" value="ALARM_STATUS_ANALOG_SENSOR"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+	</field>
+	<field name="TIME_STAMP" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="TIME_STAMP"/>
+		<property name="com.jaspersoft.studio.field.label" value="TIME_STAMP"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="measuring"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="199" y="7" width="156" height="30" uuid="7e048e6f-9497-4f59-be70-3754ecb3654a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="14"/>
+				</textElement>
+				<text><![CDATA[Устройства УСПД]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="32" y="2" width="58" height="40" uuid="a4faa4e7-f5f4-4ca2-907d-4b179e89ea1e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1c5e4a57-de01-4c31-be74-4ccf1d7a4ec7"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="10"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Номер]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="2" width="54" height="40" uuid="b4b9c0ea-a219-43dc-99a8-0e06e4a85b79">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3eb4d2d-1b8a-4456-93a8-57e723696196"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="10"/>
+					<paragraph lineSpacingSize="0.0"/>
+				</textElement>
+				<text><![CDATA[Значение
+на входе]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="2" width="62" height="40" uuid="e03e31da-64ba-497b-9d87-7636c3f92978">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="558ef110-1c70-4ddd-800f-83a45ec2ce29"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[Значения
+аварийных
+выходов]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="206" y="2" width="78" height="40" uuid="5d588b52-df21-4dad-9320-aeecca9e026f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="505f5744-5bd9-4460-a4a0-9407081c1561"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[Напряжение
+аккумулятора]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="284" y="2" width="64" height="40" uuid="8b8ec61b-e3dd-4370-bcc7-cf0da0a5d2df">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2eae5020-31b0-4094-bdd9-19897b35d455"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="10"/>
+				</textElement>
+				<text><![CDATA[Тип
+питающего
+напряжения]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="2" width="70" height="40" uuid="c669cec7-d037-494b-bd3f-88181c40db6b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3fbcc99b-5208-4f9f-8cf1-ac8969768c50"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Превышение
+пороговых
+значений]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="2" width="60" height="40" uuid="7f9ad110-59e1-4c31-b350-989d6bda5dd8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a355714d-f081-4059-a806-b5628d8dcc8d"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Выход
+сигнала за
+диапозон]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="478" y="2" width="74" height="40" uuid="69dcef16-0d99-4dec-9862-410c127c063a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e57008e-f14f-4cea-9073-978ed6d63423"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<text><![CDATA[Время
+передачи]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="32" y="-2" width="58" height="20" uuid="cc77473e-21d0-4208-97d8-d54798dacef3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1c5e4a57-de01-4c31-be74-4ccf1d7a4ec7"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FACTORY_NUMBER_USPD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="-2" width="54" height="20" uuid="abd19c53-0c7b-4e8e-9bcd-2ebb0539ddd9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a3eb4d2d-1b8a-4456-93a8-57e723696196"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INPUT_STATUS_USPD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="-2" width="62" height="20" uuid="72db0595-90da-427e-86ad-93e9f580a7f3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="558ef110-1c70-4ddd-800f-83a45ec2ce29"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OUTPUT_STATUS_USPD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="206" y="-2" width="78" height="20" uuid="fbd299e9-9f9d-40d6-bf8f-35db2c37df56">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="505f5744-5bd9-4460-a4a0-9407081c1561"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{POWER_BATTERY_USPD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="-2" width="64" height="20" uuid="4c83d065-521d-4b83-9bcf-d34381822634">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2eae5020-31b0-4094-bdd9-19897b35d455"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{LOW_POWER_BATTERY_USPD}.startsWith("0")) ?"Сеть":"Аккум.")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="-2" width="70" height="20" uuid="5d71f4fd-f069-4e24-ac47-6ef0a114cc94">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3fbcc99b-5208-4f9f-8cf1-ac8969768c50"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{THRESHOLD_COUNTER_USPD}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="-2" width="60" height="20" uuid="684deaf7-021b-477d-994d-0a74c17b5afe">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a355714d-f081-4059-a806-b5628d8dcc8d"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ALARM_STATUS_ANALOG_SENSOR} == null ? "00" : $F{ALARM_STATUS_ANALOG_SENSOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="478" y="-2" width="74" height="20" uuid="a496f434-f08e-4ee2-b759-0c14184c6e7a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e57008e-f14f-4cea-9073-978ed6d63423"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TIME_STAMP}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="487" y="1" width="68" height="14" uuid="2720bdfc-cecf-44fa-8abb-a2cb35978754"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

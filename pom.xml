@@ -27,6 +27,13 @@
 	</repositories>
 
 	<dependencies>
+        <!--            JasperReports           -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>6.6.0</version>
+		</dependency>
+		
 		<!-- ping сервера связи -->
 		<dependency>
 			<groupId>eis.test.myping</groupId>
@@ -121,7 +128,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		
 
 	</dependencies>
 
