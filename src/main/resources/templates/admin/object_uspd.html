@@ -60,20 +60,50 @@
 	  })
   });
 
+  /**
+  **************Вызов страницы отчета УСПД объектов****************
+  */
+  $(function(){
+     $('#btn-report-uspd').click(function(){
+    	  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
+		  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
+		  var dateTo   = $('#dateto').val() != '' ? $('#dateto').val() : myDateNow();
+
+		  $.ajax({
+			  "type": "get",
+		        "url": '/admin/reports/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
+		        "dataType": "text",
+		        "cache": "false",
+		        "data": "$(this).serialize()",
+		        success: function(data){
+                     //alert(data);
+			        },
+		        error: function(jqXHR, textStatus, errorThrown){
+			        alert( jqXHR + ' ' + textStatus  +' ' + errorThrown);
+			        //console.log("jqXHR:"+jqXHR);
+			        //console.log("textStatus:"+textStatus);
+			        //console.log("errorThrown:"+errorThrown);
+			        //let data = JSON.parse(this.responseText);
+			        //console.log("data:"+data);
+			        }
+
+			  });
+
+         })
+  });
+
 
   /**
   ******************* Филтрация данных ****************************
   **/
   $(function(){
 	  $('#btn-filtr').click(function(){
-		  var dat = new Date();
 		  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
 		  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
 		  var dateTo   = $('#dateto').val() != '' ? $('#dateto').val() : myDateNow();
 		  $('#datefrom').val(dateFrom);
 		  $('#dateto').val(dateTo);
-		  //$('#searchuspd').val(numUspd);
-		  
+		  		  
 		  $.ajax({
 		        "type": "get",
 		        "url": '/admin/object_uspd/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
