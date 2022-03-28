@@ -2,6 +2,7 @@ package eis.company.households.restcontroller;
 
 import static org.springframework.http.HttpStatus.OK;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.core.env.Environment;
 
 import eis.company.households.dto.AlarmDTO;
 import eis.company.households.dto.CountWaterDTO;
@@ -23,11 +26,13 @@ import eis.company.households.service.ObjectAdminService;
 public class ObjectAdminRest {
 
 	private ObjectAdminService objAdmSrv;
+	private Environment env;
 
 	@Autowired
-	public ObjectAdminRest(ObjectAdminService objAdmSrv) {
+	public ObjectAdminRest(ObjectAdminService objAdmSrv, Environment env) {
 		super();
 		this.objAdmSrv = objAdmSrv;
+		this.env = env;
 	}
 	
 
@@ -39,9 +44,30 @@ public class ObjectAdminRest {
 	@GetMapping(value = "/admin/reports/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
 	public ResponseEntity<String> getUspdObjectsForPDF(@PathVariable("numUspd") String numUspd,
 			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+         
+		StringBuilder sbUrl = new StringBuilder("http://");
+		sbUrl.append(env.getProperty("jasperreport.ip_port"));
+		sbUrl.append("/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=");
+		sbUrl.append("/reports/Housing/admin/uspd&output="); 
+		sbUrl.append(env.getProperty("jasperreport.type.report"));
+		sbUrl.append("&j_username=");
+		sbUrl.append(env.getProperty("jasperreport.username"));
+		sbUrl.append("&j_password=");
+		sbUrl.append(env.getProperty("jasperreport.password"));
+		sbUrl.append("&dateBegin=");
+		sbUrl.append(dateFrom.toString());
+		sbUrl.append("&dateEnd=");
+		sbUrl.append(dateTo.toString());
+		sbUrl.append("&numUspd=");
+		sbUrl.append(numUspd);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.getForEntity(sbUrl.toString(), String.class);
+        String productsJson = response.getBody();
+
+		 
 		
 	     return ResponseEntity.status(OK).body("uspd-report-OK");
-	
 	}
 	
 

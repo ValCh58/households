@@ -28,11 +28,12 @@ public class PersistenceHousingAutoConfiguration {
 	@Autowired
 	private Environment env;
 
-	public PersistenceHousingAutoConfiguration() {
+	public PersistenceHousingAutoConfiguration(Environment env) {
 		super();
+		this.env = env;
 	}
 
-	
+
 	@Bean
 	@Primary
 	@ConfigurationProperties(prefix = "spring.housing-datasource")

@@ -28,10 +28,12 @@ public class PersistenceEisystemsAutoConfiguration {
 	@Autowired
 	private Environment env;
 
-	public PersistenceEisystemsAutoConfiguration() {
+	public PersistenceEisystemsAutoConfiguration(Environment env) {
 		super();
+		this.env = env;
 	}
-	
+
+
 	@Bean
 	@ConfigurationProperties(prefix = "spring.eisystems-datasource")
 	public DataSource eisystemsDataSource() {
