@@ -56,12 +56,11 @@
   $(function(){
 	  $('#btn-del-filtr').click(function(){
 		  location.reload();
-		  
 	  })
   });
 
   /**
-  **************Вызов страницы отчета УСПД объектов****************
+  **************Calling the page of the report USPD of objects****************
   */
   $(function(){
      $('#btn-report-uspd').click(function(){
@@ -71,30 +70,23 @@
 
 		  $.ajax({
 			  "type": "get",
-		        "url": '/admin/reports/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
-		        "dataType": "text",
-		        "cache": "false",
-		        "data": "$(this).serialize()",
-		        success: function(data){
-                     //alert(data);
-			        },
-		        error: function(jqXHR, textStatus, errorThrown){
-			        alert( jqXHR + ' ' + textStatus  +' ' + errorThrown);
-			        //console.log("jqXHR:"+jqXHR);
-			        //console.log("textStatus:"+textStatus);
-			        //console.log("errorThrown:"+errorThrown);
-			        //let data = JSON.parse(this.responseText);
-			        //console.log("data:"+data);
-			        }
-
-			  });
-
-         })
+		      "url": '/admin/repUspd/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
+		      "dataType": "text",
+		      "cache": "false",
+		      "data": "$(this).serialize()",
+		       success: function(data){
+		       	window.location.href = data;//Redirect to report page
+               },
+		      error: function(jqXHR, textStatus, errorThrown){
+			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+			   }
+		  });
+      })
   });
 
 
   /**
-  ******************* Филтрация данных ****************************
+  ******************* Фильтрация данных ****************************
   **/
   $(function(){
 	  $('#btn-filtr').click(function(){

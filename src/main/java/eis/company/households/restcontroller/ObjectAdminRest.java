@@ -2,18 +2,18 @@ package eis.company.households.restcontroller;
 
 import static org.springframework.http.HttpStatus.OK;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.core.env.Environment;
 
+import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.AlarmDTO;
 import eis.company.households.dto.CountWaterDTO;
 import eis.company.households.modeleis.CountElEn;
@@ -35,44 +35,61 @@ public class ObjectAdminRest {
 		this.env = env;
 	}
 	
-
 	/**
-	 * REST Print of PDF reports
-	 * 
-	 * 
+	 * Making a URL to call the report
+	 * @param pathReport
+	 * @param numUspd
+	 * @param dateFrom
+	 * @param dateTo
+	 * @return URL
 	 */
-	@GetMapping(value = "/admin/reports/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
-	public ResponseEntity<String> getUspdObjectsForPDF(@PathVariable("numUspd") String numUspd,
-			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
-         
+	private String makeUrlReport(String pathReport, String numUspd, 
+			                     LocalDate dateFrom, LocalDate dateTo) {
+		
 		StringBuilder sbUrl = new StringBuilder("http://");
-		sbUrl.append(env.getProperty("jasperreport.ip_port"));
+		sbUrl.append(env.getProperty("jasperreport.ip_port"));//application.properties
 		sbUrl.append("/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=");
-		sbUrl.append("/reports/Housing/admin/uspd&output="); 
-		sbUrl.append(env.getProperty("jasperreport.type.report"));
+		sbUrl.append(pathReport); 
+		sbUrl.append(env.getProperty("jasperreport.type.report"));//application.properties
 		sbUrl.append("&j_username=");
-		sbUrl.append(env.getProperty("jasperreport.username"));
+		sbUrl.append(env.getProperty("jasperreport.username"));//application.properties
 		sbUrl.append("&j_password=");
-		sbUrl.append(env.getProperty("jasperreport.password"));
+		sbUrl.append(env.getProperty("jasperreport.password"));//application.properties
 		sbUrl.append("&dateBegin=");
 		sbUrl.append(dateFrom.toString());
 		sbUrl.append("&dateEnd=");
 		sbUrl.append(dateTo.toString());
-		sbUrl.append("&numUspd=");
-		sbUrl.append(numUspd);
+		if(!numUspd.equals("0")) {
+		  sbUrl.append("&numUspd=");
+		  sbUrl.append(numUspd);
+		}
 		
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.getForEntity(sbUrl.toString(), String.class);
-        String productsJson = response.getBody();
+		return sbUrl.toString();
+	}
 
-		 
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of objects
+	 */
+	@GetMapping(value = "/admin/repUspd/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public ResponseEntity<String> getUspdObjectsForPDF(@PathVariable("numUspd") String numUspd,
+			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		String url = null;
+        
+		if(!numUspd.equals("0"))
+		    url = Optional.ofNullable(makeUrlReport("/reports/Housing/admin/uspd&output=", numUspd, dateFrom, dateTo))
+				      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
+		else
+			url = Optional.ofNullable(makeUrlReport("/reports/Housing/admin/uspd2&output=", numUspd, dateFrom, dateTo))
+		      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
+			
 		
-	     return ResponseEntity.status(OK).body("uspd-report-OK");
+		return ResponseEntity.status(OK).body(url);
 	}
 	
 
 	/**
-	 * REST УСПД фильтрация
+	 * REST USPD filtration
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
@@ -88,7 +105,7 @@ public class ObjectAdminRest {
 	}
 
 	/**
-	 * REST Счетчики фильтрация
+	 * REST Counters, filtering
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
@@ -103,7 +120,7 @@ public class ObjectAdminRest {
 	}
 
 	/**
-	 * REST Эл. счетчики фильтрация
+	 * REST Electric meters, filtration
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
@@ -118,7 +135,7 @@ public class ObjectAdminRest {
 	}
 
 	/**
-	 * REST Row данные от серверов, фильтрация
+	 * REST Row data from servers, filtering
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
@@ -134,7 +151,7 @@ public class ObjectAdminRest {
 	}
 
 	/**
-	 * REST Аварийные сообщения
+	 * REST Alarm messages
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
@@ -148,7 +165,7 @@ public class ObjectAdminRest {
 	}
 
 	/**
-	 * REST Тепл. счетчики фильтрация
+	 * REST Heat meters filtration
 	 * 
 	 * @param numUspd
 	 * @param dateFrom
