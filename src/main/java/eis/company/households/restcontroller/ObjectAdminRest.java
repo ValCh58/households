@@ -43,8 +43,7 @@ public class ObjectAdminRest {
 	 * @param dateTo
 	 * @return URL
 	 */
-	private String makeUrlReport(String pathReport, String numUspd, 
-			                     LocalDate dateFrom, LocalDate dateTo) {
+	private String makeUrlReport(String pathReport, String numUspd, LocalDate dateFrom, LocalDate dateTo) {
 		
 		StringBuilder sbUrl = new StringBuilder("http://");
 		sbUrl.append(env.getProperty("jasperreport.ip_port"));//application.properties
