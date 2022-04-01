@@ -65,26 +65,56 @@ public class ObjectAdminRest {
 		
 		return sbUrl.toString();
 	}
+	
+	/**
+	 * Resource URL preparation
+	 * 
+	 */
+	private String prepUrl(String pathReport, String numUspd, LocalDate dateFrom, LocalDate dateTo) {
+				
+		String url = Optional.ofNullable(makeUrlReport(pathReport, numUspd, dateFrom, dateTo))
+				      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
+		return url;
+	}
+	
+	
 
 	/**
 	 * Print of PDF reports
-	 * Calling the page of the report of objects
+	 * Calling the page of the report of USPD objects 
 	 */
 	@GetMapping(value = "/admin/repUspd/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
 	public ResponseEntity<String> getUspdObjectsForPDF(@PathVariable("numUspd") String numUspd,
 			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		
 		String url = null;
-        
-		if(!numUspd.equals("0"))
-		    url = Optional.ofNullable(makeUrlReport("/reports/Housing/admin/uspd&output=", numUspd, dateFrom, dateTo))
-				      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
+       	if(!numUspd.equals("0"))
+		    url = prepUrl("/reports/Housing/admin/uspd&output=", numUspd, dateFrom, dateTo);
 		else
-			url = Optional.ofNullable(makeUrlReport("/reports/Housing/admin/uspd2&output=", numUspd, dateFrom, dateTo))
-		      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
-			
+			url = prepUrl("/reports/Housing/admin/uspd2&output=", numUspd, dateFrom, dateTo);
 		
 		return ResponseEntity.status(OK).body(url);
 	}
+	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of Counts objects 
+	 */
+	@GetMapping(value = "/admin/repCountWater/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public ResponseEntity<String> getCountWaterObjectsForPDF(@PathVariable("numUspd") String numUspd,
+			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		String url = null;
+        
+		if(!numUspd.equals("0"))
+		    url = prepUrl("/reports/Housing/admin/count_w_adm&output=", numUspd, dateFrom, dateTo);
+		else
+			url = prepUrl("/reports/Housing/admin/count_w_adm2&output=", numUspd, dateFrom, dateTo);
+		
+		return ResponseEntity.status(OK).body(url);
+	}
+	
+	
+	
 	
 
 	/**
