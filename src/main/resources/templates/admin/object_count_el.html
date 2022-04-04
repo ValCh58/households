@@ -48,6 +48,33 @@
 		  
 	  })
   });
+
+
+  /**
+   **************Calling the page of the report USPD of El Cnt objects****************
+   */
+   $(function(){
+      $('#btn-report-uspd').click(function(){
+     	  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
+ 		  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
+ 		  var dateTo   = $('#dateto').val() != '' ? $('#dateto').val() : myDateNow();
+
+ 		  $.ajax({
+ 			  "type": "get",
+ 		      "url": '/admin/repElEnCnt/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
+ 		      "dataType": "text",
+ 		      "cache": "false",
+ 		      "data": "$(this).serialize()",
+ 		       success: function(data){
+ 		       	window.location.href = data;//Redirect to report page
+                },
+ 		      error: function(jqXHR, textStatus, errorThrown){
+ 			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+ 			   }
+ 		  });
+       })
+   }); 
+  
   
   $(function(){
 	  $('#btn-filtr').click(function(){

@@ -54,16 +54,19 @@ public class ObjectAdminRest {
 		sbUrl.append(env.getProperty("jasperreport.username"));//application.properties
 		sbUrl.append("&j_password=");
 		sbUrl.append(env.getProperty("jasperreport.password"));//application.properties
-		sbUrl.append("&dateBegin=");
-		sbUrl.append(dateFrom.toString());
-		sbUrl.append("&dateEnd=");
-		sbUrl.append(dateTo.toString());
+		
+		StringBuilder sbParam = new StringBuilder();
+		sbParam.append("&dateBegin=");
+		sbParam.append(dateFrom.toString());
+		sbParam.append("&dateEnd=");
+		sbParam.append(dateTo.toString());
+		
 		if(!numUspd.equals("0")) {
-		  sbUrl.append("&numUspd=");
-		  sbUrl.append(numUspd);
+		  sbParam.append("&numUspd=");
+		  sbParam.append(numUspd);
 		}
 		
-		return sbUrl.toString();
+		return sbUrl.append(sbParam).toString();
 	}
 	
 	/**
@@ -114,7 +117,22 @@ public class ObjectAdminRest {
 	}
 	
 	
-	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of El En Counts objects 
+	 */
+	@GetMapping(value = "/admin/repElEnCnt/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public ResponseEntity<String> getCountElEnObjectsForPDF(@PathVariable("numUspd") String numUspd,
+			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		String url = null;
+        
+		if(!numUspd.equals("0"))
+		    url = prepUrl("/reports/Housing/admin/CountElEn&output=", numUspd, dateFrom, dateTo);
+		else
+			url = prepUrl("/reports/Housing/admin/CountElEn2&output=", numUspd, dateFrom, dateTo);
+		
+		return ResponseEntity.status(OK).body(url);
+	}
 	
 
 	/**
