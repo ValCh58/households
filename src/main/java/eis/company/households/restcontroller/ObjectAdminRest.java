@@ -81,6 +81,22 @@ public class ObjectAdminRest {
 	}
 	
 	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of Heater Counts objects 
+	 */
+	@GetMapping(value = "/admin/repHeatCnt/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public ResponseEntity<String> getHeaterCntObjectsForPDF(@PathVariable("numUspd") String numUspd,
+			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		
+		String url = null;
+       	if(!numUspd.equals("0"))
+		    url = prepUrl("/reports/Housing/admin/ReportHotCnt&output=", numUspd, dateFrom, dateTo);
+		else
+			url = prepUrl("/reports/Housing/admin/ReportHotCnt2&output=", numUspd, dateFrom, dateTo);
+		
+		return ResponseEntity.status(OK).body(url);
+	}
 
 	/**
 	 * Print of PDF reports
