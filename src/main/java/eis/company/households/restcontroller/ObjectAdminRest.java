@@ -79,8 +79,24 @@ public class ObjectAdminRest {
 				      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
 		return url;
 	}
-	
-	
+		
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of raw data from server 
+	 */
+	@GetMapping(value = "/admin/repRawDataSrv/numUspd/{numUspd}/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public ResponseEntity<String> getRawDataSrvForPDF(@PathVariable("numUspd") String numUspd,
+			    @PathVariable("dateFrom") LocalDate dateFrom, @PathVariable("dateTo") LocalDate dateTo) {
+		
+		String url = null;
+       	if(!numUspd.equals("0"))
+		    url = prepUrl("/reports/Housing/admin/RawDataFromSrv&output=", numUspd, dateFrom, dateTo);
+		else
+			url = prepUrl("/reports/Housing/admin/RawDataFromSrv2&output=", numUspd, dateFrom, dateTo);
+		
+		return ResponseEntity.status(OK).body(url);
+	}
+		
 	/**
 	 * Print of PDF reports
 	 * Calling the page of the report of Heater Counts objects 
@@ -131,8 +147,7 @@ public class ObjectAdminRest {
 		
 		return ResponseEntity.status(OK).body(url);
 	}
-	
-	
+		
 	/**
 	 * Print of PDF reports
 	 * Calling the page of the report of El En Counts objects 
