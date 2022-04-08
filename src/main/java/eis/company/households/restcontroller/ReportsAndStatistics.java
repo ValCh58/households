@@ -16,6 +16,7 @@ import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.service.ReportsService;
+import eis.company.households.utility.ReportUtils;
 
 
 
@@ -23,11 +24,13 @@ import eis.company.households.service.ReportsService;
 public class ReportsAndStatistics {
 	
 	private ReportsService reportService;
+	private ReportUtils reportUtils;
 	
 	@Autowired
-	public ReportsAndStatistics(ReportsService reportService) {
+	public ReportsAndStatistics(ReportsService reportService, ReportUtils reportUtils) {
 		super();
 		this.reportService = reportService;
+		this.reportUtils = reportUtils;
 	}
 
 
@@ -54,6 +57,26 @@ public class ReportsAndStatistics {
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
 		return ResponseEntity.status(OK)
 				.body(reportService.getHotCountDto(num, dateFrom));
+	}
+	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of flow water cool 
+	 */
+	@GetMapping(value = "/user/flow_water_report_pdf/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public ResponseEntity<String> getRawDataSrvForPDF(@PathVariable("numUspd") String numUspd,
+			                                             @PathVariable("dateFrom") LocalDate dateFrom) {
+		String numuspd = "%25";
+		String url = null;
+       	if(!numUspd.equals("0")) {
+       	   	numuspd = numUspd + "%25";
+       	}
+       	String dateCurr = dateFrom.toString().substring(0, 7) + "%25";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%25";
+		url = reportUtils.prepUrl("/reports/Housing/user/FlowColdWater&output=", numuspd, dateCurr, datePrev);
+		
+		
+		return ResponseEntity.status(OK).body(url);
 	}
 	
 	

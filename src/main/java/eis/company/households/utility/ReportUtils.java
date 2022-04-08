@@ -65,5 +65,44 @@ public class ReportUtils {
 				      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
 		return url;
 	}
+	
+@SuppressWarnings("unused")
+private String makeUrlReport(String pathReport, String numUspd, String dateFrom, String dateTo) {
+		
+		StringBuilder sbUrl = new StringBuilder("http://");
+		sbUrl.append(env.getProperty("jasperreport.ip_port"));//application.properties
+		sbUrl.append("/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=");
+		sbUrl.append(pathReport); 
+		sbUrl.append(env.getProperty("jasperreport.type.report"));//application.properties
+		sbUrl.append("&j_username=");
+		sbUrl.append(env.getProperty("jasperreport.username"));//application.properties
+		sbUrl.append("&j_password=");
+		sbUrl.append(env.getProperty("jasperreport.password"));//application.properties
+		
+		StringBuilder sbParam = new StringBuilder();
+		sbParam.append("&dateBegin=");
+		sbParam.append(dateFrom);
+		sbParam.append("&dateEnd=");
+		sbParam.append(dateTo);
+		
+		if(!numUspd.equals("0")) {
+		  sbParam.append("&numUspd=");
+		  sbParam.append(numUspd);
+		}
+		
+		return sbUrl.append(sbParam).toString();
+	}
+
+/**
+ * Resource URL preparation
+ * 
+ */
+@SuppressWarnings("unused")
+public String prepUrl(String pathReport, String numUspd, String dateFrom, String dateTo) {
+			
+	String url = Optional.ofNullable(makeUrlReport(pathReport, numUspd, dateFrom, dateTo))
+			      .orElseThrow(()->new ResourceNotFoundException("Url is invalid"));
+	return url;
+}    
 
 }

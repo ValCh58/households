@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.restcontroller.ReportsAndStatistics;
 import eis.company.households.service.ReportsService;
+import eis.company.households.utility.ReportUtils;
 
 
 @DisplayName(value = "Controller \"/user/count_water/{id}\"")
@@ -34,13 +35,15 @@ class ReportsAndStatisticTest3 {
 	
 	@MockBean
 	ReportsService reportsService;
+	@MockBean
+	ReportUtils reportUtils;
 	
 	@Autowired
 	MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
-         this.mockMvc = MockMvcBuilders.standaloneSetup(new ReportsAndStatistics(reportsService)).build();
+         this.mockMvc = MockMvcBuilders.standaloneSetup(new ReportsAndStatistics(reportsService, reportUtils)).build();
     }
     
 
