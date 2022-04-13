@@ -86,6 +86,33 @@
 		  })
 	  });
 
+
+
+   /**
+    **************Calling the page of the report flow Hot Energy**************************************
+    */
+    $(function(){
+       $('#btn-report-flow').click(function(){
+      	  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
+  		  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
+  		  
+  		  $.ajax({
+  			  "type": "get",
+  		      "url": '/user/flow_HotEnergy_report_pdf/numUspd/'+numUspd+'/dateFrom/'+dateFrom,
+  		      "dataType": "text",
+  		      "cache": "false",
+  		      "data": "$(this).serialize()",
+  		       success: function(data){
+  		       	window.location.href = data;//Redirect to report page
+                 },
+  		      error: function(jqXHR, textStatus, errorThrown){
+  			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+  			   }
+  		  });
+        })
+    });   
+   
+
    /**
    * GET фильтрации для "flowreporttablehot"
    */

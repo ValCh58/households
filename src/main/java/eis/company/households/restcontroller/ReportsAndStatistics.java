@@ -61,10 +61,10 @@ public class ReportsAndStatistics {
 	
 	/**
 	 * Print of PDF reports
-	 * Calling the page of the report of flow water cool 
+	 * Calling the page of the report of flow cold water
 	 */
 	@GetMapping(value = "/user/flow_water_report_pdf/numUspd/{numUspd}/dateFrom/{dateFrom}")
-	public ResponseEntity<String> getRawDataSrvForPDF(@PathVariable("numUspd") String numUspd,
+	public ResponseEntity<String> getColWaterForPDF(@PathVariable("numUspd") String numUspd,
 			                                             @PathVariable("dateFrom") LocalDate dateFrom) {
 		String numuspd = "%25";
 		String url = null;
@@ -74,7 +74,66 @@ public class ReportsAndStatistics {
        	String dateCurr = dateFrom.toString().substring(0, 7) + "%25";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%25";
 		url = reportUtils.prepUrl("/reports/Housing/user/FlowColdWater&output=", numuspd, dateCurr, datePrev);
+			
+		return ResponseEntity.status(OK).body(url);
+	}
+	
+	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of flow hot water 
+	 */
+	@GetMapping(value = "/user/flow_hot_water_report_pdf/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public ResponseEntity<String> getHotWaterForPDF(@PathVariable("numUspd") String numUspd,
+			                                             @PathVariable("dateFrom") LocalDate dateFrom) {
+		String numuspd = "%25";
+		String url = null;
+       	if(!numUspd.equals("0")) {
+       	   	numuspd = numUspd + "%25";
+       	}
+       	String dateCurr = dateFrom.toString().substring(0, 7) + "%25";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%25";
+		url = reportUtils.prepUrl("/reports/Housing/user/FlowHotWater&output=", numuspd, dateCurr, datePrev);
 		
+		return ResponseEntity.status(OK).body(url);
+	}
+	
+	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of El Energy 
+	 */
+	@GetMapping(value = "/user/flow_ElEnergy_report_pdf/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public ResponseEntity<String> getElEnergyForPDF(@PathVariable("numUspd") String numUspd,
+			                                             @PathVariable("dateFrom") LocalDate dateFrom) {
+		String numuspd = "%25";
+		String url = null;
+       	if(!numUspd.equals("0")) {
+       	   	numuspd = numUspd + "%25";
+       	}
+       	String dateCurr = dateFrom.toString().substring(0, 7) + "%25";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%25";
+		url = reportUtils.prepUrl("/reports/Housing/user/FlowElEnergy&output=", numuspd, dateCurr, datePrev);
+		
+		return ResponseEntity.status(OK).body(url);
+	}
+	
+	
+	/**
+	 * Print of PDF reports
+	 * Calling the page of the report of Hot Energy 
+	 */
+	@GetMapping(value = "/user/flow_HotEnergy_report_pdf/numUspd/{numUspd}/dateFrom/{dateFrom}")
+	public ResponseEntity<String> getHotEnergyForPDF(@PathVariable("numUspd") String numUspd,
+			                                             @PathVariable("dateFrom") LocalDate dateFrom) {
+		String numuspd = "%25";
+		String url = null;
+       	if(!numUspd.equals("0")) {
+       	   	numuspd = numUspd + "%25";
+       	}
+       	String dateCurr = dateFrom.toString().substring(0, 7) + "%25";
+		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%25";
+		url = reportUtils.prepUrl("/reports/Housing/user/FlowHotEnergy&output=", numuspd, dateCurr, datePrev);
 		
 		return ResponseEntity.status(OK).body(url);
 	}
