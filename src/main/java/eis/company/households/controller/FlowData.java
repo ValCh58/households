@@ -23,6 +23,23 @@ public class FlowData {
 		super();
 		this.reportsService = reportsService;
 	}
+	
+	
+	/**
+	 * Chart for cold water
+	 * 
+	 */
+	@GetMapping(value="/user/ChartColdWater")
+	public ModelAndView makeChartColdWater() {
+		LocalDate dateFrom = LocalDate.now();
+		
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "1");
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
+		modelAndView.setViewName("user/ChartColdWater");
+		return modelAndView;
+		
+	}
 
 
 	/**
@@ -79,8 +96,8 @@ public class FlowData {
 	public ModelAndView getReportFlowElEn() {
 		LocalDate dateFrom = LocalDate.now();
 		ModelAndView modelAndView = new ModelAndView();
-		List<ElEnFlowDTO> lisElEnReport = reportsService.getElEnFlowDto("%", dateFrom);
-		modelAndView.addObject("lisElEnReport", lisElEnReport);
+		List<ElEnFlowDTO> listElEnReport = reportsService.getElEnFlowDto("%", dateFrom);
+		modelAndView.addObject("listElEnReport", listElEnReport);
 		modelAndView.setViewName("user/flow_el_en_report");
 		return modelAndView;
 	}
