@@ -29,14 +29,14 @@ public class FlowData {
 	 * Chart for cold water
 	 * 
 	 */
-	@GetMapping(value="/user/ChartColdWater")
+	@GetMapping(value="/user/ChartColdWater1")
 	public ModelAndView makeChartColdWater() {
 		LocalDate dateFrom = LocalDate.now();
 		
 		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "1");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
-		modelAndView.setViewName("user/ChartColdWater");
+		modelAndView.setViewName("user/ChartColdWater1");
 		return modelAndView;
 		
 	}
