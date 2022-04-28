@@ -3,100 +3,70 @@
 <head>
    <meta charset="utf-8">
    <title>Диаграмма по расходу холодной воды</title>
+    
+   <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+   
 </head>
 <body>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<div class="container">
+     <div class="justify-content-center  align-items-center" style="margin-top: 3px">
+        <div class="col text-nowrap">
+			<p style="text-align: center;font-size: 1.4em;">Диаграмма по расходу холодной воды</p>
+			<div th:insert="~{fragments/filter_flow_chart :: fr_filter_flow_chart}"></div>
+		</div>
+	 </div>		
+</div>
+
+<div class="container" id="main_div"></div>
+
 <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
-
-
-<div class="container" id="main_div">
-    <!-- canvas id="myChart" width="600" height="200"></canvas -->
-   
-</div>
+<script th:src="@{/js/mychart.js}"></script>
 
 <script  th:inline="javascript">
-
 var listFlow = [[${listWaterFlowReport}]];//Fucking editor!!!
-
-var ret = 0;
+var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
 var i = 0;
 var arrChartMain = [];
 var arrChart = [];
+const seriesLen = 40;//Длинна серии баров
 
-_.each(listFlow, function(list) {
-		i++; 
-		//if(i < 60){
-		 arrChartMain[i]=[list.diffCountW];
-		 var str = list.numAcnt;
-		 arrChart[i]=[str];
-		 //}else
-		if(i == 60){
-			ret = makeCharts(ret);//Каждые 60 измерений
-			arrChartMain = [];
-			arrChart = [];
-            i = 0;
-			}
-	   });
-	   
-if(i < 60 && i != 0){
-	ret = makeCharts(ret);//Последнее измерение при i < 60
-}	
-
-function makeCharts(idx){
-	addCanvas(idx);
-	addChart(idx);
-	return (++idx);
-}
-
-
-function addCanvas(idx){
-	var div = document.getElementById("main_div");
-	var canvas = document.createElement('canvas');
-	canvas.setAttribute('id', 'myChart'+idx);
-	canvas.setAttribute('width', '600');
-	canvas.setAttribute('height', '200');
-	div.appendChild(canvas);
-	
-}
-
-function addChart(idx){
-const ctx = document.getElementById('myChart'+idx).getContext('2d');
-const myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: arrChart,
-        datasets: [{
-            label: '# of Votes',
-            data: arrChartMain,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-    	//indexAxis: 'y',
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
+/**
+ * Сброс фильтрации
+ */
+$(function(){
+   $('#btn-del-filtr-flow').click(function(){
+	  location.reload();
+		  
+   });
 });
-}
+
+/**
+ * Фильтрация по дате 
+ *
+ */
+$(function(){ 
+   $("#btn-filtr-flow").click(function(){
+      $.get("/user/ChartColdWater1", function(data, status){
+        alert("status = " + status);
+        listFlow = data;
+        console.log("data - " + data);
+        console.log("listFlow - " + listFlow);
+      });
+   });
+});
+
+//console.log("listFlow - " + listFlow[5]);
+$("#datefrom").val(myDateNow());
+myChart();
+
+
 
 </script>
-
-
-
-
-
 </body>
 </html>

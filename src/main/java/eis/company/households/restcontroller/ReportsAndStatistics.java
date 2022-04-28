@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import eis.company.households.dto.AcntCountsDTO;
 import eis.company.households.dto.ColdWaterFlowDTO;
@@ -42,8 +43,7 @@ public class ReportsAndStatistics {
 	@GetMapping(value = "/user/count_water/{id}")
 	public ResponseEntity<List<AcntCountsDTO>> getTableAcntCounts(@PathVariable("id") Integer id) {
 		
-		return ResponseEntity.status(OK)
-				.body(reportService.getAcntCounts(id));
+		return ResponseEntity.status(OK).body(reportService.getAcntCounts(id));
     }
 	
 	
@@ -55,8 +55,7 @@ public class ReportsAndStatistics {
 	public ResponseEntity<List<HotCountFlowDTO>> reportFiltrHot(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return ResponseEntity.status(OK)
-				.body(reportService.getHotCountDto(num, dateFrom));
+		return ResponseEntity.status(OK).body(reportService.getHotCountDto(num, dateFrom));
 	}
 	
 	/**
@@ -136,6 +135,16 @@ public class ReportsAndStatistics {
 		url = reportUtils.prepUrl("/reports/Housing/user/FlowHotEnergy&output=", numuspd, dateCurr, datePrev);
 		
 		return ResponseEntity.status(OK).body(url);
+	}
+	
+	
+	/**
+	 * REST Фильтрация для построения диаграммы по холодной воде
+	 * 
+	 */
+	@GetMapping(value="/user/ChartColdWater1/dateFrom/{dateFrom}")
+	public  ResponseEntity<List<ColdWaterFlowDTO>> makeChartColdWater(@PathVariable("dateFrom") LocalDate dateFrom){
+		return ResponseEntity.status(OK).body(reportService.getWaterFlowDto("%", dateFrom, "1000", "1"));
 	}
 	
 	
