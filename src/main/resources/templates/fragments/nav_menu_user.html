@@ -8,7 +8,8 @@
 		<!-- Navigation -->
 		<nav class="navbar navbar-expand-lg navbar-light bg-light static-top">
 			<div class="container">
-				<a class="navbar-brand" th:href="@{/user/home_user}">Объекты УК</a>
+		    	<a class="navbar-brand" th:href="@{/user/home_user}">Объекты УК</a>
+		<!--  input type="text" class="form-control" id="dateFrom"/ -->
 				<button class="navbar-toggler" type="button" data-toggle="collapse"
 					data-target="#navbarUser" aria-controls="navbarUser"
 					aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +46,7 @@
 				          Диаграммы по расходу
 				          </button>  
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonReport">
-						     <li><a class="dropdown-item" th:href="@{/user/ChartColdWater1}">Диаграмма по расходу холодной воды</a></li>
+						     <li><a class="dropdown-item" id="par1" th:href="@{/user/ChartColdWater1}">Диаграмма по расходу холодной воды</a></li>
 						     <!-- li><a class="dropdown-item" th:href="@{/user/flow_water_hot_report}">Расход горячей воды</a></li-->
 						     <!-- li><a class="dropdown-item" th:href="@{/user/flow_el_en_report}">Расход электро энергии</a></li-->
 						     <!-- li><a class="dropdown-item" th:href="@{/user/flow_hot_report}">Расход тепловой энергии</a></li-->
@@ -60,5 +61,7 @@
      		</div>
 		</nav>
 	</div>
+	
+	
 </body>
 </html>

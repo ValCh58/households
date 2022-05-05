@@ -34,7 +34,17 @@ var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
 var i = 0;
 var arrChartMain = [];
 var arrChart = [];
+//var chartObj = [];
+var dateFrom ='';
 const seriesLen = 40;//Длинна серии баров
+
+$(document).ready(function(){
+	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();	
+	$('#datefrom').val(dateFrom);
+	myChart();
+	//console.log("dateFrom - "+dateFrom);
+	
+});
 
 /**
  * Сброс фильтрации
@@ -42,7 +52,9 @@ const seriesLen = 40;//Длинна серии баров
 $(function(){
    $('#btn-del-filtr-flow').click(function(){
 	  location.reload();
-		  
+	  dateFrom = myDateNow();
+	  $('#datefrom').val(dateFrom);
+	  //destroyChart();
    });
 });
 
@@ -51,21 +63,23 @@ $(function(){
  *
  */
 $(function(){ 
-   $("#btn-filtr-flow").click(function(){
-      $.get("/user/ChartColdWater1", function(data, status){
-        alert("status = " + status);
-        listFlow = data;
-        console.log("data - " + data);
-        console.log("listFlow - " + listFlow);
-      });
+  $("#btn-filtr-flow").click(function(){
+	$("#btn-filtr-flow").prop( "disabled", true );  
+	var in_canvas = document.getElementById('main_div');
+	//destroyChart();
+	while (in_canvas.hasChildNodes()) {
+   	       in_canvas.removeChild(in_canvas.lastChild);
+   	}
+   	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+	$('#datefrom').val(dateFrom);
+	$.get("/user/ChartColdWater1/dateFrom/" + dateFrom, function(data, status){
+      listFlow = data;
+      myChart();
+      $("#btn-filtr-flow").prop( "disabled", false); 
+    });
+       
    });
 });
-
-//console.log("listFlow - " + listFlow[5]);
-$("#datefrom").val(myDateNow());
-myChart();
-
-
 
 </script>
 </body>
