@@ -30,20 +30,13 @@
 
 <script  th:inline="javascript">
 var listFlow = [[${listWaterFlowReport}]];//Fucking editor!!!
-var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
-var i = 0;
-var arrChartMain = [];
-var arrChart = [];
-//var chartObj = [];
 var dateFrom ='';
 const seriesLen = 40;//Длинна серии баров
 
 $(document).ready(function(){
 	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();	
 	$('#datefrom').val(dateFrom);
-	myChart();
-	//console.log("dateFrom - "+dateFrom);
-	
+	myChart('Расход холодной воды', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)');
 });
 
 /**
@@ -54,7 +47,7 @@ $(function(){
 	  location.reload();
 	  dateFrom = myDateNow();
 	  $('#datefrom').val(dateFrom);
-	  //destroyChart();
+	  
    });
 });
 
@@ -66,20 +59,25 @@ $(function(){
   $("#btn-filtr-flow").click(function(){
 	$("#btn-filtr-flow").prop( "disabled", true );  
 	var in_canvas = document.getElementById('main_div');
-	//destroyChart();
-	while (in_canvas.hasChildNodes()) {
+	
+	destroyChart();
+	while (in_canvas.hasChildNodes()) {//Удаление canvas
    	       in_canvas.removeChild(in_canvas.lastChild);
    	}
+   	
    	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
 	$('#datefrom').val(dateFrom);
+		
 	$.get("/user/ChartColdWater1/dateFrom/" + dateFrom, function(data, status){
       listFlow = data;
-      myChart();
+      myChart('Расход холодной воды', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)');
       $("#btn-filtr-flow").prop( "disabled", false); 
     });
-       
+    
    });
 });
+
+
 
 </script>
 </body>

@@ -1,33 +1,50 @@
+var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
+var i = 0;
+var arrChartMain = [ [ [] ] ];
+var arrChart = [ [ [] ] ];
+var chartObj = [];
+
+/////////////////
+//var label = 'Расход холодной воды';
+//var backColor = 'rgba(1, 1, 255, 0.4)';
+//var borderColor = 'rgba(1, 1, 255, 1)';
+////////////////
+
 /**
 * Удаление all myCharts
 */
 function destroyChart(){
-	var j = chartObj.lenght;
+	var j = chartObj.length;
 	var i;
 	for(i = 0; i < j; i++){
-		chratObj[i].chart.destroy();
+		chartObj[i].destroy();
 	}
 	chartObj.lenght = 0;
+	arrChartMain[0].length = 0;
+	arrChart[0].length = 0;
 }
 
 
 
-function myChart(){
+function myChart(label, backColor, borderColor){
+	
+ arrChartMain[0][ret] = new Array();
+ arrChart[0][ret] = new Array();
 
 /**
  * Заполнение данными массивов для построения диаграммы
  */
 _.each(listFlow, function(list) {
-		i++; 
-		arrChartMain[i] = list.diffCountW;
+	    arrChartMain[0][ret][i] = list.diffCountW;
 		var str = list.numAcnt;
-		arrChart[i] = str;
+		arrChart[0][ret][i] = str;
 		if(i == seriesLen){
-			ret = makeCharts(ret);//Каждые 40 измерений из таблицы данных
-			//arrChartMain.lenght = 0;
-			//arrChart.lenght = 0;
-            i = 0;
-		}
+			ret = makeCharts(ret, arrChart[0][ret], arrChartMain[0][ret], label, backColor, borderColor);//Каждые 40 измерений из таблицы данных
+		    i = 0;
+		    arrChartMain[0][ret] = new Array();
+		    arrChart[0][ret] = new Array();
+        }
+		i++;
 });
 	   
 /**
@@ -36,22 +53,19 @@ _.each(listFlow, function(list) {
 */
    if(i <= seriesLen && i != 0){
 	   for(j=(++i); j <= seriesLen; j++){
-		   arrChartMain[j] = 0;
-		   arrChart[j] = "";
+		   arrChartMain[0][ret][j] = 0;
+		   arrChart[0][ret][j] = "";
 	   }
-	   makeCharts(ret);//Последнее измерение при i < 40
+	   makeCharts(ret, arrChart[0][ret], arrChartMain[0][ret], label, backColor, borderColor);//Последнее измерение при i < 40
 	   ret = 0;
 	   i = 0;
-	   //arrChartMain.lenght = 0;
-	   //arrChart.lenght = 0;
    } 	
 }
 
 
-function makeCharts(idx){
+function makeCharts(idx, arrChart, arrChartMain, label, backColor, borderColor){
 	addCanvas(idx);
-	addChart(idx);
-	//chartObj.push(addChart(idx));
+	chartObj[idx] = addChart(idx, arrChart, arrChartMain, label, backColor, borderColor);
 	return (++idx);
 }
 
@@ -65,7 +79,7 @@ function addCanvas(idx){
 	div.appendChild(canvas);
 }
 
-function addChart(idx){
+function addChart(idx, arrayLabel, arrayData, label, backColor, borderColor){
 var ctx = null;
 var myChart = null;
 
@@ -73,29 +87,21 @@ ctx = document.getElementById('myChart'+idx).getContext('2d');
 myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: arrChart,
+        labels: arrayLabel,
         datasets: [{
-            label: 'Расход холодной воды',
-            data: arrChartMain,
+            label: label,
+            data: arrayData,
             backgroundColor: [
-                'rgba(1, 1, 255, 0.4)'
+                backColor
             ],
             borderColor: [
-                'rgba(1, 1, 255, 1)'
+                borderColor
             ],
             borderWidth: 1
         }]
     },
     options: {
-	    plugins: {
-           tooltip: {
-              enabled: true,
-              usePointStyle: true,
-           callbacks: { 
-              title: (data) => {return data[0].parsed.x} 
-        },
-      },
-    },
+	    
        scales: {
         	x: {
               },
