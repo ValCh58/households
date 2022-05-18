@@ -25,7 +25,7 @@ public class FlowData {
 	}
 	
 	
-	/**
+	/** **********************************************************************************************************
 	 * Chart for cold water
 	 * 
 	 */
@@ -40,7 +40,49 @@ public class FlowData {
 		return modelAndView;
 		
 	}
-
+	
+	/**
+	 * Chart for cold water
+	 * 
+	 */
+	@GetMapping(value="/user/ChartHotWater")
+	public ModelAndView makeChartHotWater() {
+		LocalDate dateFrom = LocalDate.now();
+		List<ColdWaterFlowDTO> listWaterFlowReport = reportsService.getWaterFlowDto("%", dateFrom, "1000", "2");
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("listWaterFlowReport", listWaterFlowReport);
+		modelAndView.setViewName("user/ChartHotWater");
+		return modelAndView;
+	}
+	
+	/**
+	 * Chart for hot energy
+	 * @return ModelAndView
+	 */
+	@GetMapping(value="/user/ChartHotEn")
+	public ModelAndView makeChartHotEn() {
+		LocalDate dateFrom = LocalDate.now();
+	  	ModelAndView modelAndView = new ModelAndView();
+		List<HotCountFlowDTO> listHotFlowReport = reportsService.getHotCountDto("%", dateFrom);
+		modelAndView.addObject("listHotFlowReport", listHotFlowReport);
+		modelAndView.setViewName("user/ChartHotEn");
+		return modelAndView;
+	}
+	
+	/**
+	 * Chart for расходу Эл. энергии
+	 * @return ModelAndView
+	 */
+	@GetMapping(value="/user/ChartElEn")
+	public ModelAndView makeChartElEn() {
+		LocalDate dateFrom = LocalDate.now();
+		ModelAndView modelAndView = new ModelAndView();
+		List<ElEnFlowDTO> listElEnReport = reportsService.getElEnFlowDto("%", dateFrom);
+		modelAndView.addObject("listElEnReport", listElEnReport);
+		modelAndView.setViewName("user/ChartElEn");
+		return modelAndView;
+	}
+    //************************************************************************************************************ 
 
 	/**
 	 * Отчет по расходу тепловой энергии

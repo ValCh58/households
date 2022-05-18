@@ -4,11 +4,6 @@ var arrChartMain = [ [ [] ] ];
 var arrChart = [ [ [] ] ];
 var chartObj = [];
 
-/////////////////
-//var label = 'Расход холодной воды';
-//var backColor = 'rgba(1, 1, 255, 0.4)';
-//var borderColor = 'rgba(1, 1, 255, 1)';
-////////////////
 
 /**
 * Удаление all myCharts
@@ -35,7 +30,7 @@ function myChart(label, backColor, borderColor){
  * Заполнение данными массивов для построения диаграммы
  */
 _.each(listFlow, function(list) {
-	    arrChartMain[0][ret][i] = list.diffCountW;
+	    arrChartMain[0][ret][i] = list.diffCountW == undefined ? list.diffGKalor : list.diffCountW;
 		var str = list.numAcnt;
 		arrChart[0][ret][i] = str;
 		if(i == seriesLen){

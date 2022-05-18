@@ -138,7 +138,7 @@ public class ReportsAndStatistics {
 	}
 	
 	
-	/**
+	/** ********************************************************
 	 * REST Фильтрация для построения диаграммы по холодной воде
 	 * 
 	 */
@@ -147,9 +147,28 @@ public class ReportsAndStatistics {
 		return ResponseEntity.status(OK).body(reportService.getWaterFlowDto("%", dateFrom, "1000", "1"));
 	}
 	
-	
+	/**
+	 * REST Фильтрация для построения диаграммы по горячей воде
+	 * 
+	 */
+	@GetMapping(value="/user/ChartHotWater/dateFrom/{dateFrom}")
+	public  ResponseEntity<List<ColdWaterFlowDTO>> makeChartHotWater(@PathVariable("dateFrom") LocalDate dateFrom){
+		return ResponseEntity.status(OK).body(reportService.getWaterFlowDto("%", dateFrom, "1000", "2"));
+	}
 	
 	/**
+	 * REST Фильтрация для построения диаграммы по расходу тепловой энергии 
+	 * 
+	 */
+	@GetMapping(value="/user/ChartHotEn/dateFrom/{dateFrom}")
+	public ResponseEntity<List<HotCountFlowDTO>> makeChartHotEl(@PathVariable("dateFrom") LocalDate dateFrom){
+		return ResponseEntity.status(OK).body(reportService.getHotCountDto("%", dateFrom));
+	}
+	
+	
+	
+	
+	/** **********************************************************
 	 * REST Фильтрация данных по расходу холодной воды 
 	 * 
 	 */
@@ -157,11 +176,10 @@ public class ReportsAndStatistics {
 	public ResponseEntity<List<ColdWaterFlowDTO>> reportFiltrCoolWater(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return ResponseEntity.status(OK)
-				.body(reportService.getWaterFlowDto(num, dateFrom, "1000", "1"));
+		return ResponseEntity.status(OK).body(reportService.getWaterFlowDto(num, dateFrom, "1000", "1"));
 	}
 	
-	/**
+	/** 
 	 * REST Фильтрация данных по расходу горячей воды 
 	 * 
 	 */
@@ -169,8 +187,7 @@ public class ReportsAndStatistics {
 	public ResponseEntity<List<ColdWaterFlowDTO>> reportFiltrHotWater(@PathVariable("numUspd") String numUspd, 
 			                                           @PathVariable("dateFrom") LocalDate dateFrom){
 		String num = numUspd.indexOf("0")==0 ? "%" : numUspd + "%";
-		return ResponseEntity.status(OK)
-				.body(reportService.getWaterFlowDto(num, dateFrom, "1000", "2"));
+		return ResponseEntity.status(OK).body(reportService.getWaterFlowDto(num, dateFrom, "1000", "2"));
 	}
 	
 	/**
