@@ -165,6 +165,16 @@ public class ReportsAndStatistics {
 		return ResponseEntity.status(OK).body(reportService.getHotCountDto("%", dateFrom));
 	}
 	
+	/**
+	 * REST Фильтрация данных по расходу эл энергии 
+	 * 
+	 */
+	@GetMapping(value="/user/ChartElEn/dateFrom/{dateFrom}")
+	public ResponseEntity<List<ElEnFlowDTO>> makeChartElEn(@PathVariable("dateFrom") LocalDate dateFrom){
+		String num = "%";
+		return ResponseEntity.status(OK).body(reportService.getElEnFlowDto(num, dateFrom));
+	}
+	
 	
 	
 	

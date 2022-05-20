@@ -38,7 +38,7 @@ const seriesLen = 39;//Длинна серии баров 40/0-39
 $(document).ready(function(){
 	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();	
 	$('#datefrom').val(dateFrom);
-	myChart('Тариф - T1', 'Тариф - T2', 'rgba(111, 1, 5, 0.4)', 'rgba(111, 1, 5, 1)', 'rgba(1, 111, 2, 0.4)', 'rgba(1, 111, 2, 1)');
+	myChart('Тариф - T1', 'Тариф - T2', 'rgba(200, 151, 2, 0.4)', 'rgba(111, 111, 2, 1)', 'rgba(1, 111, 2, 0.4)', 'rgba(1, 111, 2, 1)');
 });
 
 /**
@@ -57,7 +57,7 @@ $(function(){
 /**
  * Фильтрация по дате 
  *
- 
+ */
 $(function(){ 
   $("#btn-filtr-flow").click(function(){
 	$("#btn-filtr-flow").prop( "disabled", true );  
@@ -71,16 +71,16 @@ $(function(){
    	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
 	$('#datefrom').val(dateFrom);
 		
-	$.get("/user/ChartColdWater1/dateFrom/" + dateFrom, function(data, status){
+	$.get("/user/ChartElEn/dateFrom/" + dateFrom, function(data, status){
       listFlow = data;
-      myChart('Расход эл. энергии', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)');
+      myChart('Тариф - T1', 'Тариф - T2', 'rgba(200, 151, 2, 0.4)', 'rgba(111, 111, 2, 1)', 'rgba(1, 111, 2, 0.4)', 'rgba(1, 111, 2, 1)');
       $("#btn-filtr-flow").prop( "disabled", false); 
     });
     
    });
 });
 
-*/
+
 
 /**
  * Вывод текущей даты в формате YYYY-MM-DD 

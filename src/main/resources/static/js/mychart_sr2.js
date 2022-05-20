@@ -97,26 +97,26 @@ myChart = new Chart(ctx, {
     data: {
         labels: arrayLabel,
         datasets: [{
+	  //barPercentage: 0.5,
+      ///barThickness: 10,
+      //maxBarThickness: 12,
+      minBarLength: 2,
             label: lab1,
             data: arrayDataT1,
-            backgroundColor: [
-                backColorT1
-            ],
-            borderColor: [
-                borderColorT1
-            ],
+            backgroundColor: [ backColorT1 ],
+            borderColor: [ borderColorT1 ],
             borderWidth: 1
             
         },
         {
+	  //barPercentage: 0.5,
+      //barThickness: 10,
+      //maxBarThickness: 12,
+      minBarLength: 2,
             label: lab2,
             data: arrayDataT2,
-            backgroundColor: [
-                backColorT2
-            ],
-            borderColor: [
-                borderColorT2
-            ],
+            backgroundColor: [ backColorT2 ],
+            borderColor: [ borderColorT2 ],
             borderWidth: 1
         }
         ]
@@ -126,10 +126,13 @@ myChart = new Chart(ctx, {
        scales: {
 		         
         	x: {
+        	grid: {offset: false},
+	        ticks: {minRotation: 75}, // angle in degrees
+            stacked: true 	
               },
             y: {
                 beginAtZero: true,
-                
+                stacked: true
                }
         }
     }
