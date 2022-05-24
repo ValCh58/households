@@ -33,6 +33,7 @@
 								<th>Время снятия <br>показаний</th>
 								<th>Тип <br>счетчика</th>
 								<th>Номер <br>канала</th>
+								<th>Делитель</th>
 							</tr>
 						</thead>
 						<tbody style="text-align: center;">
@@ -45,6 +46,7 @@
 								<td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy HH:mm:ss')}"></td>
 								<td th:text="${cnt.typeCount}==1?'СХВ':(${cnt.typeCount}==2?'СГВ':'*')"></td>
 								<td th:text="${cnt.numCh}"></td>
+								<td th:text="${cnt.numRat}"></td>
 							</tr>
 						</tbody>
 					</table>

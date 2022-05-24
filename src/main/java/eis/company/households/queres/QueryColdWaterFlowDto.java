@@ -18,24 +18,24 @@ public class QueryColdWaterFlowDto {
 	private List<ColdWaterFlowDTO> coldWaterFlowDTO = new ArrayList<>();
 	@PersistenceContext(name="housingEntityManager") private EntityManager em;
 	
-	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, String ratio, String typeCount){
+	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, /*String ratio,*/ String typeCount){
 		
 		coldWaterFlowDTO.clear();
 		
 		@SuppressWarnings("unchecked")
 		List<Tuple> list = em.createNativeQuery(
 				  "select curr.time_stamp as timeStamp, curr.address_loc as addressLoc, curr.num_acnt as numAcnt, "
-				  + "curr.name_count as nameCount, (curr.count_w/:ratio) as countW, (prev.count_w/:ratio)  as prevCountW, \r\n"
-				  + "IF(period_diff(date_format(curr.date_expire, \"%Y%m\"), date_format(curr.time_stamp, \"%Y%m\")) > 0, (curr.count_w - prev.count_w)/:ratio, '0') as diffCountW, "
+				  + "curr.name_count as nameCount, (curr.count_w/curr.num_rat) as countW, (prev.count_w/prev.num_rat)  as prevCountW, \r\n"
+				  + "IF(period_diff(date_format(curr.date_expire, \"%Y%m\"), date_format(curr.time_stamp, \"%Y%m\")) > 0, (curr.count_w - prev.count_w)/prev.num_rat, '0') as diffCountW, "
 				  + "curr.serial_num as serialNum, curr.date_expire as dateExpire, "
 				  + "curr.factory_number_uspd as factoryNumberUspd, curr.num_ch as numCh \r\n"
 				  + " from \r\n"
-				  + "(SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch  \r\n"
+				  + "(SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch, num_rat  \r\n"
 				  + " FROM housing.report_all  \r\n"
 				  + " where  factory_number_uspd like :factoryNumberUspd and type_count = :typeCount and time_stamp like :timeStamp \r\n"
 				  + " group by factory_number_uspd\r\n"
 				  + " order by factory_number_uspd) curr left join \r\n"
-				  + " (SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch  \r\n"
+				  + " (SELECT max(time_stamp) as time_stamp, address_loc, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, num_ch, num_rat  \r\n"
 				  + " FROM housing.report_all  \r\n"
 				  + " where  factory_number_uspd like :factoryNumberUspd and type_count = :typeCount and time_stamp like :timeStampPrev \r\n"
 				  + " group by factory_number_uspd\r\n"
@@ -44,7 +44,7 @@ public class QueryColdWaterFlowDto {
 				Tuple.class).setParameter("factoryNumberUspd", factoryNumberUspd)
 				            .setParameter("timeStamp", timeStamp)
 				            .setParameter("timeStampPrev", timeStampPrev)
-				            .setParameter("ratio", ratio)
+				            //.setParameter("ratio", ratio)
 				            .setParameter("typeCount", typeCount)
 				            .getResultList();
 				

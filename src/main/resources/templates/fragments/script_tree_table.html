@@ -129,6 +129,19 @@ function reloadMyPage(){
 
 /*******************************************************************************/
  
+ $(function(){ 
+  $("#modalEditCount #counts-group").change(function(){
+	 var sel = $("input:radio[name=counts]:checked").val();
+     if(sel == '1' || sel == '2'){ 
+    	 $("#id_num_ch").prop( "disabled", false); 
+         } else {
+        	 $("#id_num_ch").prop( "disabled", true); 
+             }	 
+	  
+	 });
+  });
+ 
+ 
  /****редактирование счетчика***************************************************/
  function editCount(idObj){
 	
@@ -147,9 +160,11 @@ function reloadMyPage(){
         	$('#modalEditCount #nameCount').val(data.nameCount);
         	$('#modalEditCount #address').val(data.address);
         	$('#modalEditCount #num_ch').val(data.numCh);
+        	$('#modalEditCount #num_rat').val(data.numRat);
         	$('#modalEditCount #idLinkObject').val(data.idLinkObject);
         	$('input[name="counts"][value="' + data.typeCount + '"]').prop('checked', true);
 
+            //Номер канала
         	var ch = [1,2,3,4,5,6,7,8];
         	$('#id_num_ch option').remove();
         	$.each($(ch), function(idx, obj){
@@ -158,9 +173,17 @@ function reloadMyPage(){
         		}else{
         		   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_ch');
             	}
-            		
-               
-            	});
+            });
+            //Делитель
+        	var rat = [1,10,20,50,100,1000];
+        	$('#id_num_rat option').remove();
+        	$.each($(rat), function(idx, obj){
+        		if(obj == $('#modalEditCount #num_rat').val()){
+        		   $('<option/>', {value: obj, html: obj, selected: true}).appendTo('#id_num_rat');
+        		}else{
+        		   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_rat');
+            	}
+            });
         	
        }
     });
@@ -169,7 +192,13 @@ function reloadMyPage(){
 }
  $('#modalEditCount').on('shown.bs.modal', function() {
 	   $('#nameCount').focus();
-	 })
+	   var sel = $("input:radio[name=counts]:checked").val();
+	   if(sel == '1' || sel == '2'){ 
+	   	 $("#id_num_ch").prop( "disabled", false); 
+	     } else {
+	      	 $("#id_num_ch").prop( "disabled", true); 
+	       }	 
+ });
 
 /******* Запись состояния радиокнопки *********************/
  $("#counts-group input[type='radio']").change(function() {
@@ -179,6 +208,7 @@ function reloadMyPage(){
  /* Запись параметров счетчика в режиме редактирования*******/
  $("#modalFormEditCount").on("submit", function(){
 	$('#modalEditCount #num_ch').val($('#modalEditCount #id_num_ch :selected').val());
+	$('#modalEditCount #num_rat').val($('#modalEditCount #id_num_rat :selected').val());
 	 
 	$.ajax({
 		url: '/updateCounts',
@@ -402,13 +432,22 @@ $("#modalFormNewSrv").on("submit", function(){
 	        	$('#modalEditCount #dateExpire').val(data.dateExpire);
 	        	$('#modalEditCount #nameCount').val(data.nameCount);
 	        	$('#modalEditCount #address').val(data.address);
+	        	$('#modalEditCount #num_rat').val(data.numRat);
 	        	$('#modalEditCount #idLinkObject').val(idLinkObj);
-
+	        	
+                //Номер канала
 	        	var ch = [1,2,3,4,5,6,7,8];
 	        	$('#id_num_ch option').remove();
 	        	$.each($(ch), function(idx, obj){
 	        	   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_ch');
 	        	});
+	        	
+	        	//Делитель
+	        	var ch = [1,10,20,50,100,1000];
+	        	$('#id_num_rat option').remove();
+	        	$.each($(ch), function(idx, obj){
+	        		$('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_rat');
+	            });
 	       }
 	    });
 

@@ -49,20 +49,23 @@
                         </div>
                         
 						<div class="row">						
-                        <div class="form-group col-sm-8">
+                        <div class="form-group col-sm-6">
                             <label for="title">Серийный номер счетчика:</label>
                             <input value="" type="text" class="form-control" id="serialNum" name="serialNum"/>
                         </div>
                         
-                        <div class="form-group col-sm-4">
-                            <label for="id_num_ch">Номер канала:</label>
+                        <div class="form-group col-sm-3">
+                            <label for="id_num_ch">Канал:</label>
                             <select class="form-control" id="id_num_ch"></select>
                             <input value="" type="hidden" class="form-control" id="num_ch" name="numCh"/>
                         </div>
+                        <div class="form-group col-sm-3">
+                            <label for="id_num_rat">Делитель:</label>
+                            <select class="form-control" id="id_num_rat"></select>
+                            <input value="" type="hidden" class="form-control" id="num_rat" name="numRat"/>
                         </div>
-                           
-                        
-                        
+                        </div>
+                                               
                         <div class="row">
                         <div class="form-group col-sm-6">
                             <label for="title">Дата установки:</label>
@@ -78,9 +81,7 @@
                             <input value="" type="hidden" class="form-control" id="idLinkObject" name="idLinkObject"/>
                             <input value="" type="hidden" class="form-control" id="typeCount" name="typeCount"/>
                         </div>
-                        
-						
-                        
+                            
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>

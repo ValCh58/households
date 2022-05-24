@@ -414,3 +414,19 @@ TcpConnector RECEIVED: IDsession-1 gnipping
 
 [2022-03-29 10:31:58.194][INFO ][NioProcessor-2]
 TcpConnector sessionClosed: 1 total 10 byte(s)
+[2022-05-24 13:17:49.710][INFO ][NioProcessor-2]
+TcpConnector sessionCreated:1
+[2022-05-24 13:17:49.712][INFO ][NioProcessor-2]
+TcpConnector sessionOpened:1
+[2022-05-24 13:17:49.712][INFO ][http-nio-8088-exec-3]
+TcpConnector SEND: pinggnip
+[2022-05-24 13:17:49.716][INFO ][NioProcessor-2]
+TcpConnector SENT: pinggnip
+[2022-05-24 13:17:49.744][INFO ][NioProcessor-2]
+TcpConnector RECEIVED: IDsession-1 gnipping
+
+[2022-05-24 13:17:49.745][INFO ][NioProcessor-2]
+Принято сообщение: gnipping
+
+[2022-05-24 13:17:49.745][INFO ][NioProcessor-2]
+TcpConnector sessionClosed: 1 total 10 byte(s)

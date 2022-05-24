@@ -80,9 +80,12 @@ public class Counts implements Serializable {
     
     @Column(nullable=false, length=255)
     private String address;
-    
+    //Номер канала
     @Column(name="num_ch")
     private int numCh;
+    //Делитель импулсов
+    @Column(name="num_rat")
+    private int numRat;
     
     /*** Counts >-------> Person_acnt ***/
     @ManyToOne
@@ -117,8 +120,18 @@ public class Counts implements Serializable {
      * @return the current value of numCh
      */
     
+    
+    
     public int getNumCh() {
 		return numCh;
+	}
+
+	public int getNumRat() {
+		return numRat;
+	}
+
+	public void setNumRat(int numRat) {
+		this.numRat = numRat;
 	}
 
 	public void setNumCh(int numCh) {

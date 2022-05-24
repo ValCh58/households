@@ -18,4 +18,5 @@ public class CountWaterDTO {
 	private LocalDateTime timeStamp;
 	private int typeCount;
 	private int numCh;
+	private int numRat;
 }

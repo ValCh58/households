@@ -22,7 +22,7 @@ public class QueryCountsDto {
 	TypedQuery<Tuple> q = em.createQuery(
             "SELECT c.idCounts as idCounts, c.serialNum as serialNum, "
             + "c.datePlug as datePlug, c.dateExpire as dateExpire, c.nameCount as nameCount, c.address as address, "
-            + "c.numCh as numCh, c.typeCount as typeCount"
+            + "c.numCh as numCh, c.numRat as numRat, c.typeCount as typeCount"
             + " FROM counts c where c.idCounts = :id", Tuple.class).setParameter("id", id);
 	
 	Optional<Tuple> counts = Optional.ofNullable(q.getSingleResult());
@@ -39,6 +39,7 @@ public class QueryCountsDto {
 		                           (String)t.get("nameCount"), 
 		                           (String)t.get("address"),
 		                           (int)t.get("numCh"),
+		                           (int)t.get("numRat"),
 		                           (int)linkObj);
 	
 	return  cdto;

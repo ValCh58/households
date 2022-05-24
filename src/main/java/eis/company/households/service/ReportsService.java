@@ -85,7 +85,7 @@ public class ReportsService {
 		List<ColdWaterFlowDTO> listFlowWaterCold = Optional.ofNullable(qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
 				                                                                    dateCurr, 
 				                                                                    datePrev, 
-				                                                                    ratio, typeCount))
+				                                                                    /*ratio,*/ typeCount))
 				                                  .orElseThrow(()->new ResourceNotFoundException("Object list ColdWaterFlowDTO Not found")); 
 	return listFlowWaterCold;	
 	}

@@ -138,7 +138,7 @@ public class NodesController {
 	 */
 	@GetMapping(value = "nodeNewCount")
 	public ResponseEntity<CountsDTO> createCount() {
-		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 0);
+		CountsDTO countsDto = new CountsDTO(0, 0, "", LocalDate.now(), LocalDate.now(), "", "", 0, 1, 0);
 
 		return ResponseEntity.status(HttpStatus.OK).body(countsDto);
 	}

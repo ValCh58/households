@@ -21,6 +21,7 @@ public class CountsDTO {
     private String nameCount;
     private String address;
     private Integer numCh;
+    private Integer numRat;
     @Default
 	private int idLinkObject = 0;
 

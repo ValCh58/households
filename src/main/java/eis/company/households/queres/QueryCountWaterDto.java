@@ -26,14 +26,14 @@ public class QueryCountWaterDto {
 	countList.clear();	
 		
 	Query q = em.createNativeQuery("select b.id_count_water as idCountWater, b.factory_number_uspd as factoryNumberUspd, b.id_measuring as id_Measuring, \r\n"
-			+ " b.count_w as countW, b.time_stamp as timeStamp, b.type_count as typeCount, b.num_ch as numCh  from(\r\n"
+			+ " b.count_w as countW, b.time_stamp as timeStamp, b.type_count as typeCount, b.num_ch as numCh, b.numRat  from(\r\n"
 			+ " SELECT cw.id_count_water, cw.id_measuring, cw.factory_number_uspd, cw.count_w, cw.time_stamp, cw.num_ch,\r\n"
-			+ " a.id_uspd_dev, a.num_uspd_dev, a.type_count, a.num_ch as numCh \r\n"
+			+ " a.id_uspd_dev, a.num_uspd_dev, a.type_count, a.num_ch as numCh, a.num_rat as numRat \r\n"
 			+ " FROM eisystems.count_water cw \r\n"
 			+ " left join \r\n"
-			+ " (SELECT ud.id_uspd_dev, ud.num_uspd_dev, cnt.type_count, cnt.num_ch \r\n"
+			+ " (SELECT ud.id_uspd_dev, ud.num_uspd_dev, cnt.type_count, cnt.num_ch, cnt.num_rat \r\n"
 			+ " FROM housing.uspd_dev ud, housing.counts cnt\r\n"
-			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev) a\r\n"
+			+ " where type_count in(1,2) and ud.id_uspd_dev = cnt.id_uspd_dev)a \r\n"
 			+ " on a.num_uspd_dev = cw.factory_number_uspd and a.num_ch = cw.num_ch)b "
 			+ " where b.type_count <> 0 and b.count_w <> 0 order by b.time_stamp desc limit 1000;", Tuple.class);
 	
@@ -50,7 +50,8 @@ public class QueryCountWaterDto {
 				                   (BigDecimal) t.get("countW"),
 				                   ((Timestamp) t.get("timeStamp")).toLocalDateTime(), 
 				                   (t.get("typeCount") == null ? -1 : (int)t.get("typeCount")),
-				                   (int) t.get("numCh")
+				                   (int) t.get("numCh"),
+				                   (int) t.get("numRat")
 				                   );
 		countList.add(ad);
 	}

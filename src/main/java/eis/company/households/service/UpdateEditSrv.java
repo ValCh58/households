@@ -106,6 +106,7 @@ public class UpdateEditSrv {
 		counts.setSerialNum(countsDto.getSerialNum());
 		counts.setTypeCount(countsDto.getTypeCount());
 		counts.setNumCh(countsDto.getNumCh());
+		counts.setNumRat(countsDto.getNumRat());
 		counts = Optional.ofNullable(countsRep.save(counts))
 				.orElseThrow(()->new SaveResourceErrorException("Save resource error ComServer"));
 		return counts;
@@ -127,6 +128,7 @@ public class UpdateEditSrv {
 		counts.setSerialNum(countsDto.getSerialNum());
 		counts.setTypeCount(countsDto.getTypeCount());
 		counts.setNumCh(countsDto.getNumCh());
+		counts.setNumRat(countsDto.getNumRat());
 		
 		LinkObject opLinkObj = linkObjRep.findById(countsDto.getIdLinkObject())
 		                     .orElseThrow(()->new ResourceNotFoundException("Object LinkObject Not found"));
