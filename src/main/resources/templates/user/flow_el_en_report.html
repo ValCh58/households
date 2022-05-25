@@ -36,7 +36,7 @@
 			    	</tr>
 			</thead>
 				<tbody style="text-align: center;">
-				<tr th:each="cnt,idxStat : *{lisElEnReport}">
+				<tr th:each="cnt,idxStat : *{listElEnReport}">
 				    <td th:text="${idxStat.index + 1}"></td>
 				    <td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy')}"></td>
 					<td th:text="${cnt.addressLoc}"></td>

@@ -42,7 +42,7 @@ public class FlowData {
 	}
 	
 	/**
-	 * Chart for cold water
+	 * Chart for hot water
 	 * 
 	 */
 	@GetMapping(value="/user/ChartHotWater")
@@ -137,6 +137,7 @@ public class FlowData {
 	@GetMapping(value="/user/flow_el_en_report")
 	public ModelAndView getReportFlowElEn() {
 		LocalDate dateFrom = LocalDate.now();
+		
 		ModelAndView modelAndView = new ModelAndView();
 		List<ElEnFlowDTO> listElEnReport = reportsService.getElEnFlowDto("%", dateFrom);
 		modelAndView.addObject("listElEnReport", listElEnReport);
