@@ -8,10 +8,10 @@
 				<input value="" type="date" class="form-control pull-right" id="datefrom" name="datebeg" placeholder="Дата"/>
 			</div>
 			<div class="col-sm-auto">
-				 <button type="button" class="btn btn-info btn-sm" id="btn-filtr-flow"><i class="bi-funnel"></i>Фильтр</button>
+				 <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-filtr-flow"><i class="bi-funnel"></i>Фильтр</button>
 			</div>
 			<div class="col-sm-auto">
-				 <button type="button" class="btn btn-info btn-sm" id="btn-del-filtr-flow"><i class="bi-file-x"></i>Сброс</button>
+				 <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-del-filtr-flow"><i class="bi-file-x"></i>Сброс</button>
 			</div>
 			<div class="col-sm-auto">
 				  <a th:href="@{/user/home_user}" class="btn btn-primary btn-sm">Выход</a>

@@ -23,7 +23,7 @@
 				          Конфигурация УК
 				          </button>  
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonCfg">
-						     <li><a class="dropdown-item" th:href="@{/user/nodes_uk}">Редактирование конфигурации</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/nodes_uk}">Редактирование конфигурации</a></li>
 						  </ul>			
 				       </div>
 				    </li>
@@ -33,10 +33,10 @@
 				          Отчеты по расходу
 				          </button>  
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonReport">
-						     <li><a class="dropdown-item" th:href="@{/user/flow_water_report}">Расход холодной воды</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/flow_water_hot_report}">Расход горячей воды</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/flow_el_en_report}">Расход электро энергии</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/flow_hot_report}">Расход тепловой энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/flow_water_report}">Расход холодной воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/flow_water_hot_report}">Расход горячей воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/flow_el_en_report}">Расход электро энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/flow_hot_report}">Расход тепловой энергии</a></li>
 						  </ul>			
 				       </div>
 				    </li>
@@ -46,10 +46,10 @@
 				          Диаграммы по расходу
 				          </button>  
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonReport">
-						     <li><a class="dropdown-item" id="par1" th:href="@{/user/ChartColdWater1}">Диаграмма по расходу холодной воды</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/ChartHotWater}">Диаграмма по расходу горячей воды</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/ChartElEn}">Расход электро энергии</a></li>
-						     <li><a class="dropdown-item" th:href="@{/user/ChartHotEn}">Диаграмма по расходу тепловой энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" id="par1" th:href="@{/user/ChartColdWater1}">Диаграмма по расходу холодной воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotWater}">Диаграмма по расходу горячей воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartElEn}">Расход электро энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotEn}">Диаграмма по расходу тепловой энергии</a></li>
 						  </ul>			
 				       </div>
 				    </li>

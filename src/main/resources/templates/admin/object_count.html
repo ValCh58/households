@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}" />
     <title>Counts</title>
   </head>
 
-  <body>
+  <body onload="offLoader()">
+  <div id="loader"></div>
             <!----------------------------------Объекты счетчики воды---------------------------->
     <div th:insert="~{fragments/count_water_table :: obj_count_water_table}"></div>
 
@@ -26,6 +28,15 @@
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         
   <script>
+
+  function onLoader(){
+	   document.getElementById("loader").style.display = "block";
+	   }
+
+  function offLoader(){
+	   document.getElementById("loader").style.display = "none";
+	   }
+  
   $(document).ready(function(){
     $("#search").keyup(function(){
     _this = this;
@@ -110,7 +121,7 @@
 		        		);
 		        		
 		        	});
-		        	
+		        	offLoader();
 		        },
 		        error: function (x, e) {
 		        	var tableBody = $("#counttable tbody");

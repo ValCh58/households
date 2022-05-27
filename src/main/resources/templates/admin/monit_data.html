@@ -11,10 +11,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}" />
     <title>Data Monitoring</title>
     
   </head>
-  <body>
+  <body onload="offLoader()">
+  <div id="loader"></div>
   <div>
     <div th:insert="~{fragments/raw_data_table :: raw_data_table_obj}"></div>
     <a href="javascript:scroll(0,0)" style="top: 50%;left: 15px;position: fixed; z-index: 101;"><i class="fas fa-arrow-alt-circle-up"></i></a>
@@ -27,6 +29,15 @@
     <!-- Для обеспечения работы $.ajax -->
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script>
+
+function onLoader(){
+	   document.getElementById("loader").style.display = "block";
+	   }
+
+function offLoader(){
+	   document.getElementById("loader").style.display = "none";
+	   }
+
 $(document).ready(function(){
     $("#search").keyup(function(){
     _this = this;
@@ -108,6 +119,7 @@ $(document).ready(function(){
 		        		);
 		        		
 		        	});
+		        	offLoader();
 		        },
 		        error: function (x, e) {
 		        	var tableBody = $("#rawtable tbody");

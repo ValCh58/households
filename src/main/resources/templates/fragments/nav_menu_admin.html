@@ -37,10 +37,10 @@
 								<button class="btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">Объекты</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 									<!-- li><a class="dropdown-item" th:href="@{/admin/object_server}">Серверы</a></li -->
-									<li><a class="dropdown-item" th:href="@{/admin/object_uspd}">УСПД</a></li>
-									<li><a class="dropdown-item" th:href="@{/admin/object_count}">Счетчики воды</a></li>
-									<li><a class="dropdown-item" th:href="@{/admin/object_count_el}">Счетчики электро энергии</a></li>
-									<li><a class="dropdown-item" th:href="@{/admin/object_count_he}">Счетчики тепла</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/object_uspd}">УСПД</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/object_count}">Счетчики воды</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/object_count_el}">Счетчики электро энергии</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/object_count_he}">Счетчики тепла</a></li>
 								</ul>
 							</div>
 						</li>
@@ -51,8 +51,8 @@
 									data-toggle="dropdown" aria-expanded="false">Мониторинг</button>
 								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 									<li><a class="dropdown-item" th:href="@{/admin/object_server}">Состояние серверов связи</a></li>
-									<li><a class="dropdown-item" th:href="@{/admin/monit_data}">Данные от серверов связи</a></li>
-									<li><a class="dropdown-item" th:href="@{/admin/message_obj}">Сообщения системы</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/monit_data}">Данные от серверов связи</a></li>
+									<li><a class="dropdown-item" onclick="onLoader()" th:href="@{/admin/message_obj}">Сообщения системы</a></li>
 								</ul>
 							</div>
 						</li>

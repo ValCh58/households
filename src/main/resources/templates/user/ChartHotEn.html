@@ -8,9 +8,10 @@
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
-   
+   <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
 </head>
-<body>
+<body onload="offLoader()">
+<div id="loader"></div>
 
 <div class="container">
      <div class="justify-content-center  align-items-center" style="margin-top: 3px">
@@ -29,6 +30,14 @@
 <script th:src="@{/js/mychart.js}"></script>
 
 <script  th:inline="javascript">
+function onLoader(){
+	   document.getElementById("loader").style.display = "block";
+	   }
+
+function offLoader(){
+	   document.getElementById("loader").style.display = "none";
+	   }
+
 var listFlow = [[${listHotFlowReport}]];//Fucking editor!!!
 var dateFrom ='';
 const seriesLen = 40;//Длинна серии баров
@@ -69,6 +78,7 @@ $(function(){
       listFlow = data;
       myChart('Расход тепловой энергии', 'rgba(1, 155, 5, 0.4)', 'rgba(1, 155, 5, 1)');
       $("#btn-filtr-flow").prop( "disabled", false); 
+      offLoader();
     });
    });
 });
