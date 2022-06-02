@@ -1,3 +1,6 @@
+/*
+* Diagram of El. Energy
+*/
 
 var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
 var i = 0;
@@ -61,8 +64,8 @@ _.each(listFlow, function(list) {
 });
 
 /**
-* Заполним оставшуюся часть серии баров 0-ми
-* для сохранения ширины баров
+* Let's fill in the rest of the series of bars 0th
+* to save the width of bars
 */
    if(i <= seriesLen && i != 0){
 	   for(j=(++i); j <= seriesLen; j++){
@@ -97,10 +100,7 @@ myChart = new Chart(ctx, {
     data: {
         labels: arrayLabel,
         datasets: [{
-	  //barPercentage: 0.5,
-      ///barThickness: 10,
-      //maxBarThickness: 12,
-      minBarLength: 2,
+	        minBarLength: 2,
             label: lab1,
             data: arrayDataT1,
             backgroundColor: [ backColorT1 ],
@@ -109,10 +109,7 @@ myChart = new Chart(ctx, {
             
         },
         {
-	  //barPercentage: 0.5,
-      //barThickness: 10,
-      //maxBarThickness: 12,
-      minBarLength: 2,
+	        minBarLength: 2,
             label: lab2,
             data: arrayDataT2,
             backgroundColor: [ backColorT2 ],
@@ -128,8 +125,8 @@ myChart = new Chart(ctx, {
         	x: {
         	grid: {offset: false},
 	        ticks: {minRotation: 75}, // angle in degrees
-            stacked: true 	
-              },
+            stacked: true
+           },
             y: {
                 beginAtZero: true,
                 stacked: true

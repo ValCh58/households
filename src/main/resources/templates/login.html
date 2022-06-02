@@ -5,33 +5,51 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Система сбора данных для ЖКХ</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
+    </head>
 
 <body>
 <!--
     <form th:action="@{/registration}" method="get">
     <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Registration Page</button>
 </form>
+<img th:src="@{/images/image4.jpg}" class="img-responsive center-block" width="120" height="100" alt="Logo"/>
 -->
 
-<div class="container">
-    <img th:src="@{/images/login.jpg}" class="img-responsive center-block" width="300" height="300" alt="Logo"/>
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-0">
     <form th:action="@{/login}" method="POST" class="form-signin">
-        <h3 class="form-signin-heading" >Введите логин и пароль</h3>
+        <h5 class="form-signin-heading" >Введите логин и пароль</h5>
         <br/>
-
-        <input type="text" id="user_name" name="user_name" placeholder="Логин" class="form-control"/> <br/>
-        <input type="password" th:placeholder="Пароль" id="password" name="password" class="form-control"/> <br/>
-
+      <div class="form-row">  
+        <div class="col-sm-auto">
+           <input type="text" id="user_name" name="user_name" placeholder="Логин" class="form-control"/> <br/>
+           <input type="password" th:placeholder="Пароль" id="password" name="password" class="form-control"/> <br/>
+        </div>
+        <div class="col-sm-auto">
+           <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login"  type="Submit" th:text="Вход">
+           <img th:src="@{/images/login1.jpg}" class="img-responsive center-block" width="120" height="100" alt="Logo"/>
+           </button>
+           <!-- img id="imgLog" th:src="@{/images/login1.jpg}" class="img-responsive center-block" width="120" height="100" alt="Logo"/ -->    
+        </div>
+      </div>  
         <div align="center" th:if="${param.error}">
             <p style="font-size: 20; color: #FF1C19;">Логин или пароль неверные</p>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Вход"></button>
+        <!-- button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Вход"></button -->
     </form>
 </div>
+<div id="frameFooter">
+        
+        <p>
+        © 1992-2022 ЗАО «НПП Электронные информационные системы» <i class='fas fa-home'></i> Екатеринбург 620075 ул. Мамина-Сибиряка, 145 <i class='fas fa-mail-bulk'></i> main@eisystem.ru <i class='fas fa-phone-square'></i> (343) 263 73 68, (343) 263 74 80, (343) 350 57 35
+        </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+         
 </body>
 </html>

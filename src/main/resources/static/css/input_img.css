@@ -1,0 +1,13 @@
+@charset "UTF-8";
+p {
+  position: relative;
+  display: inline-block;
+}
+
+i.fa {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  padding-right: 3px;
+}

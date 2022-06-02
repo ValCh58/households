@@ -84,6 +84,7 @@ myChart = new Chart(ctx, {
     data: {
         labels: arrayLabel,
         datasets: [{
+	        minBarLength: 2,
             label: label,
             data: arrayData,
             backgroundColor: [

@@ -7,6 +7,7 @@
     
     <link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.css}"/>
     <link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.theme.default.css}"/>
+    <link th:rel="stylesheet" th:href="@{/css/input_img.css}"/>
         
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
@@ -16,7 +17,7 @@
 </head>
 
 <body>
-<div class="col-ms-12">
+
 	<div class="form-row mt-2 ml-1 mr-1">
 		<div class="form-group col-md-7">
 			<h4 style="text-align: right;">Объекты конфигурации УК</h4>
@@ -24,11 +25,15 @@
 		<div class="form-group col-md-1">
 			<a th:href="@{/user/home_user}" class="btn btn-primary btn-sm">Выход</a>
 		</div>
-		<div class="form-group col-md-2">
-		    <input type="text" class="form-control pull-right" id="finder" placeholder="Поиск по наименованию">
+		<div class="form-row form-group col-md-4">
+		<p>
+		    <input type="text" class="form-control" style="width: 230px;" id="finder" placeholder="Поиск по наименованию&nbsp">
+		    <i onclick="cleanFinder();" class='fa fa-times-rectangle-o' style='color: gray;'></i>
+		</p>    
+		    
 		</div>
 	</div>
-</div>
+
 
 
 
@@ -58,6 +63,12 @@
 <div th:insert="~{fragments/script_tree_table_uk :: script_tree_table_uk}"></div>
 
 <script type="text/javascript">
+
+/**
+ * Clearing the search field
+ */
+function cleanFinder(){	$("#finder").val(''); }
+
 /**
  * Поиск по таблице объектов *
  */
