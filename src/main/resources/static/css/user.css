@@ -1,6 +1,6 @@
 @charset "UTF-8";
 html, body {
-  background: url(/images/adminImg2.jpeg);
+  background: url(/images/userimg.jpg);
   -webkit-background-size: 100% 100%;
   -moz-background-size: 100% 100%;
   -o-background-size: 100% 100%;
@@ -15,4 +15,3 @@ html, body {
     font-size: 22px;
     color: #004080;
 }
-
