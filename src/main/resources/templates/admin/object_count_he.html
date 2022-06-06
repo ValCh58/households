@@ -13,7 +13,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}" />
 <title>Count Heater</title>
 </head>
-<body onload="offLoader()">
+<body onload="offLoader()" style="background: url(/images/textures.jpeg);">
 <div id="loader"></div>
      <!----------------------------------Cчетчики тепла---------------------------->
     <div th:insert="~{fragments/count_heater_table :: obj_count_heater_table}"></div>
