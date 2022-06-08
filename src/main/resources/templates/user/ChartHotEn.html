@@ -10,10 +10,10 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
    <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
 </head>
-<body onload="offLoader()">
+<body onload="offLoader()" style="background: url(/images/textures.jpeg);">
 <div id="loader"></div>
 
-<div class="container" style="background: url(/images/textures.jpeg);">
+<div class="container">
      <div class="justify-content-center  align-items-center" style="margin-top: 3px">
         <div class="col text-nowrap">
 			<p style="text-align: center;font-size: 1.4em;">Диаграмма по расходу тепловой энергии</p>
@@ -63,26 +63,42 @@ $(function(){
 /**
  * Фильтрация по дате 
  *
- */
+*/
 $(function(){ 
-  $("#btn-filtr-flow").click(function(){
-	$("#btn-filtr-flow").prop( "disabled", true );  
-	var in_canvas = document.getElementById('main_div');
-	destroyChart();
-	while (in_canvas.hasChildNodes()) {//Удаление canvas
-   	       in_canvas.removeChild(in_canvas.lastChild);
-   	}
-   	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
-	$('#datefrom').val(dateFrom);
-    $.get("/user/ChartHotEn/dateFrom/" + dateFrom, function(data, status){
-      listFlow = data;
-      myChart('Расход тепловой энергии', 'rgba(1, 155, 5, 0.4)', 'rgba(1, 155, 5, 1)');
-      $("#btn-filtr-flow").prop( "disabled", false); 
-      offLoader();
-    });
-   });
+	  $("#btn-filtr-flow").click(function(){
+		var in_canvas = document.getElementById('main_div');
+		destroyChart();
+		while (in_canvas.hasChildNodes()) {//Удаление canvas
+		       in_canvas.removeChild(in_canvas.lastChild);
+		}
+		dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+		$('#datefrom').val(dateFrom);
+		  
+      $.ajax({
+		        "type": "get",
+		        "url": "/user/ChartHotEn/dateFrom/" + dateFrom,
+		        "dataType": "json",
+		        "cache": "false",
+		        "data": "$(this).serialize()",
+		        success: function (data) {
+		        	if(data.length == 0){
+			        	alert('Данные не найдены. Измените параметры запроса');
+				    }else{
+		        	 listFlow = data;
+		        	 myChart('Расход тепловой энергии', 'rgba(1, 155, 5, 0.4)', 'rgba(1, 155, 5, 1)');
+				    }
+		        	offLoader();
+		        	$("#btn-filtr-flow").prop( "disabled", false);
+		        },
+		        error: function (x, e) {
+		          offLoader();
+		          $("#btn-filtr-flow").prop( "disabled", false);
+                alert('Данные не найдены. Измените параметры запроса.');
+	            }
+		    });  
+		  
+	  });
 });
-
 
 
 </script>

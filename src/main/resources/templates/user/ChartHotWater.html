@@ -64,26 +64,42 @@ $(function(){
 /**
  * Фильтрация по дате 
  *
- */
+*/
 $(function(){ 
-  $("#btn-filtr-flow").click(function(){
-	var in_canvas = document.getElementById('main_div');
-	destroyChart();
-	while (in_canvas.hasChildNodes()) {//Удаление canvas
-   	       in_canvas.removeChild(in_canvas.lastChild);
-   	}
-   	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
-	$('#datefrom').val(dateFrom);
-	$("#btn-filtr-flow").prop( "disabled", true );
-	$.get("/user/ChartHotWater/dateFrom/" + dateFrom, function(data, status){
-      listFlow = data;
-      myChart('Расход горячей воды', 'rgba(155, 1, 5, 0.4)', 'rgba(155, 1, 5, 1)');
-      $("#btn-filtr-flow").prop( "disabled", false); 
-      offLoader();
-    });
-   });
+	  $("#btn-filtr-flow").click(function(){
+		var in_canvas = document.getElementById('main_div');
+		destroyChart();
+		while (in_canvas.hasChildNodes()) {//Удаление canvas
+		       in_canvas.removeChild(in_canvas.lastChild);
+		}
+		dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+		$('#datefrom').val(dateFrom);
+		  
+      $.ajax({
+		        "type": "get",
+		        "url": "/user/ChartHotWater/dateFrom/" + dateFrom,
+		        "dataType": "json",
+		        "cache": "false",
+		        "data": "$(this).serialize()",
+		        success: function (data) {
+		        	if(data.length == 0){
+			        	alert('Данные не найдены. Измените параметры запроса');
+				    }else{
+		        	 listFlow = data;
+		        	 myChart('Расход горячей воды', 'rgba(155, 1, 5, 0.4)', 'rgba(155, 1, 5, 1)');
+				    }
+		        	offLoader();
+		        	$("#btn-filtr-flow").prop( "disabled", false);
+		        },
+		        error: function (x, e) {
+		          offLoader();
+		          $("#btn-filtr-flow").prop( "disabled", false);
+                alert('Данные не найдены. Измените параметры запроса.');
+	            }
+		    });  
+		  
+	  });
 });
-
 
 
 </script>

@@ -111,6 +111,10 @@
 		        "cache": "false",
 		        "data": "$(this).serialize()",
 		        success: function (data) {
+			        if(data.length == 0){
+			        	offLoader();
+	                    alert('Данные не найдены. Измените параметры запроса');
+				        }
 		        	//Удалим тело таблицы/////////////////
 		        	var tableBody = $("#uspdtable tbody");
 		        	tableBody.empty();
@@ -129,20 +133,17 @@
 		        			         "<td>" + (new Date(obj.timeStamp)).toLocaleDateString() + " " +(new Date(obj.timeStamp)).toLocaleTimeString()
 		        			         + "</td>" +
 		        			"</tr>" 
-		        				
 		        		);
-		        		
 		        	});
 		        	offLoader();
 		        },
 		        error: function (x, e) {
 		        	var tableBody = $("#uspdtable tbody");
 		        	tableBody.empty();
-                    alert('Данные не найдены. Измените параметры запроса');
+		        	offLoader();
+                    alert('Данные не найдены. Измените параметры запроса.');
 	            }
-		    });
-		  
-		  
+	  	    });
 	  }) 
   });
   

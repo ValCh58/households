@@ -103,6 +103,10 @@ function offLoader(){
 		        "cache": "false",
 		        "data": "$(this).serialize()",
 		        success: function (data) {
+		        	if(data.length == 0){
+			        	offLoader();
+	                    alert('Данные не найдены. Измените параметры запроса');
+				        }
 		        	//Удалим тело таблицы/////////////////
 		        	var tableBody = $("#counteltable tbody");
 		        	tableBody.empty();
@@ -129,7 +133,8 @@ function offLoader(){
 		        error: function (x, e) {
 		        	var tableBody = $("#counteltable tbody");
 		        	tableBody.empty();
-                    alert('Данные не найдены. Измените параметры запроса');
+                    alert('Данные не найдены. Измените параметры запроса.');
+                    offLoader();
 	            }
 		    });
 		  

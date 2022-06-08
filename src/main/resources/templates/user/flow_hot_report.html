@@ -141,6 +141,10 @@
 			        "cache": "false",
 			        "data": "$(this).serialize()",
 			        success: function (data) {
+			        	if(data.length == 0){
+				        	offLoader();
+		                    alert('Данные не найдены. Измените параметры запроса');
+					        }
 			        	//Удалим тело таблицы/////////////////
 			        	var tableBody = $("#flowreporttablehot tbody");
 			        	tableBody.empty();
@@ -167,7 +171,8 @@
 			        error: function (x, e) {
 			        	var tableBody = $("#flowreporttablehot tbody");
 			        	tableBody.empty();
-	                    alert('Данные не найдены. Измените параметры запроса');
+	                    alert('Данные не найдены. Измените параметры запроса.');
+	                    offLoader();
 		        }
 			 });
 		  })

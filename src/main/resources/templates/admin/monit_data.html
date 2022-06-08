@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}" />
     <title>Data Monitoring</title>
     
-  </head>
+</head>
   <body onload="offLoader()" style="background: url(/images/textures.jpeg);">
   <div id="loader"></div>
   <div>
@@ -54,10 +54,8 @@ $(document).ready(function(){
   $(function(){
 	  $('#btn-del-filtr').click(function(){
 		  location.reload();
-		  
 	  })
   });
-
 
   /**
    **************Calling the page of the report Raw Data from server**************************************
@@ -93,7 +91,6 @@ $(document).ready(function(){
 		  var dateTo   = $('#dateto').val() != '' ? $('#dateto').val() : myDateNow();
 		  $('#datefrom').val(dateFrom);
 		  $('#dateto').val(dateTo);
-		  		  
 		  $.ajax({
 		        "type": "get",
 		        "url": '/admin/monit_rawdata/numUspd/'+numUspd+'/dateFrom/'+dateFrom+'/dateTo/'+dateTo,
@@ -101,6 +98,10 @@ $(document).ready(function(){
 		        "cache": "false",
 		        "data": "$(this).serialize()",
 		        success: function (data) {
+		        	if(data.length == 0){
+			        	offLoader();
+	                    alert('Данные не найдены. Измените параметры запроса');
+				        }
 		        	//Удалим тело таблицы/////////////////
 		        	var tableBody = $("#rawtable tbody");
 		        	tableBody.empty();
@@ -115,20 +116,17 @@ $(document).ready(function(){
 		        			         "<td>" + obj.numUspd + "</td>" +
 		        			         "<td>" + obj.rawData + "</td>" +
 		        			"</tr>" 
-		        				
-		        		);
-		        		
+		        	     );
 		        	});
 		        	offLoader();
 		        },
 		        error: function (x, e) {
 		        	var tableBody = $("#rawtable tbody");
 		        	tableBody.empty();
-                    alert('Данные не найдены. Измените параметры запроса');
+                    alert('Данные не найдены. Измените параметры запроса.');
+                    offLoader();
 	            }
 		    });
-		  
-		  
 	  }) 
   });
   
