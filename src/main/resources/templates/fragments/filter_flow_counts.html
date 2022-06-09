@@ -3,7 +3,7 @@
 <head> <meta charset="UTF-8"> </head>
 <body>
 	<div th:fragment="fr_filter_flow_counts">
-		<div class="row align-items-center offset-md-1" style="margin-top: 2px; margin-bottom: 2px;">
+		<div class="row justify-content-center align-items-center" style="margin-top: 2px; margin-bottom: 2px;">
 			<div class="col-sm-auto">
 				<input type="text" class="form-control pull-right" id="searchflow" placeholder="Поиск по таблице">
 			</div>
@@ -17,14 +17,14 @@
 			</div>
 
 			
-		    <div class="row align-items-center" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
-			   <div class="col-sm-auto">
+		    <div class="row" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
+			   <div class="col-auto">
 				 <button type="button" class="btn btn-info btn-sm" onclick="onLoader()" id="btn-filtr-flow"><i class="bi-funnel"></i>Фильтр</button>
 			   </div>
-			   <div class="col-sm-auto" style="margin-top: 1px; margin-bottom: 1px">
-			       <button type="button" id="btn-report-flow" onclick="onLoader()" class="btn btn-primary btn-sm"><i class="bi-printer"></i>Печать</button>
+			   <div class="col-auto" >
+			     <button type="button" id="btn-report-flow" onclick="onLoader()" class="btn btn-primary btn-sm"><i class="bi-printer"></i>Печать</button>
 			   </div>
-			   <div class="col-sm-auto">
+			   <div class="col-auto">
 				 <button type="button" class="btn btn-info btn-sm" onclick="onLoader()" id="btn-del-filtr-flow"><i class="bi-file-x"></i>Сброс</button>
 			   </div>
 		    </div>

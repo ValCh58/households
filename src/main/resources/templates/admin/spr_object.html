@@ -18,6 +18,8 @@
 </head>
 
 <body id="page-top" style="background: url(/images/textures.jpeg);">
+
+
       <div class="col-ms-12">
          <div class="form-row mt-2 ml-1 mr-1">
 			<div class="form-group col-md-7">
@@ -66,6 +68,8 @@
 
 <script type="text/javascript">
 
+
+
 /**
  * Clearing the search field
  */
@@ -75,6 +79,7 @@ function cleanFinder(){	$("#finder").val(''); }
  * Поиск по таблице объектов *
  */
 $(document).ready(function(){
+	onLoader();
     $("#finder").keyup(function(){
         $('#treeTable tr').each(function(){
 			var array_row = [];

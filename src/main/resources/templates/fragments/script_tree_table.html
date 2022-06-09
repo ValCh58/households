@@ -14,6 +14,7 @@
 <script>
 
     $(document).ready(function () {
+    	        
         $.ajax({
           "type": 'get',
           "url": '/nodes',
@@ -41,7 +42,10 @@
                 + '</div></div>'
                 + '</TD>'
                 + "</tr>");
-              });
+                
+              },
+                
+              );
               
               $("#treeTable").treetable({
                   expandable: true,
@@ -51,7 +55,11 @@
               });
 
               setScrollToPos();         
-          }
+          },
+
+          error: function(jqXHR, textStatus, errorThrown){
+			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+			   }
         });
     });
 
