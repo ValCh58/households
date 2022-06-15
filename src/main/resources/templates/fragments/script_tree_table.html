@@ -58,7 +58,7 @@
           },
 
           error: function(jqXHR, textStatus, errorThrown){
-			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+			    alert('Ошибка при вызове таблицы: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
 			   }
         });
     });
@@ -82,6 +82,7 @@
 
 
 <script>
+
 /****Удаление записей из дерева объектов*****************************************/
 function openModalWarningDel(idLinkObject, idTypeObject){
 	
@@ -234,8 +235,7 @@ function reloadMyPage(){
 function editUspd(idObj){
 	
 	var id = idObj;
-	 //console.log("idObj " + idObj);
-	
+		
 	$.ajax({
         "type": 'get',
         "url": '/nodeEditUspd/'+id,
@@ -297,7 +297,7 @@ $('#modalEditServer').on('shown.bs.modal', function() {
 	   $('#name_server').focus();
 	 })
 
-/* Запись параметров сервера связи в режиме редактирования***********/
+/** Запись параметров сервера связи в режиме редактирования***********/
  $("#modalFormEditSrv").on("submit", function(){
 	$.ajax({
 		url: '/updateEditSrv',
@@ -312,7 +312,7 @@ $('#modalEditServer').on('shown.bs.modal', function() {
 });
 
  
- /* Запись параметров УСПД в режиме редактирования******************************/
+ /** Запись параметров УСПД в режиме редактирования******************************/
  
  $("#modalFormEditUspd").on("submit", function(){
 	 	 
@@ -325,40 +325,35 @@ $('#modalEditServer').on('shown.bs.modal', function() {
 		cache: false,
 		data: $(this).serialize(),
 		success: function(data){
-			
 		}
 	});
-	//e.preventDefault();
 	$("#modalEditUspd").modal('hide');
-	//return false;
 });
 
 
 
 /************ Создание нового объекта - Сервер связи ******************/
 function openModalNewSrv(idTypeObject){
+	
 	if(idTypeObject == 1){
 		/******** Событие на закрытие окна modalNewServer *******/
 		var myModalEl = document.getElementById('modalNewServer');
 		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
 		reloadMyPage();
 	})
-		
-		
 	$('#modalNewServer #name_server').val('');
 	$('#modalNewServer #ip_server').val('');
 	$('#modalNewServer #port_server').val('');
-	 
 	$("#modalNewServer").modal();
-	
 	}
 	else{
 		alert("Сервер связи можно привязать только к Управляющей компании!");
 	}
 }
 
-/* Запись параметров нового сервера связи *****/
+/** Запись параметров нового сервера связи *****/
 $("#modalFormNewSrv").on("submit", function(){
+	
 	$.ajax({
 		url: '/newSrv',
 		method: 'post',
@@ -370,15 +365,12 @@ $("#modalFormNewSrv").on("submit", function(){
 	});
 	
 	$("#modalNewServer").modal('hide');
-	
-	
-	
 });
 
 /*************Создать новый УСПД****************************************************/
  function openModalNewUspd(idLinkObj, idTypeObject){
+	 
 	if(idTypeObject == 2){
-		
 		var myModalEl = document.getElementById('modalEditUspd');
 		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
 		reloadMyPage();
@@ -414,18 +406,17 @@ $("#modalFormNewSrv").on("submit", function(){
 } 
  $('#modalEditUspd').on('shown.bs.modal', function() {
 	   $('#nameUspdDev').focus();
-	 })
+	 });
 
 /****************************Создать новый счетчик************************************/
  
  function openModalNewCnt(idLinkObj, idTypeObject){
 	
 	if(idTypeObject == 3){
-		
 		var myModalEl = document.getElementById('modalEditCount');
 		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
 		reloadMyPage();
-	})
+	});
 		
 	 $.ajax({
 	        "type": 'get',
@@ -470,7 +461,6 @@ $("#modalFormNewSrv").on("submit", function(){
  
 </script>
 
- 
 </div>
 </body>
 </html>

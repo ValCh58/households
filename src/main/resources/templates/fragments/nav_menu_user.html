@@ -43,17 +43,26 @@
 				    <li>
 				       <div class="dropdown">
 				          <button class="btn" type="button" id="dropdownMenuButtonChart" data-toggle="dropdown" aria-expanded="false">
-				          Диаграммы по расходу
+				          Диаграммы расхода по лицевым счетам
 				          </button>  
 						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonReport">
-						     <li><a class="dropdown-item" onclick="onLoader()" id="par1" th:href="@{/user/ChartColdWater1}">Диаграмма по расходу холодной воды</a></li>
-						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotWater}">Диаграмма по расходу горячей воды</a></li>
-						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartElEn}">Диаграмма по расходу электро энергии</a></li>
-						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotEn}">Диаграмма по расходу тепловой энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartColdWater1}">Расход холодной воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotWater}">Расход горячей воды</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartElEn}">Расход электро энергии</a></li>
+						     <li><a class="dropdown-item" onclick="onLoader()" th:href="@{/user/ChartHotEn}">Расход тепловой энергии</a></li>
 						  </ul>			
 				       </div>
 				    </li>
-				 
+				    <li>
+				       <div class="dropdown">
+				          <button class="btn" type="button" id="dropdownMenuButtonChartHouse" data-toggle="dropdown" aria-expanded="false">
+				          Диаграммы расхода по объектам УК
+				          </button>  
+						  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonHouse">
+						     <li><a class="dropdown-item" th:href="@{/user/ChartForHouseApart}">Расход воды по дому поквартирно</a></li>
+						  </ul>			
+				       </div>
+				    </li>
 				    
 				    <li class="nav-item"><a class="nav-link" th:href="@{/logout}">Выход</a></li>
 				</ul>    

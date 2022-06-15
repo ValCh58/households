@@ -24,8 +24,21 @@ public class FlowData {
 		this.reportsService = reportsService;
 	}
 	
-	
 	/** **********************************************************************************************************
+	 * Charts for all objects
+	 */
+	
+	@GetMapping(value="/user/ChartForHouseApart")
+	public ModelAndView makeChartHousApart() {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("user/chart_house_apart");
+		
+		return modelAndView;
+	}
+	
+	
+	/** 
 	 * Chart for cold water
 	 * 
 	 */
