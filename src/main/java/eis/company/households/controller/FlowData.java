@@ -11,19 +11,23 @@ import org.springframework.web.servlet.ModelAndView;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
+import eis.company.households.dto.LinkObjectDTO;
+import eis.company.households.queres.QueryMenuObjects;
 import eis.company.households.service.ReportsService;
 
 @Controller
 public class FlowData {
 
 	private ReportsService reportsService;
+	private QueryMenuObjects queryMenuObj;
 	
 	@Autowired
-	public FlowData(ReportsService reportsService) {
+	public FlowData(ReportsService reportsService, QueryMenuObjects queryMenuObj) {
 		super();
 		this.reportsService = reportsService;
+		this.queryMenuObj = queryMenuObj;
 	}
-	
+
 	/** **********************************************************************************************************
 	 * Charts for all objects
 	 */
@@ -32,6 +36,8 @@ public class FlowData {
 	public ModelAndView makeChartHousApart() {
 		
 		ModelAndView modelAndView = new ModelAndView();
+		List<LinkObjectDTO> menuObjects = queryMenuObj.makeTree();
+		modelAndView.addObject("menuObjects", menuObjects);
 		modelAndView.setViewName("user/chart_house_apart");
 		
 		return modelAndView;
