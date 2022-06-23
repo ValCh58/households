@@ -1,6 +1,3 @@
-/*
- * Diagram of El. Energy
- */
 
 var ret = 0;//Для присвоения id <canvas id='myChart'+idx>
 var i = 0;
@@ -11,19 +8,40 @@ var chartObj = [];
 
 
 /**
-* Удаление all myCharts
-*/
-function destroyChart(){
-	var j = chartObj.length;
-	var i;
-	for(i = 0; i < j; i++){
-		chartObj[i].destroy();
-	}
-	chartObj.lenght = 0;
-	arrChartMainT1[0].length = 0;
-	arrChartT1[0].length = 0;
-	arrChartMainT2[0].length = 0;
-}
+ * Создание меню объектов УК
+ */
+ function makeMenu(data) {
+     $.each(data, function (idx, obj) {
+       $("#menuTreeTable").append(
+       "<tr data-tt-id=\"" + obj.id_link_object + "\" data-tt-parent-id=\"" + obj.id_parent + "\" id=\"link" + obj.id_link_object + "\" ><td style=\"text-align: center\">" + obj.name_object + "</td>" +
+       + "<td style=\"display: none;\">" + obj.id_object + "</td><td style=\"display: none;\">" + obj.id_type_object + "</td>"
+       + '<TD style="width:8%;" align=center>'
+       + "<button type=\"button\" onclick=\"onChart(" + obj.id_link_object + "," + obj.id_parent + ")\" class=\"btn btn-light btn-sm\" id=\"btn" 
+       + obj.id_link_object+ "\"><i class=\"fas fa-cogs\"></i></button>"
+       + '</div></div>'
+       + '</TD>'
+       + "</tr>");
+       
+       //var myId = $('#link'+obj.id_link_object);
+       //var a = myId.hasClass("leaf");
+              
+     });
+     $("#menuTreeTable").treetable({
+         expandable: true,
+         initialState: "expanded",
+         clickableNodeNames: true,
+         indent: 10
+      });
+      //setScrollToPos();
+};
+
+/**
+ * Обработчик для построения диаграммы
+ 
+function onChart(id_link_object, id_parent){
+	console.log(id_link_object + " --- " + id_parent);
+}*/
+
 
 function myChart(lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColorT2){
 
@@ -31,7 +49,7 @@ function myChart(lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColo
     arrChartT1[0][ret] = new Array();
     arrChartMainT2[0][ret] = new Array();
     var strLblT;
-
+    
 /**
  * Заполнение данными массивов для построения диаграммы
  */
@@ -148,6 +166,22 @@ function addCanvas(idx){
 	div.appendChild(canvas);
 }
 
+
+/**
+ * Удаление all myCharts
+ */
+function destroyChart(){
+	var j = chartObj.length;
+	var i;
+	for(i = 0; i < j; i++){
+		chartObj[i].destroy();
+	}
+	chartObj.lenght = 0;
+	arrChartMainT1[0].length = 0;
+	arrChartT1[0].length = 0;
+	arrChartMainT2[0].length = 0;
+}
+
 /**
  * Вывод текущей даты в формате YYYY-MM-DD 
  */
@@ -161,4 +195,7 @@ function addCanvas(idx){
  	  return dat;
    }
    
+   
+
+
 
