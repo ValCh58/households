@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import eis.company.households.dto.AcntCountsDTO;
+import eis.company.households.dto.ChartHouseApartDto;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
@@ -137,7 +138,18 @@ public class ReportsAndStatistics {
 	}
 	
 	
-	/** ********************************************************
+	/** **********************************************************************************************************************
+	 * Запрос на получение данных по C&H воде
+	 * для построения диаграммы по дому поквартирно
+	 */
+	@GetMapping(value="/user/ChartHouseApartdWater/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	public  ResponseEntity<List<ChartHouseApartDto>> makeChartHouseApartColdWater(@PathVariable("dateFrom") LocalDate dateFrom,
+			                                                                      @PathVariable("dateTo") LocalDate dateTo){
+		return ResponseEntity.status(OK).body(reportService.getChartHouseApartDto(dateFrom, dateTo));
+	}
+	/**************************************************************************************************************************/
+	
+	/** ***********************************************************************************************************************
 	 * REST Фильтрация для построения диаграммы по холодной воде
 	 * 
 	 */
@@ -173,11 +185,11 @@ public class ReportsAndStatistics {
 		String num = "%";
 		return ResponseEntity.status(OK).body(reportService.getElEnFlowDto(num, dateFrom));
 	}
+	/**************************************************************************************************************************/
 	
 	
 	
-	
-	/** 
+	/** ***********************************************************************************************************************
 	 * REST Фильтрация данных по расходу холодной воды 
 	 * 
 	 */
@@ -211,5 +223,5 @@ public class ReportsAndStatistics {
 		return ResponseEntity.status(OK).body(reportService.getElEnFlowDto(num, dateFrom));
 	}
 	
-
+    /**************************************************************************************************************************/
 }

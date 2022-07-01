@@ -35,14 +35,6 @@ var chartObj = [];
       //setScrollToPos();
 };
 
-/**
- * Обработчик для построения диаграммы
- 
-function onChart(id_link_object, id_parent){
-	console.log(id_link_object + " --- " + id_parent);
-}*/
-
-
 function myChart(lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColorT2){
 
 	arrChartMainT1[0][ret] = new Array();
@@ -53,22 +45,22 @@ function myChart(lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColo
 /**
  * Заполнение данными массивов для построения диаграммы
  */
-_.each(listFlow, function(list) {
-	  if(list.typeTarif === "T1"){
-	    arrChartMainT1[0][ret][i] = list.diffTarifEn;
-	    strLblT = list.numAcnt;
+_.each(listWater, function(list) {
+	  if(list.typeCount == 1){
+	    arrChartMainT1[0][ret][i] = list.diffCountW;
+	    strLblT = list.room;
 		
       }	
       
-	  if(list.typeTarif === "T2"){	
-		arrChartMainT2[0][ret][i] = list.diffTarifEn;
-	    strLblT = list.numAcnt;
+	  if(list.typeCount == 2){	
+		arrChartMainT2[0][ret][i] = list.diffCountW;
+	    strLblT = list.room;
 		
 	  } 	
 	  
 	  arrChartT1[0][ret][i] = strLblT;
 	  	  	
-	  if(i === seriesLen){
+	  if(i == seriesLen){
 			ret = makeCharts(ret, arrChartT1[0][ret], arrChartMainT1[0][ret], arrChartMainT2[0][ret],  
 			                 lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColorT2);
 		    i = 0;

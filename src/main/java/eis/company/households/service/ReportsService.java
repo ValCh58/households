@@ -1,6 +1,8 @@
 package eis.company.households.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,13 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eis.company.households.Exceptions.ResourceNotFoundException;
 import eis.company.households.dto.AcntCountsDTO;
+import eis.company.households.dto.ChartHouseApartDto;
 import eis.company.households.dto.ColdWaterFlowDTO;
 import eis.company.households.dto.ElEnFlowDTO;
 import eis.company.households.dto.HotCountFlowDTO;
 import eis.company.households.queres.QueryAcntCountsDto;
+import eis.company.households.queres.QueryChartHouseApart;
 import eis.company.households.queres.QueryColdWaterFlowDto;
 import eis.company.households.queres.QueryElEnFlow;
 import eis.company.households.queres.QueryHotCountFlowDto;
+import eis.company.households.MyConst;
 
 
 @Service
@@ -26,21 +31,23 @@ public class ReportsService {
 	private QueryColdWaterFlowDto qColdWaterFlowDto; 
 	private QueryElEnFlow queryElEnFlow;
 	private QueryHotCountFlowDto queryHotCountFlowDto; 
+	private QueryChartHouseApart qChartHouseApart;
 	
 	@Autowired
 	public ReportsService(QueryAcntCountsDto qAcntCountDto, QueryColdWaterFlowDto qColdWaterFlowDto,
-			QueryElEnFlow queryElEnFlow, QueryHotCountFlowDto queryHotCountFlowDto) {
+			QueryElEnFlow queryElEnFlow, QueryHotCountFlowDto queryHotCountFlowDto, QueryChartHouseApart qChartHouseApart) {
 		super();
 		this.qAcntCountDto = qAcntCountDto;
 		this.qColdWaterFlowDto = qColdWaterFlowDto;
 		this.queryElEnFlow = queryElEnFlow;
 		this.queryHotCountFlowDto = queryHotCountFlowDto;
+		this.qChartHouseApart = qChartHouseApart;
 	}
 
 	/**
 	 * Запрос счетчиков связанных с УСПД
 	 * @param id - Room.idRoom
-	 * @return
+	 * @return list
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<AcntCountsDTO> getAcntCounts(Integer id){
@@ -53,7 +60,7 @@ public class ReportsService {
 	 * Запрос по расчету расхода тепловой энергии 
 	 * @param factoryNumberUspd
 	 * @param dateFrom
-	 * @return
+	 * @return listHotCountDto
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<HotCountFlowDTO> getHotCountDto(String factoryNumberUspd, LocalDate dateFrom){
@@ -64,15 +71,13 @@ public class ReportsService {
 				                               .orElseThrow(()->new ResourceNotFoundException("Object list HotCountFlowDTO Not found"));
 		return listHotCountDto;
 	}
-	
-	
+		
 	/**
 	 * Запрос по расчету расхода холодной или горячей воды 
 	 * @param factoryNumberUspd
 	 * @param dateFrom
-	 * @param ratio
 	 * @param typeCount
-	 * @return
+	 * @return listFlowWaterCold
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ColdWaterFlowDTO> getWaterFlowDto(String factoryNumberUspd, //"%", "2022-01%", "2021-12%", "1000" 
@@ -82,21 +87,37 @@ public class ReportsService {
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
-		List<ColdWaterFlowDTO> listFlowWaterCold = Optional.ofNullable(qColdWaterFlowDto.getQueryResult(factoryNumberUspd,
-				                                                                    dateCurr, 
-				                                                                    datePrev, 
-				                                                                    /*ratio,*/ typeCount))
-				                                  .orElseThrow(()->new ResourceNotFoundException("Object list ColdWaterFlowDTO Not found")); 
+		List<ColdWaterFlowDTO> listFlowWaterCold = 
+				Optional.ofNullable(qColdWaterFlowDto.getQueryResult(factoryNumberUspd, dateCurr, datePrev, typeCount))
+				                      .orElseThrow(()->new ResourceNotFoundException("Object list ColdWaterFlowDTO Not found")); 
 	return listFlowWaterCold;	
 	}
 	
 	/**
+	 * Запрос на построение диаграммы по расходу холодной и горячей воды 
+	 * @param dateFrom
+	 * @param dateTo
+	 * @param typeCount
+	 * @return List<ChartHouseApartDto>
+	 */
+	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
+	public List<ChartHouseApartDto> getChartHouseApartDto(LocalDate dateFrom, LocalDate dateTo){
+		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
+		String datePrev = dateTo.toString().substring(0, 7) + "%";
+			  
+		 List<ChartHouseApartDto> listChartHouseApartDto =	
+				Optional.ofNullable(qChartHouseApart.getQueryChartHouseApart(datePrev, dateCurr))
+				                      .orElseThrow(()->new ResourceNotFoundException("Object list ChartHouseApartDto Not found"));
+			
+	return 	listChartHouseApartDto;
+	}
+		
+	/**
 	 * Запрос по расчету электро энергии
 	 * @param factoryNumberUspd
 	 * @param dateFrom
-	 * @param ratio
 	 * @param typeCount
-	 * @return
+	 * @return listFlowElEn
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
 	public List<ElEnFlowDTO> getElEnFlowDto(String factoryNumberUspd, LocalDate dateFrom){ //"%", "2022-01%", "2021-12%" 
@@ -104,7 +125,8 @@ public class ReportsService {
 		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
 		String datePrev = dateFrom.minusMonths(1L).toString().substring(0, 7) + "%";
 				
-		List<ElEnFlowDTO> listFlowElEn = Optional.ofNullable(queryElEnFlow.getQueryResult(factoryNumberUspd, dateCurr, datePrev))
+		List<ElEnFlowDTO> listFlowElEn = 
+				Optional.ofNullable(queryElEnFlow.getQueryResult(factoryNumberUspd, dateCurr, datePrev))
 				                        .orElseThrow(()->new ResourceNotFoundException("Object list ElEnFlowDTO Not found")); 
 	return listFlowElEn;	
 	}

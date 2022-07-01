@@ -34,6 +34,19 @@ a, a:hover, a:focus {
     min-width: 250px;
     max-width: 250px;
     min-height: 100vh;
+    max-height: var(--max-height);
+    overflow: auto; 
+    
+   /* background:  #7386D5;
+    border-right: 1pxsolidvar(--border-primary);
+    height: var(--max-height);
+    max-height: var(--max-height);
+    max-width: 20rem;
+    overflow: auto;
+    position: relative;
+    transition: transform .2s linear;
+    width: 80vw;
+    will-change: transform;*/
 }
 
 #sidebar .sidebar-header {

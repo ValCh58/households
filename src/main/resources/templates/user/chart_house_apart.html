@@ -13,17 +13,16 @@
     <link th:rel="stylesheet" th:href="@{/css/sidebarobject.css}"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
            
     <title>Построение диаграмм по объектам</title>
   </head>
   <body>
+  <div id="loader"></div>
   
    <!----------------------------------Выбор объектов УК----------------------------> 
    <div th:insert="~{fragments/sel_object_uk :: sel_object_uk}"></div>
-   
-   <!---------------------------------Построение диаграммы--------------------------> 
-   <div class="container" id="main_div"></div>
-   
+      
    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
    <script th:src="@{/assets/jquery-treetable/jquery.treetable.js}"></script>
    <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
@@ -35,10 +34,86 @@
    <script th:inline="javascript">
 	   var listFlow = [[${menuObjects}]];//Fucking editor!!!
 	   makeMenu(listFlow);
+	   var listWater;
+	   const seriesLen = 39;//Длинна серии баров 40/0-39
+	   
+       /**
+       * Загрузка дат - начальная
+       */
+	   $(document).ready(function(){
+	      dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+	      $('#datefrom').val(dateFrom);
+	      dateTo = $('#dateto').val()!= '' ? $('#dateto').val() : myDateNow(); 
+	      $('#dateto').val(dateTo);
+	   });
+
+	   /**
+	    * Сброс фильтрации
+	    */
+	   $(function(){
+	      $('#btn-del-filtr').click(function(){
+	   	  location.reload();
+	   	  dateFrom = myDateNow();
+	   	  $('#datefrom').val(dateFrom);
+	   	  
+	      });
+	   });
+	   
+
+	   /**
+	    * Обработчик для построения диаграммы
+	    */
+	   function onChart(id_link_object, id_parent, e){
+	   	console.log(id_link_object + " --- " + id_parent);
+	   	makeGetdWaterApart();
+	   }
+
+	   function makeGetdWaterApart(){
+		   var in_canvas = document.getElementById('main_div');
+			destroyChart();
+			while (in_canvas.hasChildNodes()) {//Удаление canvas
+			       in_canvas.removeChild(in_canvas.lastChild);
+			}
+		   
+		   dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+		   $('#datefrom').val(dateFrom);
+		   dateTo = $('#dateto').val()!= '' ? $('#dateto').val() : myDateNow(); 
+		   $('#dateto').val(dateTo);
+		   
+		   $.ajax({
+		        "type": "get",
+		        "url": "/user/ChartHouseApartdWater/dateFrom/" + dateFrom + "/dateTo/" + dateTo,
+		        "dataType": "json",
+		        "cache": "false",
+		        "data": "$(this).serialize()",
+		        success: function (data) {
+		        	if(data.length == 0){
+			        	alert('Данные не найдены. Измените параметры запроса');
+				    }else{
+					      listWater = data;
+       myChart('Холодная вода', 'Горячая вода', 'rgba(200, 151, 2, 0.4)', 'rgba(111, 111, 2, 1)', 'rgba(1, 111, 2, 0.4)', 'rgba(1, 111, 2, 1)');
+				       	  offLoader();
+				    }
+		        },
+		        error: function (x, e) {
+		          offLoader();
+		          alert('Данные не найдены. Измените параметры запроса.');
+	            }
+		    }); 
+
+		    
+		   }
+
+	function onLoader(){
+		   document.getElementById("loader").style.display = "block";
+		   }
+
+	function offLoader(){
+		   document.getElementById("loader").style.display = "none";
+		   }
+
    </script>
    
-   
-      
-   
+    
   </body>
 </html>

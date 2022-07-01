@@ -29,7 +29,7 @@ public class FlowData {
 	}
 
 	/** **********************************************************************************************************
-	 * Charts for all objects
+	 *  Make menu for all objects
 	 */
 	
 	@GetMapping(value="/user/ChartForHouseApart")
@@ -42,7 +42,6 @@ public class FlowData {
 		
 		return modelAndView;
 	}
-	
 	
 	/** 
 	 * Chart for cold water

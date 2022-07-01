@@ -22,6 +22,9 @@ public class MyConst {
 	public final static Integer ENERGY_COUNT = 3;
 	public final static Integer HOT_COUNT = 4;
 	
+	public final static String STR_COOL_WATER_COUNT = "1";
+	public final static String STR_HOT_WATER_COUNT = "2";
+	
 	
 
 }

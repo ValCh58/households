@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>filtr_diagramm</title>
+</head>
+<body>
+<div th:fragment="filtr_diagramm">
+           <div class="form-row justify-content-center align-items-center" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
+			   <div class="col-auto" style="margin-top: 1px; margin-bottom: 1px">
+				   <input value="" type="date" class="form-control pull-right" id="datefrom" name="datebeg" placeholder="За период с"/>
+			   </div>
+			   <div class="col-auto" style="margin-top: 1px; margin-bottom: 1px">
+				   <input value="" type="date" class="form-control pull-right" id="dateto" name="dateend" placeholder="по"/>
+		       </div>
+		       <div class="row" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
+			      <div class="col-auto">
+				     <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-del-filtr"><i class="bi-file-x"></i>Сброс</button>
+	              </div>
+	              <div class="col-auto">
+				     <a th:href="@{/user/home_user}" class="btn btn-primary btn-sm">Выход</a>
+	              </div>
+		       </div>	   
+		 </div>
+</div>
+</body>
+</html>

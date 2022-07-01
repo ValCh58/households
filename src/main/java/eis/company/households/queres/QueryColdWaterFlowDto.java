@@ -18,7 +18,7 @@ public class QueryColdWaterFlowDto {
 	private List<ColdWaterFlowDTO> coldWaterFlowDTO = new ArrayList<>();
 	@PersistenceContext(name="housingEntityManager") private EntityManager em;
 	
-	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, /*String ratio,*/ String typeCount){
+	public List<ColdWaterFlowDTO> getQueryResult(String factoryNumberUspd, String timeStamp, String timeStampPrev, String typeCount){
 		
 		coldWaterFlowDTO.clear();
 		
@@ -44,7 +44,6 @@ public class QueryColdWaterFlowDto {
 				Tuple.class).setParameter("factoryNumberUspd", factoryNumberUspd)
 				            .setParameter("timeStamp", timeStamp)
 				            .setParameter("timeStampPrev", timeStampPrev)
-				            //.setParameter("ratio", ratio)
 				            .setParameter("typeCount", typeCount)
 				            .getResultList();
 				

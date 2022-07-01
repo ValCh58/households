@@ -14,7 +14,8 @@
             <h5>Выбор объектов УК</h5>
        </div>
        
-       <table class="table table-secondary table-condensed table-sm table-bordered border-primary table-responsive-sm table-hover" id="menuTreeTable">
+       <table class="table table-secondary table-condensed table-sm table-bordered border-primary table-responsive-sm table-hover" 
+                 id="menuTreeTable">
                 <thead>
                   <tr>
                     <th style="text-align: center">Объекты</th>
@@ -27,9 +28,15 @@
        
     </nav>
      
-    <div id="main_div">
-        <h5>Diagramma</h5>
-    </div>    
+    <div id="diagramm" style="width: 80%;">
+        <div  style="text-align: center">  
+            <h5>Построние диаграммы по горячей и холодной воде поквартирно</h5>
+        </div>
+        <!---------------------------------Построение диаграммы--------------------------> 
+        <div th:insert="~{fragments/filtr_diagramm :: filtr_diagramm}"></div>
+        <div class="container" id="main_div"></div>       
+   </div>
+       
  </div>
  
 </div>
