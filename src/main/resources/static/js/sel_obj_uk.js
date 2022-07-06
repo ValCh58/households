@@ -16,7 +16,7 @@ var chartObj = [];
        "<tr data-tt-id=\"" + obj.id_link_object + "\" data-tt-parent-id=\"" + obj.id_parent + "\" id=\"link" + obj.id_link_object + "\" ><td style=\"text-align: center\">" + obj.name_object + "</td>" +
        + "<td style=\"display: none;\">" + obj.id_object + "</td><td style=\"display: none;\">" + obj.id_type_object + "</td>"
        + '<TD style="width:8%;" align=center>'
-       + "<button type=\"button\" onclick=\"onChart(" + obj.id_link_object + "," + obj.id_parent + ")\" class=\"btn btn-light btn-sm\" id=\"btn" 
+       + "<button type=\"button\" onclick=\"onChart(" + obj.id_link_object + "," + obj.id_type_object + ")\" class=\"btn btn-light btn-sm\" id=\"btn" 
        + obj.id_link_object+ "\"><i class=\"fas fa-cogs\"></i></button>"
        + '</div></div>'
        + '</TD>'

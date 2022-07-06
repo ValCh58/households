@@ -18,7 +18,7 @@ public class QueryChartHouseApart {
 	private List<ChartHouseApartDto> chartHouseApartDto = new ArrayList<ChartHouseApartDto>();
 	@PersistenceContext(name="housingEntityManager") private EntityManager em;
 	
-	public List<ChartHouseApartDto> getQueryChartHouseApart(String timeStamp, String timeStampPrev){
+	public List<ChartHouseApartDto> getQueryChartHouseApart(String timeStamp, String timeStampPrev,int houseID){
 	chartHouseApartDto.clear();
     
 	@SuppressWarnings("unchecked")
@@ -31,12 +31,12 @@ public class QueryChartHouseApart {
 			+ " from \r\n"
 			+ "(SELECT max(time_stamp) as time_stamp, room, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, type_count, num_rat  \r\n"
 			+ "FROM housing.report_all \r\n"
-			+ "where  type_count = :typeCount1 and time_stamp like :timeStamp \r\n"
+			+ "where  type_count = :typeCount1 and time_stamp like :timeStamp and id_house = (SELECT id_object FROM housing.link_object_uk where id_link_object = :houseID) \r\n"
 			+ "group by factory_number_uspd\r\n"
 			+ "order by factory_number_uspd) curr left join \r\n"
 			+ "(SELECT max(time_stamp) as time_stamp, room, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, type_count, num_rat \r\n"
 			+ "FROM housing.report_all  \r\n"
-			+ "where  type_count = :typeCount1 and time_stamp like :timeStampPrev \r\n"
+			+ "where  type_count = :typeCount1 and time_stamp like :timeStampPrev and id_house = (SELECT id_object FROM housing.link_object_uk where id_link_object = :houseID) \r\n"
 			+ "group by factory_number_uspd\r\n"
 			+ "order by factory_number_uspd) prev \r\n"
 			+ "on curr.factory_number_uspd = prev.factory_number_uspd\r\n"
@@ -49,12 +49,12 @@ public class QueryChartHouseApart {
 			+ " from \r\n"
 			+ "(SELECT max(time_stamp) as time_stamp, room, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, type_count, num_rat  \r\n"
 			+ "FROM housing.report_all \r\n"
-			+ "where  type_count = :typeCount2 and time_stamp like :timeStamp \r\n"
+			+ "where  type_count = :typeCount2 and time_stamp like :timeStamp and id_house = (SELECT id_object FROM housing.link_object_uk where id_link_object = :houseID) \r\n"
 			+ "group by factory_number_uspd\r\n"
 			+ "order by factory_number_uspd) curr left join \r\n"
 			+ "(SELECT max(time_stamp) as time_stamp, room, num_acnt, name_count, max(count_w) as count_w, serial_num, date_expire, factory_number_uspd, type_count, num_rat \r\n"
 			+ "FROM housing.report_all  \r\n"
-			+ "where  type_count = :typeCount2 and time_stamp like :timeStampPrev \r\n"
+			+ "where  type_count = :typeCount2 and time_stamp like :timeStampPrev and id_house = (SELECT id_object FROM housing.link_object_uk where id_link_object = :houseID) \r\n"
 			+ "group by factory_number_uspd\r\n"
 			+ "order by factory_number_uspd) prev \r\n"
 			+ "on curr.factory_number_uspd = prev.factory_number_uspd)a\r\n"
@@ -65,6 +65,7 @@ public class QueryChartHouseApart {
             .setParameter("timeStampPrev", timeStampPrev)
             .setParameter("typeCount1", MyConst.STR_COOL_WATER_COUNT)
             .setParameter("typeCount2", MyConst.STR_HOT_WATER_COUNT)
+            .setParameter("houseID", houseID)
             .getResultList();
 	
 	if(list.isEmpty()) {return null;}

@@ -53,3 +53,9 @@ a, a:hover, a:focus {
     padding: 20px;
     background: #6d7fcc;
 }
+
+#menuTreeTable {
+  overflow: auto;
+  display: block;	
+	
+}

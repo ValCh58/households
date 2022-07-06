@@ -142,10 +142,11 @@ public class ReportsAndStatistics {
 	 * Запрос на получение данных по C&H воде
 	 * для построения диаграммы по дому поквартирно
 	 */
-	@GetMapping(value="/user/ChartHouseApartdWater/dateFrom/{dateFrom}/dateTo/{dateTo}")
+	@GetMapping(value="/user/ChartHouseApartdWater/dateFrom/{dateFrom}/dateTo/{dateTo}/idLinkObj/{idLinkObj}")
 	public  ResponseEntity<List<ChartHouseApartDto>> makeChartHouseApartColdWater(@PathVariable("dateFrom") LocalDate dateFrom,
-			                                                                      @PathVariable("dateTo") LocalDate dateTo){
-		return ResponseEntity.status(OK).body(reportService.getChartHouseApartDto(dateFrom, dateTo));
+			                                                                      @PathVariable("dateTo") LocalDate dateTo,
+			                                                                      @PathVariable("idLinkObj") int idLinkObj){
+		return ResponseEntity.status(OK).body(reportService.getChartHouseApartDto(dateFrom, dateTo, idLinkObj));
 	}
 	/**************************************************************************************************************************/
 	

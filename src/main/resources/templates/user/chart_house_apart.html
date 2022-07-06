@@ -17,7 +17,7 @@
            
     <title>Построение диаграмм по объектам</title>
   </head>
-  <body>
+  <body onload="offLoader()" style="background: url(/images/textures.jpeg);">
   <div id="loader"></div>
   
    <!----------------------------------Выбор объектов УК----------------------------> 
@@ -45,6 +45,8 @@
 	      $('#datefrom').val(dateFrom);
 	      dateTo = $('#dateto').val()!= '' ? $('#dateto').val() : myDateNow(); 
 	      $('#dateto').val(dateTo);
+	      //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	   
 	   });
 
 	   /**
@@ -63,12 +65,23 @@
 	   /**
 	    * Обработчик для построения диаграммы
 	    */
-	   function onChart(id_link_object, id_parent, e){
-	   	console.log(id_link_object + " --- " + id_parent);
-	   	makeGetdWaterApart();
+	   function onChart(id_link_object, id_type_object){
+		//console.log(id_link_object);
+		var ds = $('#datefrom').val(), de = $('#dateto').val(); 
+		if(ds > de){
+             alert("Введите правильно даты!");
+             offLoader();
+             return;
+			}
+		if(id_type_object == 8){
+		   onLoader();	
+	   	   makeGetdWaterApart(id_link_object);
+		}else{
+             alert("Выберите дом!");
+			}
 	   }
 
-	   function makeGetdWaterApart(){
+	   function makeGetdWaterApart(idLinkObj){
 		   var in_canvas = document.getElementById('main_div');
 			destroyChart();
 			while (in_canvas.hasChildNodes()) {//Удаление canvas
@@ -82,7 +95,7 @@
 		   
 		   $.ajax({
 		        "type": "get",
-		        "url": "/user/ChartHouseApartdWater/dateFrom/" + dateFrom + "/dateTo/" + dateTo,
+		        "url": "/user/ChartHouseApartdWater/dateFrom/" + dateFrom + "/dateTo/" + dateTo + "/idLinkObj/" + idLinkObj,
 		        "dataType": "json",
 		        "cache": "false",
 		        "data": "$(this).serialize()",
@@ -91,7 +104,7 @@
 			        	alert('Данные не найдены. Измените параметры запроса');
 				    }else{
 					      listWater = data;
-       myChart('Холодная вода', 'Горячая вода', 'rgba(200, 151, 2, 0.4)', 'rgba(111, 111, 2, 1)', 'rgba(1, 111, 2, 0.4)', 'rgba(1, 111, 2, 1)');
+       myChart('Холодная вода', 'Горячая вода', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)', 'rgba(155, 1, 5, 0.4)', 'rgba(155, 1, 5, 1)');
 				       	  offLoader();
 				    }
 		        },

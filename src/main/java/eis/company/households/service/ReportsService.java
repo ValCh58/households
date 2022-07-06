@@ -1,8 +1,6 @@
 package eis.company.households.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +19,6 @@ import eis.company.households.queres.QueryChartHouseApart;
 import eis.company.households.queres.QueryColdWaterFlowDto;
 import eis.company.households.queres.QueryElEnFlow;
 import eis.company.households.queres.QueryHotCountFlowDto;
-import eis.company.households.MyConst;
 
 
 @Service
@@ -101,12 +98,12 @@ public class ReportsService {
 	 * @return List<ChartHouseApartDto>
 	 */
 	@Transactional(transactionManager = "housingTransactionManager", readOnly = true)
-	public List<ChartHouseApartDto> getChartHouseApartDto(LocalDate dateFrom, LocalDate dateTo){
-		String dateCurr = dateFrom.toString().substring(0, 7) + "%";
-		String datePrev = dateTo.toString().substring(0, 7) + "%";
+	public List<ChartHouseApartDto> getChartHouseApartDto(LocalDate dateFrom, LocalDate dateTo, int idLinkObj){
+		String dateCurr = dateFrom.toString().substring(0, 10) + "%";
+		String datePrev = dateTo.toString().substring(0, 10) + "%";
 			  
 		 List<ChartHouseApartDto> listChartHouseApartDto =	
-				Optional.ofNullable(qChartHouseApart.getQueryChartHouseApart(datePrev, dateCurr))
+				Optional.ofNullable(qChartHouseApart.getQueryChartHouseApart(datePrev, dateCurr, idLinkObj))
 				                      .orElseThrow(()->new ResourceNotFoundException("Object list ChartHouseApartDto Not found"));
 			
 	return 	listChartHouseApartDto;
