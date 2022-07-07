@@ -5,22 +5,23 @@ var arrChartMainT1 = [ [ [] ] ];
 var arrChartMainT2 = [ [ [] ] ];
 var arrChartT1 = [ [ [] ] ];
 var chartObj = [];
-
+var namObj;
 
 /**
  * Создание меню объектов УК
  */
  function makeMenu(data) {
      $.each(data, function (idx, obj) {
-       $("#menuTreeTable").append(
-       "<tr data-tt-id=\"" + obj.id_link_object + "\" data-tt-parent-id=\"" + obj.id_parent + "\" id=\"link" + obj.id_link_object + "\" ><td style=\"text-align: center\">" + obj.name_object + "</td>" +
-       + "<td style=\"display: none;\">" + obj.id_object + "</td><td style=\"display: none;\">" + obj.id_type_object + "</td>"
+	   $("#menuTreeTable").append(
+       '<tr data-tt-id="' + obj.id_link_object + '" data-tt-parent-id="' + obj.id_parent + '" id="link' + obj.id_link_object + '" ><td style="text-align: center">' + obj.name_object + '</td>' +
+       + '<td style="display: none;">' + obj.id_object + '</td><td style="display: none;">' + obj.id_type_object + '</td>'
+       + '<td style="display: none;">' + obj.name_object + '</td>'
        + '<TD style="width:8%;" align=center>'
-       + "<button type=\"button\" onclick=\"onChart(" + obj.id_link_object + "," + obj.id_type_object + ")\" class=\"btn btn-light btn-sm\" id=\"btn" 
-       + obj.id_link_object+ "\"><i class=\"fas fa-cogs\"></i></button>"
+       + '<button type="button" onclick="onChart(' + obj.id_link_object + ',' + obj.id_type_object + ',' + 'this' + ');" class="btn btn-light btn-sm" id="btn' 
+       + obj.id_link_object+ '"><i class="fas fa-cogs"></i></button>'
        + '</div></div>'
        + '</TD>'
-       + "</tr>");
+       + '</tr>');
        
        //var myId = $('#link'+obj.id_link_object);
        //var a = myId.hasClass("leaf");
@@ -63,7 +64,7 @@ _.each(listWater, function(list) {
 	  if(i == seriesLen){
 			ret = makeCharts(ret, arrChartT1[0][ret], arrChartMainT1[0][ret], arrChartMainT2[0][ret],  
 			                 lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColorT2);
-		    i = 0;
+		    i = -1;
 		    arrChartMainT1[0][ret] = new Array();
 		    arrChartT1[0][ret] = new Array();
 		    arrChartMainT2[0][ret] = new Array();
@@ -133,9 +134,10 @@ myChart = new Chart(ctx, {
        scales: {
 		         
         	x: {
-        	grid: {offset: false},
+        	grid: {offset: true},
 	        ticks: {minRotation: 75}, // angle in degrees
-            stacked: true
+            stacked: true,
+            offset: true
            },
             y: {
                 beginAtZero: true,

@@ -8,12 +8,13 @@ body {
     background: #fafafa;
 }
 
-p {
+p h6{
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;
     font-weight: 300;
     line-height: 1.7em;
     color: #999;
+    
 }
 
 a, a:hover, a:focus {
@@ -28,34 +29,26 @@ a, a:hover, a:focus {
 }
 
 #sidebar {
-    background: #7386D5;
+	background-color: #0081cb;
     color: #fff;
-    transition: all 0.3s;
-    min-width: 250px;
-    max-width: 250px;
-    min-height: 100vh;
-    max-height: var(--max-height);
-    overflow: auto; 
-    
-   /* background:  #7386D5;
-    border-right: 1pxsolidvar(--border-primary);
-    height: var(--max-height);
-    max-height: var(--max-height);
-    max-width: 20rem;
-    overflow: auto;
-    position: relative;
-    transition: transform .2s linear;
-    width: 80vw;
-    will-change: transform;*/
+    min-height: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    margin: 2px 0 0 2px;
+    padding: 20px 0 0;
 }
 
+
 #sidebar .sidebar-header {
-    padding: 20px;
-    background: #6d7fcc;
+    padding: 10px;
+    background: #0081cb;
 }
 
 #menuTreeTable {
+  height: 60%;
   overflow: auto;
   display: block;	
-	
 }
+
+
+

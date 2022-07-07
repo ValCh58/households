@@ -10,7 +10,7 @@
  <div class="wrapper">
      <!-- Sidebar -->
     <nav id="sidebar">
-       <div class="sidebar-header">
+       <div class="sidebar-header" style="text-align: center">
             <h5>Выбор объектов УК</h5>
        </div>
        
@@ -28,12 +28,15 @@
        
     </nav>
      
-    <div id="diagramm" style="width: 80%;">
+    <div id="diagramm" style="width: 80%; margin-top: 10px;">
         <div  style="text-align: center">  
             <h5>Построние диаграммы по горячей и холодной воде по дому поквартирно</h5>
         </div>
         <!---------------------------------Построение диаграммы--------------------------> 
         <div th:insert="~{fragments/filtr_diagramm :: filtr_diagramm}"></div>
+        <div class="diag-header" style="text-align: center;margin-top: 10px;">
+            <h6 id="id_head_diagram" style="color: graytext;"></h6>
+        </div>
         <div class="container" id="main_div"></div>       
    </div>
        

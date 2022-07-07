@@ -60,13 +60,13 @@
 	   	  
 	      });
 	   });
-	   
 
+	  
 	   /**
 	    * Обработчик для построения диаграммы
 	    */
-	   function onChart(id_link_object, id_type_object){
-		//console.log(id_link_object);
+	   function onChart(id_link_object, id_type_object, e){
+		var strHeadDiagram = e.parentNode.parentNode.cells[2].innerHTML;
 		var ds = $('#datefrom').val(), de = $('#dateto').val(); 
 		if(ds > de){
              alert("Введите правильно даты!");
@@ -76,6 +76,7 @@
 		if(id_type_object == 8){
 		   onLoader();	
 	   	   makeGetdWaterApart(id_link_object);
+	   	   $('#id_head_diagram').text(strHeadDiagram);
 		}else{
              alert("Выберите дом!");
 			}

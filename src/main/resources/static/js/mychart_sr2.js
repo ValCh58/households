@@ -53,7 +53,7 @@ _.each(listFlow, function(list) {
 	  if(i === seriesLen){
 			ret = makeCharts(ret, arrChartT1[0][ret], arrChartMainT1[0][ret], arrChartMainT2[0][ret],  
 			                 lab1, lab2, backColorT1, borderColorT1, backColorT2, borderColorT2);
-		    i = 0;
+		    i = -1;
 		    arrChartMainT1[0][ret] = new Array();
 		    arrChartT1[0][ret] = new Array();
 		    arrChartMainT2[0][ret] = new Array();

@@ -35,7 +35,7 @@ _.each(listFlow, function(list) {
 		arrChart[0][ret][i] = str;
 		if(i == seriesLen){
 			ret = makeCharts(ret, arrChart[0][ret], arrChartMain[0][ret], label, backColor, borderColor);//Каждые 40 измерений из таблицы данных
-		    i = 0;
+		    i = -1;
 		    arrChartMain[0][ret] = new Array();
 		    arrChart[0][ret] = new Array();
         }
