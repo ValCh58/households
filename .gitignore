@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ###MyIgnore###
-households/src/main/resources/application.properties
+households/README.md
+
