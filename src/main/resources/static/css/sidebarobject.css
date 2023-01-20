@@ -1,0 +1,54 @@
+@charset "UTF-8";
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p h6{
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+    
+}
+
+a, a:hover, a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+#sidebar {
+	background-color: #0081cb;
+    color: #fff;
+    min-height: 100%;
+    max-width: 400px;
+    font-size: 16px;
+    margin: 2px 0 0 2px;
+    padding: 20px 0 0;
+}
+
+
+#sidebar .sidebar-header {
+    padding: 10px;
+    background: #0081cb;
+}
+
+#menuTreeTable {
+  height: 60%;
+  overflow: auto;
+  display: block;	
+}
+
+
+

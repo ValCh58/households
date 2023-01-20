@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body>
+<div th:fragment="script_tree_table">
+<!-- Scripts------------------------------------------------------------------->
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/jquery-treetable/jquery.treetable.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+
+<!-- Create a table programmatically  ----------------------------------------->
+<script>
+
+    $(document).ready(function () {
+    	        
+        $.ajax({
+          "type": 'get',
+          "url": '/nodes',
+          "dataType": "json",
+          "cache": "false",
+          "data": "$(this).serialize()",
+          "success": function (data) {
+              $.each(data, function (idx, obj) {
+                $("#treeTable").append(
+                "<tr data-tt-id=\"" + obj.id_link_object + "\" data-tt-parent-id=\"" + obj.id_parent + "\"><td>" + obj.name_object + "</td><td>" + obj.prop_object + "</td>"
+                + "<td style=\"display: none;\">" + obj.id_object + "</td><td style=\"display: none;\">" + obj.id_type_object + "</td>"
+                + '<TD style="width:8%;" align=center>'
+                + '<div class="dropdown no-arrow" id="dropdown' + obj.id_link_object + '">'
+                + '<a  href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'
+                +    '<i class="fas fa-keyboard fa-sm fa-fw text-gray-400"></i>'
+                + '</a>'
+                + '<div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">'
+                + '<div class="dropdown-header"><i class="fas fa-tools" style="color: gray"></i>&nbsp;Действия:</div>'
+                + '<div class="dropdown-divider"></div>'
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewSrv(' + obj.id_type_object + ')"><i class="fas fa-server"></i>&nbsp;Добавить Сервер</a>'
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewUspd(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-cog"></i>&nbsp;Добавить УСПД</a>'
+                + '<a class="dropdown-item newBtn" href="#" onclick="getPosScroll(); openModalNewCnt(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-cogs"></i>&nbsp;Добавить Счетчик</a>'
+                + '<a class="dropdown-item delBtn" href="#" onclick="getPosScroll(); openModalWarningDel(' + obj.id_link_object + ',' + obj.id_type_object + ')"><i class="fas fa-trash-alt"></i>&nbsp;Удалить</a>'
+                + '<a class="dropdown-item editBtn" href="#" onclick="getPosScroll(); openModalEdit(' + obj.id_object + ',' + obj.id_type_object + ')"><i class="fas fa-pencil-alt"></i>&nbsp;Изменить</a>' 
+                + '</div></div>'
+                + '</TD>'
+                + "</tr>");
+                
+              },
+                
+              );
+              
+              $("#treeTable").treetable({
+                  expandable: true,
+                  initialState: "expanded",
+                  clickableNodeNames: true,
+                  indent: 30
+              });
+
+              setScrollToPos();         
+          },
+
+          error: function(jqXHR, textStatus, errorThrown){
+			    alert('Ошибка при вызове таблицы: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+			   }
+        });
+    });
+
+    /**
+     *  Получим и запишем позицию скроллинга
+     */
+      function getPosScroll(){
+      	sessionStorage.scrollTop = $(window).scrollTop();
+      }
+      
+      /**
+       *  Прочитаем и установим позицию скроллинга
+       */ 
+      function setScrollToPos(){
+      	if (sessionStorage.scrollTop != "undefined") {
+  			  $(window).scrollTop(sessionStorage.scrollTop);
+  		   }
+          }
+</script>
+
+
+<script>
+
+/****Удаление записей из дерева объектов*****************************************/
+function openModalWarningDel(idLinkObject, idTypeObject){
+	
+	var myModalEl = document.getElementById('modal-warning-obj');
+	myModalEl.addEventListener('hidden.bs.modal', function (e) {reloadMyPage();})
+	
+	$('#modal-warning-obj #id_link_object').val(idLinkObject);
+	$('#modal-warning-obj #id_type_object').val(idTypeObject);
+	$("#modal-warning-obj").modal();
+}
+
+$("#modalFormWarningDelObject").on("submit", function(){
+	$.ajax({
+		url: '/delObjectTree',
+		method: 'post',
+		dataType: 'json',
+		cache: false,
+		data: $(this).serialize(),
+		success: function(data){
+			
+		}
+	});
+	
+	$("#modal-warning-obj").modal('hide');
+});
+
+
+/********* Открытие модальных окон для редактирования объектов *****************/
+function openModalEdit(IdObject, IdTypeObject){
+	
+	if(IdTypeObject == 2){
+		editSrv(IdObject); //сервер связи
+	}
+	else if(IdTypeObject == 3){
+		editUspd(IdObject); //успд 
+	}
+	else if(IdTypeObject == 4){
+		editCount(IdObject); //счетчики 
+	}
+}
+
+function reloadMyPage(){
+	$.ajax({
+        "type": 'get',
+        "url": '/nodes',
+        "dataType": "json",
+        "success": function (data) {
+        	
+        }
+        	
+        });
+}
+
+/*******************************************************************************/
+ 
+ $(function(){ 
+  $("#modalEditCount #counts-group").change(function(){
+	 var sel = $("input:radio[name=counts]:checked").val();
+     if(sel == '1' || sel == '2'){ 
+    	 $("#id_num_ch").prop( "disabled", false); 
+         } else {
+        	 $("#id_num_ch").prop( "disabled", true); 
+             }	 
+	  
+	 });
+  });
+ 
+ 
+ /****редактирование счетчика***************************************************/
+ function editCount(idObj){
+	
+	 //$('input[name="counts"][value="4"]').prop('checked', true);
+	 
+	 $.ajax({
+        "type": 'get',
+        "url": '/nodeCounts/'+idObj,
+        "dataType": "json",
+        "success": function (data) {
+        	$('#modalEditCount #idCounts').val(data.idCounts);
+        	$('#modalEditCount #typeCount').val(data.typeCount);
+        	$('#modalEditCount #serialNum').val(data.serialNum);
+        	$('#modalEditCount #datePlug').val(data.datePlug);
+        	$('#modalEditCount #dateExpire').val(data.dateExpire);
+        	$('#modalEditCount #nameCount').val(data.nameCount);
+        	$('#modalEditCount #address').val(data.address);
+        	$('#modalEditCount #num_ch').val(data.numCh);
+        	$('#modalEditCount #num_rat').val(data.numRat);
+        	$('#modalEditCount #idLinkObject').val(data.idLinkObject);
+        	$('input[name="counts"][value="' + data.typeCount + '"]').prop('checked', true);
+
+            //Номер канала
+        	var ch = [1,2,3,4,5,6,7,8];
+        	$('#id_num_ch option').remove();
+        	$.each($(ch), function(idx, obj){
+        		if(obj == $('#modalEditCount #num_ch').val()){
+        		   $('<option/>', {value: obj, html: obj, selected: true}).appendTo('#id_num_ch');
+        		}else{
+        		   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_ch');
+            	}
+            });
+            //Делитель
+        	var rat = [1,10,20,50,100,1000];
+        	$('#id_num_rat option').remove();
+        	$.each($(rat), function(idx, obj){
+        		if(obj == $('#modalEditCount #num_rat').val()){
+        		   $('<option/>', {value: obj, html: obj, selected: true}).appendTo('#id_num_rat');
+        		}else{
+        		   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_rat');
+            	}
+            });
+       }
+    });
+	
+	 $("#modalEditCount").modal();
+}
+ $('#modalEditCount').on('shown.bs.modal', function() {
+	   $('#nameCount').focus();
+	   var sel = $("input:radio[name=counts]:checked").val();
+	   if(sel == '1' || sel == '2'){ 
+	   	 $("#id_num_ch").prop( "disabled", false); 
+	     } else {
+	      	 $("#id_num_ch").prop( "disabled", true); 
+	       }	 
+ });
+
+/******* Запись состояния радиокнопки *********************/
+ $("#counts-group input[type='radio']").change(function() {
+	 $('#modalEditCount #typeCount').val($(this).val());
+	});
+	
+ /* Запись параметров счетчика в режиме редактирования*******/
+ $("#modalFormEditCount").on("submit", function(){
+	$('#modalEditCount #num_ch').val($('#modalEditCount #id_num_ch :selected').val());
+	$('#modalEditCount #num_rat').val($('#modalEditCount #id_num_rat :selected').val());
+	 
+	$.ajax({
+		url: '/updateCounts',
+		method: 'post',
+		dataType: 'json',
+		cache: false,
+		data: $(this).serialize(),
+		success: function(data){
+		}
+	});
+	
+	$("#modalEditServer").modal('hide');
+});	
+
+/* заполнение полей формы успд в режиме редактирования**************************/	
+function editUspd(idObj){
+	
+	var id = idObj;
+		
+	$.ajax({
+        "type": 'get',
+        "url": '/nodeEditUspd/'+id,
+        "dataType": "json",
+        "success": function (data) {
+          	 $('#modalEditUspd #nameUspdDev').val(data.nameUspdDev);
+        	 $('#modalEditUspd #numUspdDev').val(data.numUspdDev);
+        	 $('#modalEditUspd #addressLoc').val(data.addressLoc);
+        	 $('#modalEditUspd #idUspdDev').val(data.idUspdDev);
+        	 $('#modalEditUspd #idCounts').val(data.idCounts);
+        	 $('#modalEditUspd #idConfigUspd').val(data.idConfigUspd);
+        	 $('#modalEditUspd #idTypeUspdDev').val(data.idTypeUspdDev);
+        	 $('#modalEditUspd #idLinkObject').val(0);//Значение 0 в режиме редактирования только для заполнения//
+        	 
+        	 //Заполняем список Тип УСПД//        	
+        	 $('#typeuspdselect option').remove();
+        	 $.each($(data.typeUspd), function(idx, obj) {
+        		 if(obj.idTypeUspd == $('#modalEditUspd #idTypeUspdDev').val()){
+        		   $('<option/>', {value: obj.idTypeUspd, html: obj.nameType, selected: true}).appendTo('#typeuspdselect');
+        		 }  
+        		 else{
+        			 $('<option/>', {value: obj.idTypeUspd, html: obj.nameType, selected: false}).appendTo('#typeuspdselect');
+        		 }
+        		});
+
+        	 $("#modalEditUspd").modal();
+       }
+    });
+}
+
+$('#modalEditUspd').on('shown.bs.modal', function() {
+	   $('#nameUspdDev').focus();
+	 })
+
+/****редактирование сервера связи************************************************/
+function editSrv(idObj){
+	var id = idObj;
+	
+	$.ajax({
+        "type": 'get',
+        "url": '/nodeEditSrv/'+id,
+        "dataType": "json",
+        "success": function (data) {
+        	 $('#modalEditServer #name_server').val(data.name_server);
+        	 $('#modalEditServer #ip_server').val(data.ip_server);
+        	 $('#modalEditServer #port_server').val(data.port_server);
+        	 $('#modalEditServer #name_company').val(data.name_company);
+        	 $('#modalEditServer #name_type').val(data.name_type);
+        	 $('#modalEditServer #id_manag_company').val(data.id_manag_company);
+        	 $('#modalEditServer #id_type_object').val(data.id_type_object);
+        	 $('#modalEditServer #id_com_server').val(data.id_com_server);
+        	 
+        	 $("#modalEditServer").modal();    	 
+       }
+    });
+	
+}
+$('#modalEditServer').on('shown.bs.modal', function() {
+	   $('#name_server').focus();
+	 })
+
+/** Запись параметров сервера связи в режиме редактирования***********/
+ $("#modalFormEditSrv").on("submit", function(){
+	$.ajax({
+		url: '/updateEditSrv',
+		method: 'post',
+		dataType: 'json',
+		cache: false,
+		data: $(this).serialize(),
+		success: function(data){
+		}
+	});
+	$("#modalEditServer").modal('hide');
+});
+
+ 
+ /** Запись параметров УСПД в режиме редактирования******************************/
+ 
+ $("#modalFormEditUspd").on("submit", function(){
+	 	 
+	 $('#modalEditUspd #retIdTypeUspdDev').val($('#modalEditUspd #typeuspdselect :selected').val());
+	 
+	$.ajax({
+		url: '/updateUspdDev',
+		method: 'post',
+		dataType: 'json',
+		cache: false,
+		data: $(this).serialize(),
+		success: function(data){
+		}
+	});
+	$("#modalEditUspd").modal('hide');
+});
+
+
+
+/************ Создание нового объекта - Сервер связи ******************/
+function openModalNewSrv(idTypeObject){
+	
+	if(idTypeObject == 1){
+		/******** Событие на закрытие окна modalNewServer *******/
+		var myModalEl = document.getElementById('modalNewServer');
+		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
+		reloadMyPage();
+	})
+	$('#modalNewServer #name_server').val('');
+	$('#modalNewServer #ip_server').val('');
+	$('#modalNewServer #port_server').val('');
+	$("#modalNewServer").modal();
+	}
+	else{
+		alert("Сервер связи можно привязать только к Управляющей компании!");
+	}
+}
+
+/** Запись параметров нового сервера связи *****/
+$("#modalFormNewSrv").on("submit", function(){
+	
+	$.ajax({
+		url: '/newSrv',
+		method: 'post',
+		dataType: 'json',
+		cache: false,
+		data: $(this).serialize(),
+		success: function(data){
+		}
+	});
+	
+	$("#modalNewServer").modal('hide');
+});
+
+/*************Создать новый УСПД****************************************************/
+ function openModalNewUspd(idLinkObj, idTypeObject){
+	 
+	if(idTypeObject == 2){
+		var myModalEl = document.getElementById('modalEditUspd');
+		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
+		reloadMyPage();
+	})
+	
+	 $.ajax({
+	        "type": 'get',
+	        "url": '/nodeNewUspd',
+	        "dataType": "json",
+	        "success": function (data) {
+	          	 $('#modalEditUspd #nameUspdDev').val('');
+	        	 $('#modalEditUspd #numUspdDev').val('');
+	        	 $('#modalEditUspd #addressLoc').val('');
+	        	 $('#modalEditUspd #idUspdDev').val(0);
+	        	 $('#modalEditUspd #idCounts').val(0);
+	        	 $('#modalEditUspd #idConfigUspd').val(0);
+	        	 $('#modalEditUspd #idLinkObject').val(idLinkObj);
+	        	 $('#modalEditUspd #idTypeUspdDev').val(data.idTypeUspdDev);//для правильной работы записи объекта 
+	        	         	 
+	        	 //Заполняем список Тип УСПД//        	
+	        	 $('#typeuspdselect option').remove();
+	        	 $.each($(data.typeUspd), function(idx, obj) {
+	        		$('<option/>', {value: obj.idTypeUspd, html: obj.nameType, selected: false}).appendTo('#typeuspdselect');
+	        	 });
+	       }
+	    });
+	
+	 $("#modalEditUspd").modal();
+	}
+	else{
+		alert("УСПД можно привязать только к Серверу связи!");
+	}
+} 
+ $('#modalEditUspd').on('shown.bs.modal', function() {
+	   $('#nameUspdDev').focus();
+	 });
+
+/****************************Создать новый счетчик************************************/
+ 
+ function openModalNewCnt(idLinkObj, idTypeObject){
+	
+	if(idTypeObject == 3){
+		var myModalEl = document.getElementById('modalEditCount');
+		myModalEl.addEventListener('hidden.bs.modal', function (e) { 
+		reloadMyPage();
+	});
+		
+	 $.ajax({
+	        "type": 'get',
+	        "url": '/nodeNewCount',
+	        "dataType": "json",
+	        "success": function (data) {
+	        	$('#modalEditCount #idCounts').val(data.idCounts);
+	        	$('#modalEditCount #typeCount').val(data.typeCount);
+	        	$('#modalEditCount #serialNum').val(data.serialNum);
+	        	$('#modalEditCount #datePlug').val(data.datePlug);
+	        	$('#modalEditCount #dateExpire').val(data.dateExpire);
+	        	$('#modalEditCount #nameCount').val(data.nameCount);
+	        	$('#modalEditCount #address').val(data.address);
+	        	$('#modalEditCount #num_rat').val(data.numRat);
+	        	$('#modalEditCount #idLinkObject').val(idLinkObj);
+	        	
+                //Номер канала
+	        	var ch = [1,2,3,4,5,6,7,8];
+	        	$('#id_num_ch option').remove();
+	        	$.each($(ch), function(idx, obj){
+	        	   $('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_ch');
+	        	});
+	        	
+	        	//Делитель
+	        	var ch = [1,10,20,50,100,1000];
+	        	$('#id_num_rat option').remove();
+	        	$.each($(ch), function(idx, obj){
+	        		$('<option/>', {value: obj, html: obj, selected: false}).appendTo('#id_num_rat');
+	            });
+	       }
+	    });
+
+	 $("#modalEditCount").modal();
+	}
+	else{
+		alert("Счетчик можно привязать только к УСПД!");
+	}
+}
+ $('#modalEditCount').on('shown.bs.modal', function() {
+	   $('#typeCount').focus();
+	 })
+	 
+function onLoader(){
+		   document.getElementById("loader").style.display = "block";
+		   }
+
+function offLoader(){
+		   document.getElementById("loader").style.display = "none";
+		   }	 
+ 
+</script>
+
+</div>
+</body>
+</html>

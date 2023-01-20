@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> <meta charset="UTF-8"> </head>
+<body>
+	<div th:fragment="fr_filter_flow_chart">
+		<div class="row align-items-center col-12" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px; justify-content: flex-end;">
+		    <div class="col-sm-auto" style="margin-top: 1px; margin-bottom: 1px">
+				<input value="" type="date" class="form-control pull-right" id="datefrom" name="datebeg" placeholder="Дата"/>
+			</div>
+			<div class="col-sm-auto">
+				 <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-filtr-flow"><i class="bi-funnel"></i>Фильтр</button>
+			</div>
+			<div class="col-sm-auto">
+				 <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-del-filtr-flow"><i class="bi-file-x"></i>Сброс</button>
+			</div>
+			<div class="col-sm-auto">
+				  <a th:href="@{/user/home_user}" class="btn btn-primary btn-sm">Выход</a>
+			</div>
+		</div>
+	</div>
+</body>

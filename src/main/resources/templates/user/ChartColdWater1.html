@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+   <meta charset="utf-8">
+   <title>Диаграмма по расходу холодной воды</title>
+    
+   <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+   <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
+   
+</head>
+<body onload="offLoader()" style="background: url(/images/textures.jpeg);">
+<div id="loader"></div>
+
+<div class="container">
+     <div class="justify-content-center  align-items-center" style="margin-top: 3px">
+        <div class="col text-nowrap">
+			<p style="text-align: center;font-size: 1.4em;">Диаграмма по расходу холодной воды</p>
+			<div th:insert="~{fragments/filter_flow_chart :: fr_filter_flow_chart}"></div>
+		</div>
+	 </div>		
+</div>
+
+<div class="container" id="main_div"></div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script th:src="@{/js/mychart.js}"></script>
+
+<script  th:inline="javascript">
+
+function onLoader(){
+	   document.getElementById("loader").style.display = "block";
+	   }
+
+function offLoader(){
+	   document.getElementById("loader").style.display = "none";
+	   }
+
+var listFlow = [[${listWaterFlowReport}]];//Fucking editor!!!
+var dateFrom ='';
+const seriesLen = 40;//Длинна серии баров
+
+$(document).ready(function(){
+	dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();	
+	$('#datefrom').val(dateFrom);
+	myChart('Расход холодной воды', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)');
+});
+
+/**
+ * Сброс фильтрации
+ */
+$(function(){
+   $('#btn-del-filtr-flow').click(function(){
+	  location.reload();
+	  dateFrom = myDateNow();
+	  $('#datefrom').val(dateFrom);
+	  
+   });
+});
+
+/**
+ * Фильтрация по дате 
+ *
+ */
+$(function(){ 
+	  $("#btn-filtr-flow").click(function(){
+		var in_canvas = document.getElementById('main_div');
+		destroyChart();
+		while (in_canvas.hasChildNodes()) {//Удаление canvas
+		       in_canvas.removeChild(in_canvas.lastChild);
+		}
+		dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow(); 
+		$('#datefrom').val(dateFrom);
+		  
+        $.ajax({
+		        "type": "get",
+		        "url": "/user/ChartColdWater1/dateFrom/" + dateFrom,
+		        "dataType": "json",
+		        "cache": "false",
+		        "data": "$(this).serialize()",
+		        success: function (data) {
+		        	if(data.length == 0){
+			        	alert('Данные не найдены. Измените параметры запроса');
+				    }else{
+		        	 listFlow = data;
+		        	 myChart('Расход холодной воды', 'rgba(1, 1, 255, 0.4)', 'rgba(1, 1, 255, 1)');
+				    }
+		        	offLoader();
+		        	$("#btn-filtr-flow").prop( "disabled", false);
+		        },
+		        error: function (x, e) {
+		          offLoader();
+		          $("#btn-filtr-flow").prop( "disabled", false);
+                  alert('Данные не найдены. Измените параметры запроса.');
+	            }
+		    });  
+		  
+	  });
+});		  
+
+</script>
+</body>
+</html>

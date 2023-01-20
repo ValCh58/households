@@ -1,0 +1,57 @@
+{"properties": [
+  {
+    "name": "hibernate.show_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.show_sql'"
+  },
+  {
+    "name": "hibernate.format_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.format_sql'"
+  },
+  {
+    "name": "spring.eisystems-datasource.jdbcUrl",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.jdbcUrl'"
+  },
+  {
+    "name": "spring.eisystems-datasource.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.username'"
+  },
+  {
+    "name": "spring.eisystems-datasource.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.password'"
+  },
+  {
+    "name": "spring.eisystems-datasource.jdbcUrl",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.jdbcUrl'"
+  },
+  {
+    "name": "spring.eisystems-datasource.jdbcUrl",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.jdbcUrl'"
+  },
+  {
+    "name": "hibernate.ddl-auto",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.ddl-auto'"
+  },
+  {
+    "name": "hibernate.dialect",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate.dialect'"
+  },
+  {
+    "name": "spring.housing-datasource.initialization-mode",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.housing-datasource.initialization-mode'"
+  },
+  {
+    "name": "spring.eisystems-datasource.initialization-mode",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.eisystems-datasource.initialization-mode'"
+  }
+]}

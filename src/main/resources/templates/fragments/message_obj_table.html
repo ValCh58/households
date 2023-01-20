@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="message_obj_table_obj">
+		<div class="container">
+			<div class="justify-content-center align-items-center"
+				style="margin-top: 5px">
+				<div class="col-ms-12">
+					<div class="row" style="margin-top: 2px; margin-bottom: 3px; margin-left: 2px">
+						<div class="col">
+							<h5 style="text-align: right;font-size: 1.1em;">Аварии от УСПД</h5>
+						</div>
+						<div class="col">
+							<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+						</div>
+					</div>
+				</div>
+				<table class="table table-info table-condensed table-hover table-sm border-primary table-responsive-sm table-fixed" 
+				              id="objectmsg" style="font-size: 0.9em; line-height: 1em;">
+					<thead style="text-align: center;">
+						<tr>
+							<th>№</th>
+							<th style="display: none;">id_alarm </th>
+							<th style="display: none;">id_measuring</th>
+							<th>Номер УСПД</th>
+							<th>Время события</th>
+							<th>Сообщение</th>
+							<th style="display: none;">active</th>
+							<th>Состояние</th>
+						</tr>
+					</thead>
+					<tbody style="text-align: center;">
+						<tr th:each="ad,idxStat : *{listAlarmDto}" th:style="${ad.active} == 0 ? 'color: red;' : 'color: green;'">
+							<td th:text="${idxStat.index+1}"></td>
+							<td style="display: none;" th:text="${ad.idAlarm}"></td>
+							<td style="display: none;" th:text="${ad.idMeasuring}"></td>
+							<td th:text="${ad.factoryNumberUspd}"></td>
+							<td th:text="${#temporals.format(ad.timeStamp, 'dd.MM.yyyy HH:mm:ss')}"></td>
+							<td style="text-align: left;" th:text="${ad.msgText}"></td>
+							<td style="display: none;" th:text="${ad.active}"></td>
+						    <td><a href="#" th:class="${ad.active}==0?'btn btn-danger btn-sm':'btn btn-secondary btn-sm'" 
+							    style="width: 24px;height: 24px;text-align: center; border-radius: 6px; padding:0px;"
+							    ><i class="bi bi-exclamation-triangle"></i></a>
+					     </td>   
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

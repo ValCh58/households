@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Система сбора и обработки данных от контроллеров успд</title>
+    <!-- link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" 
+               integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    </head>
+<body>
+
+<!-- form th:action="@{/admin/registration}" method="GET">
+    <button class="btn btn-md btn-warning btn-block" type="Submit">На страницу регистрации</button>
+</form -->
+
+<div class="container-fluid d-flex h-100 justify-content-center align-items-center p-0">
+    <form th:action="@{/login}" method="POST" class="form-signin">
+      <h5 class="form-signin-heading" >Введите логин и пароль</h5><br/>
+      <div class="form-row">  
+        <div class="col">
+           <input type="text" id="user_name" name="user_name" placeholder="Логин" class="form-control"/> <br/>
+           <input type="password" th:placeholder="Пароль" id="password" name="password" class="form-control"/> <br/>
+        </div>
+      </div> 
+      <div align="center" th:if="${param.error}">
+           <p style="font-size: 20; color: #FF1C19;">Логин или пароль неверные</p>
+      </div>
+      <button class="btn btn-sm btn-primary btn-block" name="Submit" value="Login"  type="Submit" th:text="Вход" style="height: 50%">
+      </button>  
+    </form>
+</div>
+<div id="frameFooter">
+        
+        <p>
+        © 1992-2023 ЗАО «НПП Электронные информационные системы» <i class='fas fa-home'></i> Екатеринбург 620075 ул. Мамина-Сибиряка, 145 <i class='fas fa-mail-bulk'></i> main@eisystem.ru <i class='fas fa-phone-square'></i> (343) 263 73 68, (343) 263 74 80, (343) 350 57 35
+        </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+         
+</body>
+</html>

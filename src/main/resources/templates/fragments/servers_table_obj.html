@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="obj_table_servers">
+		<div class="container">
+			<div class="justify-content-center align-items-center" style="margin-top: 5px">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col text-nowrap">
+						<p style="text-align: right;font-size: 1.1em;">Серверы связи</p>
+					</div>
+					<div class="col">
+						<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+					</div>
+				</div>
+				<div>
+					<table	class="table table-success table-striped table-hover table-sm table-bordered border-primary 
+					               table-responsive-sm table-fixed"
+					        style="font-size: 0.9em; line-height: 1em;">
+						<thead style="text-align: center;">
+						<tr>
+							<th>№</th>
+							<th style="display: none;">ID</th>
+							<th>Название сервера</th>
+							<th>IP</th>
+							<th>Порт</th>
+							<th>Управляющая компания</th>
+							<th>Состояние</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr th:each="srv,idxStat : *{listComSrv}">
+                               <td th:text="${idxStat.index + 1}"></td>
+                               <td style="display: none;" th:text="${srv.idComServer}"></td>
+                               <td th:text="${srv.nameServer}"></td>
+                               <td th:text="${srv.ipServer}"></td>
+                               <td th:text="${srv.portServer}"></td>
+                               <td th:text="${srv.nameCompany}"></td>
+                               <td th:text="${srv.statusSrv} ? 'Работает' : 'Нет связи'"> </td>
+                            </tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+   </div>
+</body>
+</html>

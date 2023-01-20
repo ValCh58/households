@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Расход по электро энергии</title>
+
+<link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.css}" />
+<link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.theme.default.css}" />
+<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
+</head>
+
+<body onload="offLoader()" style="background: url(/images/textures.jpeg);">
+<div id="loader"></div>
+
+  <div th:insert="~{fragments/flow_el_en_report_table :: fr_flow_el_en_report_table}"></div>
+     
+      <div class="col-sm-10 justify-content-center offset-md-1 margin-top: 3px">
+		  <table class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary 
+		                table-responsive-sm table-fixed" id="flowreporttablech1" style="font-size: 0.9em; line-height: 1em;">
+			<thead style="text-align: center;">
+				<tr>
+					<th>№</th>
+					<th>Дата<br> показаний</th>
+					<th>Адрес<br> объекта</th>
+					<th>Лицевой<br> счет</th>
+					<th>Наименование<br>счетчика</th>
+					<th>Показания<br> текущие</th>
+					<th>Показания<br> предыдущие</th>
+					<th>Расход</th>
+					<th>№<br> счетчика</th>
+					<th>Дата<br> поверки</th>
+					<th>№<br> УСПД</th>
+					<th>Тип<br> тарифа</th>
+			    	</tr>
+			</thead>
+				<tbody style="text-align: center;">
+				<tr th:each="cnt,idxStat : *{listElEnReport}">
+				    <td th:text="${idxStat.index + 1}"></td>
+				    <td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy')}"></td>
+					<td th:text="${cnt.addressLoc}"></td>
+					<td th:text="${cnt.numAcnt}"></td>
+					<td th:text="${cnt.nameCount}"></td>
+					<td th:text="${cnt.tarifEn}"></td>
+					<td th:text="${cnt.prevTarifEn}"></td>
+					<td th:text="${cnt.diffTarifEn}"></td>
+					<td th:text="${cnt.serialNum}"></td>
+					<td th:text="${#temporals.format(cnt.dateExpire, 'MM.yyyy')}"></td>
+					<td th:text="${cnt.factoryNumberUspd}"></td>
+					<td th:text="${cnt.typeTarif}"></td>
+				</tr>
+				</tbody>
+		 </table>
+	  </div>
+	  <a href="javascript:scroll(0,0)" style="top: 50%;left: 15px;position: fixed; z-index: 101;"><i class="fas fa-arrow-alt-circle-up"></i></a>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <!-- Для обеспечения работы $.ajax -->
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>	  
+	  
+   <script>
+
+   function onLoader(){
+	   document.getElementById("loader").style.display = "block";
+	   }
+
+   function offLoader(){
+	   document.getElementById("loader").style.display = "none";
+	   }
+   
+   /**
+   * Интерактивный поиск по таблице "flowreporttablech1"
+   */
+   $(document).ready(function(){
+	    $("#searchflow").keyup(function(){
+	    _this = this;
+	       $.each($("#flowreporttablech1 tbody tr"), function() {
+	           if($(this).text().toLowerCase().indexOf($(_this).val().toLowerCase()) === -1) {
+	               $(this).hide();
+	           } else {$(this).show(); }
+	       });
+	    });
+	    $('#datefrom').val(myDateNow());
+		
+	  }); 
+
+   /**
+   * Сброс фильтра для "flowreporttablech1"
+   */
+   $(function(){
+		  $('#btn-del-filtr-flow').click(function(){
+			  location.reload();
+			  
+		  })
+	  });
+
+   /**
+    **************Calling the page of the report flow El Energy**************************************
+    */
+    $(function(){
+       $('#btn-report-flow').click(function(){
+      	  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
+  		  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
+  		  
+  		  $.ajax({
+  			  "type": "get",
+  		      "url": '/user/flow_ElEnergy_report_pdf/numUspd/'+numUspd+'/dateFrom/'+dateFrom,
+  		      "dataType": "text",
+  		      "cache": "false",
+  		      "data": "$(this).serialize()",
+  		       success: function(data){
+  		       	window.location.href = data;//Redirect to report page
+                 },
+  		      error: function(jqXHR, textStatus, errorThrown){
+  			    alert('Ошибка при вызове отчета: ' + jqXHR + ' ' + textStatus  +' ' + errorThrown);
+  			   }
+  		  });
+        })
+    });   
+	  
+
+   /**
+   * GET фильтрации для "flowreporttablech1"
+   */
+   $(function(){
+		  $('#btn-filtr-flow').click(function(){
+			  var dat = new Date();
+			  var numUspd  = $('#searchuspd').val()!= '' ? $('#searchuspd').val() : '0';
+			  var dateFrom = $('#datefrom').val()!= '' ? $('#datefrom').val() : myDateNow();
+			  $('#datefrom').val(dateFrom);
+
+
+			  $.ajax({
+			        "type": "get",
+			        "url": '/user/flow_el_en_report/numUspd/'+numUspd+'/dateFrom/'+dateFrom,
+			        "dataType": "json",
+			        "cache": "false",
+			        "data": "$(this).serialize()",
+			        success: function (data) {
+			        	if(data.length == 0){
+				        	offLoader();
+		                    alert('Данные не найдены. Измените параметры запроса');
+					        }
+			        	//Удалим тело таблицы/////////////////
+			        	var tableBody = $("#flowreporttablech1 tbody");
+			        	tableBody.empty();
+			        	//Вставим новые записи////////////////
+			        	
+			        	$.each(data, function (idx, obj){
+			        		$("#flowreporttablech1 tbody").append(
+			        			"<tr>" + "<td>" + (idx+1) + "</td>" + 
+			        			         "<td>" + (new Date(obj.timeStamp)).toLocaleDateString() + "</td>" +
+			        			         "<td>" + obj.addressLoc + "</td>" + 
+			        			         "<td>" + obj.numAcnt + "</td>" + 
+			        			         "<td>" + obj.nameCount + "</td>" +
+			        			         "<td>" + obj.tarifEn + "</td>" +
+			        			         "<td>" + obj.prevTarifEn + "</td>" +
+			        			         "<td>" + obj.diffTarifEn + "</td>" +
+			        			         "<td>" + obj.serialNum + "</td>" +
+			        			         "<td>" + (new Date(obj.dateExpire)).toLocaleDateString() + "</td>" +
+			        			         "<td>" + obj.factoryNumberUspd + "</td>" +
+			        			         "<td>" + obj.typeTarif + "</td>" +
+			        			"</tr>" 
+			        				
+			        		);
+			            });
+			        	offLoader();
+			        },
+			        error: function (x, e) {
+			        	var tableBody = $("#flowreporttablech1 tbody");
+			        	tableBody.empty();
+	                    alert('Данные не найдены. Измените параметры запроса.');
+	                    offLoader();
+		        }
+			 });
+		  })
+	  });
+
+
+   /**
+    * Вывод текущего времени в формате YYYY-MM-DD 
+   */
+   function myDateNow(){
+ 	  var mlsk = Date.now();
+ 	  var nowDate = new Date(mlsk);
+ 	  var year = nowDate.getFullYear().toString();
+ 	  var month = (nowDate.getMonth() + 1).toString().length > 1 ? (nowDate.getMonth() + 1).toString() : '0'+(nowDate.getMonth() + 1).toString();
+ 	  var day = nowDate.getDate().toString().length > 1 ? nowDate.getDate().toString() : '0'+nowDate.getDate().toString();  
+ 	  var dat = year + '-' + month + '-' + day;
+ 	  return dat;
+   }	  
+
+   </script> 
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+
+	<div th:fragment="obj_count_el_en_table">
+		<div class="container">
+			<div class="justify-content-center align-items-center"
+				style="margin-top: 3px">
+				<div class="col-sm-12">
+					<div class="row">
+						<div class="col text-nowrap">
+							<p style="text-align: right;font-size: 1.1em;">Электро счетчики</p>
+						</div>
+						<div class="col">
+							<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+						</div>
+					</div>
+				</div>
+				<!-- Фильтр для таблиц объектов -->			
+				<div th:insert="~{fragments/filtr_uspd :: filtr_uspd_obj}"></div>
+				<div>
+					<table
+						class="table table-success table-condensed table-striped table-hover table-sm table-bordered border-primary 
+						       table-responsive-sm table-fixed" id="counteltable" style="font-size: 0.9em; line-height: 1em;">
+						<thead style="text-align: center;">
+							<tr>
+								<th>№</th>
+								<th style="display: none;">idCountElEn</th>
+								<th>Версия <br>программы</th>
+								<th>Заводские <br>номера</th>
+								<th style="display: none;">id_Measuring</th>
+								<th>Показания <br>счетчиков
+								</th>
+								<th>Номер <br>УСПД
+								</th>
+								<th>Время снятия <br>показаний
+								</th>
+								<th>Тип <br>тарифа
+								</th>
+								<th>Код <br>ошибки
+								</th>
+							</tr>
+						</thead>
+						<tbody style="text-align: center;">
+							<tr th:each="cnt,idxStat : *{listCountElEn}">
+								<td th:text="${idxStat.index + 1}"></td>
+								<td style="display: none;" th:text="${cnt.idCountElEn}"></td>
+								<td th:text="${cnt.progVersionEn}"></td>
+								<td th:text="${cnt.factoryNumberEn}"></td>
+								<td style="display: none;" th:text="${cnt.id_Measuring}"></td>
+								<td th:text="${cnt.tariffEn}"></td>
+								<td th:text="${cnt.factoryNumberUspd}"></td>
+								<td th:text="${#temporals.format(cnt.timeStamp, 'dd.MM.yyyy HH:mm')}"></td>
+								<td th:text="${cnt.typeTarif}==0 ? 'Дневной' : 'Ночной'"></td>
+								<td th:text="${cnt.errorEn}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

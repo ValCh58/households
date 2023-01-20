@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<body>
+ <div th:fragment="sel_object_uk">
+  
+ <div class="wrapper">
+     <!-- Sidebar -->
+    <nav id="sidebar">
+       <div class="sidebar-header" style="text-align: center">
+            <h5>Выбор объектов УК</h5>
+       </div>
+       
+       <table class="table table-secondary table-condensed table-sm table-bordered border-primary table-responsive-sm table-hover" 
+                 id="menuTreeTable">
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Объекты</th>
+                    <th style="text-align: center">График</th>
+                    <th style="display: none;">id_object</th>
+                    <th style="display: none;">id_type_object</th>
+                  </tr>
+                </thead>
+           </table>
+       
+    </nav>
+     
+    <div id="diagramm" style="width: 80%; margin-top: 10px;">
+        <div  style="text-align: center">  
+            <h5>Построние диаграммы по горячей и холодной воде по дому поквартирно</h5>
+        </div>
+        <!---------------------------------Построение диаграммы--------------------------> 
+        <div th:insert="~{fragments/filtr_diagramm :: filtr_diagramm}"></div>
+        <div class="diag-header" style="text-align: center;margin-top: 10px;">
+            <h6 id="id_head_diagram" style="color: graytext;"></h6>
+        </div>
+        <div class="container" id="main_div"></div>       
+   </div>
+       
+ </div>
+ 
+</div>
+ 
+ 
+</body>
+</html>

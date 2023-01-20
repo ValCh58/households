@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<!----------------------------------Header block----------------------------------------------------------->
+<!-- th:block th:insert="~{fragments/css_tree_table}"/ -->
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Администрирование</title>
+    
+    <link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.css}"/>
+    <link th:rel="stylesheet" th:href="@{/assets/jquery-treetable/jquery.treetable.theme.default.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/v4-shims.css">
+    <link th:rel="stylesheet" th:href="@{/css/input_img.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/myloader.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+</head>
+
+<body onload="offLoader()" id="page-top" style="background: url(/images/textures.jpeg);">
+<div id="loader"></div>
+
+      <div class="col-ms-12">
+         <div class="form-row mt-2 ml-1 mr-1">
+			<div class="form-group col-md-7">
+				<h4 style="text-align: right;">Объекты конфигурации</h4>
+		    </div>
+			<div class="form-group col-md-1">
+				<a th:href="@{/admin/home}" class="btn btn-primary btn-sm">Выход</a>
+			</div>
+		    <div class="form-group col-md-2">
+				<p>
+		          <input type="text" style="width: 230px;" class="form-control pull-right" id="finder" placeholder="Поиск по наименованию">
+		          <i onclick="cleanFinder();" class='fa fa-times-rectangle-o' style='color: gray;'></i>
+		        </p>    
+		    </div>
+		 </div>
+	  </div>
+
+<!----------------------------------Модальное окно редактирования сервера связи---------------------------->
+<div th:insert="~{fragments/modal_edit_object :: modal_edit_server}"></div>
+
+<!----------------------------------Модальное окно редактирования USPD------------------------------------->
+<div th:insert="~{fragments/model_edit_uspd :: modal_edit_uspd}"></div>
+
+<!----------------------------------Модальное окно редактирования Счетчиков-------------------------------->
+<div th:insert="~{fragments/modal_edit_Count :: modal_edit_count}"></div>
+
+
+<!----------------------------------Модальное окно создания сервера связи---------------------------------->
+<div th:insert="~{fragments/new_modal_server :: modal_new_server}"></div>
+
+<!----------------------------------Модальное окно Warning del Object-------------------------------------->
+<div th:insert="~{fragments/modal_warning_del_obj :: warning_del_obj}"></div>
+
+
+<!---------------------------------Меню навигации--------------------------------------------------------
+<div th:insert="~{fragments/nav_menu_admin :: menu_admin}"></div>
+-->
+<!-----------------------------------Table tree------------------------------------------------------------>
+<div th:insert="~{fragments/table_tree_object :: tree_object}"></div>
+<a href="javascript:scroll(0,0)" style="top: 50%;left: 15px;position: fixed; z-index: 101;"><i class="fas fa-arrow-alt-circle-up"></i></a>
+
+<!------------------------------------Scripts-------------------------------------------------------------->
+<div th:insert="~{fragments/script_tree_table :: script_tree_table}"></div>
+
+<!------------------------------------Footer--------------------------------------------------------------->
+
+<script type="text/javascript">
+
+
+
+/**
+ * Clearing the search field
+ */
+function cleanFinder(){	$("#finder").val(''); }
+
+/**
+ * Поиск по таблице объектов *
+ */
+$(document).ready(function(){
+	onLoader();
+    $("#finder").keyup(function(){
+        $('#treeTable tr').each(function(){
+			var array_row = [];
+			$(this).find('td').each(function(){
+				array_row.push($(this).text());
+			});
+			var y = array_row[1];
+			yy = new String(y);
+			if(yy.toLowerCase().indexOf($("#finder").val().toLowerCase()) > 0){
+			   var td = $($(this));
+			   var pos = td.offset();
+			   //console.log(pos);
+			   $(window).scrollTop(pos.top);
+			}
+		});
+      });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+
+</head>
+<body>
+	<div th:fragment="obj_table_uspd">
+		<div class="container">
+			<div class="justify-content-center align-items-center" style="margin-top: 3px">
+				<div class="col-sm-12">
+					<div class="row">
+						<div class="col text-nowrap">
+							<p style="text-align: right;font-size: 1.1em;">Устройства УСПД</p>
+						</div>
+						<div class="col">
+							<a th:href="@{/admin/home}" class="btn btn-primary btn-sm" style="text-align: center;">Выход</a>
+						</div>
+					</div>
+		           <!-- Фильтр для таблиц объектов -->			
+					<div th:insert="~{fragments/filtr_uspd :: filtr_uspd_obj}"></div>
+							
+					<div>
+						<table class="table table-success table-condensed table-striped table-hover table-sm table-bordered 
+						              border-primary table-responsive-sm table-fixed" id="uspdtable" style="font-size: 0.9em; line-height: 1em;">
+							<thead style="text-align: center;">
+								<tr>
+									<th>№</th>
+									<th style="display: none;">ID_MEASURING</th>
+									<th>Серийный<br>номер</th>
+									<th>Значение<br>на входе</th>
+									<th>Значения<br>аварийных<br>выходов</th>
+									<th>Напряжение<br>аккумулятора</th>
+									<th>Тип<br>питающего<br>напряжения </th>
+									<th>Превышение<br>пороговых<br>значений</th>
+									<th>Выход<br>сигнала за<br>диапозон</th>
+									<th>Время<br>передачи</th>
+								</tr>
+							</thead>
+							<tbody style="text-align: center;">
+								<tr th:each="uspd,idxStat : *{listMeasuring}">
+									<td th:text="${idxStat.index + 1}"></td>
+									<td style="display: none;" th:text="${uspd.idMeasuring}"></td>
+									<td th:text="${uspd.factoryNumberUspd}"></td>
+									<td th:text="${uspd.inputStatusUspd}"></td>
+									<td th:text="${uspd.outputStatusUspd}"></td>
+									<td th:text="${uspd.powerBatteryUspd}"></td>
+									<td th:text="${uspd.lowPowerBatteryUspd} == 0 ? 'Сеть' : 'Аккумулятор'"></td>
+									<td th:text="${uspd.thresholdCounterUspd}"></td>
+									<td th:text="${uspd.alarmStatusAnalogSensor}"></td>
+									<td	th:text="${#temporals.format(uspd.timeStamp, 'dd.MM.yyyy HH:mm:ss')}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

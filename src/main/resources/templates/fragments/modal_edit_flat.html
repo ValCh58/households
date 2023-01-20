@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="modal_edit_flat">
+		<div class="modal modal-warning fade in" id="modalEditFlat" data-backdrop="static" data-keyboard="false" tabindex="-1">
+			<form id="modalFormEditFlat">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Редактирование параметров квартиры</h5>
+							<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" 
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body"
+							style="max-height: 500px !important; overflow-y: scroll">
+							<div class="form-group">
+								<input value="" type="hidden" class="form-control" id="id_flat" name="idRoom" /> 
+								<input value="" type="hidden" class="form-control" id="id_link_object" name="idLinkObject" />
+							</div>
+
+							<div class="row">
+								<div class="col-sm-8 input-group input-group-sm mb-3">
+									<label for="title">Помещение:</label> 
+									<input value="" type="text" class="form-control" id="name_flat" name="nameRoom" required />
+								</div>
+
+								<div class="col-sm-4 input-group input-group-sm mb-3">
+									<label for="title">Номер:</label> 
+									<input value="" type="text" class="form-control" id="number_flat" name="numberRoom" required />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-7 input-group input-group-sm mb-3">
+									<label for="title" class="form-label">Номер УСПД:</label> 
+									<input value="" type="text" class="form-control" id="number_uspd" name="numberUspd" required 
+									                                                          onkeydown="return false;" onmousedown="return false;"/>
+									<input value="" type="hidden" class="form-control" id="id_uspd"	name="id_uspd" /> 	
+								</div>
+
+								<div style="justify-content: normal;">
+									<button style="font-weight: 200; height: 36px;" onclick="setScrollToPos();" 
+									    type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+									<input style="font-weight: 200; height: 36px;" type="submit" class="btn btn-primary" value="Сохранить" />
+								</div>
+
+								<!-- div><a class="btn" href="#" onclick="openUspdFlat();"><i class="fas fa-pencil-alt"></i>&nbsp;Загрузить</a></div -->
+
+							</div>
+							<div class="modal-footer" style="justify-content: center;">
+
+								<div class="col-sm-12 input-group input-group-sm mb-3">
+									<input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
+								</div>
+
+								<div class="overflow: auto;" id="scrolluspdflat">
+									<table
+										class="table table-success table-condensed table-hover table-sm table-bordered border-primary 
+                                               table-responsive-sm table-fixed" id="uspdtableflat" style="font-size: 0.8em; line-height: 1em;">
+										<thead style="text-align: center;">
+											<tr>
+												<th>№</th>
+												<th style="display: none;">id_uspd_dev</th>
+												<th>Наименование</th>
+												<th>Адрес</th>
+												<th>Сервер</th>
+												<th>Номер</th>
+												<th>Запись</th>
+											</tr>
+										</thead>
+										<tbody style="text-align: center;">
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

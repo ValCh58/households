@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> <meta charset="UTF-8"> </head>
+<body>
+	<div th:fragment="filtr_uspd_obj">
+		   <div class="form-row justify-content-center align-items-center" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
+			   <div class="col-sm-auto">
+			      <input type="text" class="form-control pull-right" id="search" placeholder="Поиск по таблице">
+			   </div>
+			   <div class="col-sm-auto" style="margin-top: 1px; margin-bottom: 1px">
+				   <input type="text" class="form-control pull-right" id="searchuspd" placeholder="Номер УСПД">
+			   </div>
+			   <div class="col-sm-auto" style="margin-top: 1px; margin-bottom: 1px">
+				   <input value="" type="date" class="form-control pull-right" id="datefrom" name="datebeg" placeholder="За период с"/>
+			   </div>
+			   <div class="col-sm-auto" style="margin-top: 1px; margin-bottom: 1px">
+				   <input value="" type="date" class="form-control pull-right" id="dateto" name="dateend" placeholder="по"/>
+			   </div>
+	
+		   <div class="row" style="margin-top: 1px; margin-bottom: 1px; margin-left: 1px">
+			   <div class="col-auto">
+			       <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-filtr"><i class="bi-funnel"></i>Фильтр</button>
+			   </div>
+			   <div class="col-auto">
+			       <button type="button" id="btn-report-uspd" onclick="onLoader()" class="btn btn-primary btn-sm"><i class="bi-printer"></i>Печать</button>
+			   </div>
+			   <div class="col-auto">
+				  <button type="button" onclick="onLoader()" class="btn btn-info btn-sm" id="btn-del-filtr"><i class="bi-file-x"></i>Сброс</button>
+			   </div>
+		  </div>	   
+		</div>
+	</div>
+</body>

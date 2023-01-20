@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+   <meta charset="utf-8">
+   <title>Диаграмма по расходу холодной воды</title>
+</head>
+<body>
+
+   <div id='chart' style="width:600px;height:300px;"></div>
+   
+   
+<!--  th:inline="javascript" -->   
+   
+<script th:inline="javascript"> 
+
+   var wins = [ [ [0,3.213],[1,4.345],[2,6.677] ] ];
+   var years = [ [0,"18-04-22<br>0-390004"],[1,"18-04-22<br>0-390005"],[2,"18-04-22<br>0-390006"] ];
+  
+  var listFlow = [[${listWaterFlowReport}]];//Fucking editor!!!
+   
+ window.onload = function () {
+	
+	var i = -1;
+	var arrChartMain = [ [ [] ] ];
+	var arrChart = [ [] ];
+
+    _.each(listFlow, function(list) {
+		console.log('list');
+		i++;
+	var arr1 = [i, list.diffCountW];
+		var date = "01-01-2022";//[[${#temporals.format(list.timeStamp, 'dd.MM.yyyy')}]];
+		arrChartMain[0][0].push(arr1);
+		var str = list.numAcnt + "\n" + date;
+		var arr2 = [i, str]; 
+		arrChart[0].push(arr2);  
+		
+    });
+	
+	
+	
+	Flotr.draw(document.getElementById("chart"), wins, {
+		title: "Расход холодной воды",
+	    colors: ["#39AFD2"],
+	    bars: {
+	        show: true,
+	        barWidth: 0.25,
+	        shadowSize: 0,
+	        fillOpacity: 1,
+	        lineWidth: 0
+	    },
+	    yaxis: {
+	        min: 0,
+	        tickDecimals: 3
+	    },
+	    xaxis: {
+	        ticks: years
+	    },
+
+	    grid: {
+	        horizontalLines: false,
+	        verticalLines: false
+	    }
+	});
+	$(".flotr-dummy-div").parent().hide();
+	
+};
+</script>
+
+ 
+    
+   <script th:src="@{/assets/Flotr2/flotr2.min.js}"></script>
+   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+   <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+   <script src="https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"></head>
+<body>
+<div th:fragment="modal_edit_uspd">
+
+<div class="modal modal-warning fade in" id="modalEditUspd"
+		data-backdrop="static" data-keyboard="false" tabindex="-1">
+		<!-- form th:action="@{/update}" th:method="post" -->
+		<form  id="modalFormEditUspd">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">Редактирование УСПД </h5>
+						<button type="button" class="close" data-dismiss="modal" onclick="setScrollToPos();" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						
+						<div class="form-group">
+						    <input  value="" type="hidden" class="form-control" id="idUspdDev" name="idUspdDev"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Наименование:</label>
+                            <input value="" type="text" class="form-control" id="nameUspdDev" name="nameUspdDev" required/>
+                        </div>
+						<div class="form-group">
+						    <label for="title">Серийный номер:</label>
+                            <input  value="" type="text" class="form-control" id="numUspdDev" name="numUspdDev" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Место установки:</label>
+                            <input value="" type="text" class="form-control" id="addressLoc" name="addressLoc" required/>
+                        </div>
+                        
+                        <div class="form-group">
+							<label for="typeuspdselect" class="form-label">Тип УСПД</label>
+							<select id="typeuspdselect">
+								<!--  option th:each="d : ${listType}" th:value="${d.id_type_uspd}" th:text="${d.name_type}" / -->
+							</select>
+						</div>
+						<div class="form-group">
+                            <input value="" type="hidden" class="form-control" id="retIdTypeUspdDev" name="retIdTypeUspdDev"/>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input value="" type="hidden" class="form-control" id="idLinkObject" name="idLinkObject"/>
+                        </div>
+                                                
+						<div class="form-group">
+                            <input value="" type="hidden" class="form-control" id="idTypeUspdDev" name="idTypeUspdDev"/>
+                        </div>
+						<div class="form-group">
+                            <input value="" type="hidden" class="form-control" id="idCounts" name="idCounts"/>
+                        </div>
+                        <div class="form-group">
+                            <input value="" type="hidden" class="form-control" id="idConfigUspd" name="idConfigUspd"/>
+                        </div>
+                        
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="setScrollToPos();" data-dismiss="modal">Отменить</button>
+						<input type="submit" class="btn btn-primary" value="Сохранить" />
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>
+</body>
+</html>
